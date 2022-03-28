@@ -1,0 +1,22 @@
+{
+  "name": "FoxVideoPlayer",
+  "version": "0.1.0",
+  "summary": "A short description of FoxVideoPlayer.",
+  "description": "TODO: Add long description of the pod here.",
+  "homepage": "https://github.com/dev-lis/FoxVideoPlayer",
+  "license": {
+    "type": "MIT",
+    "file": "LICENSE"
+  },
+  "authors": {
+    "dev-lis": "mr.aleksandr.lis@gmail.com"
+  },
+  "source": {
+    "git": "https://github.com/dev-lis/FoxVideoPlayer.git",
+    "tag": "0.1.0"
+  },
+  "platforms": {
+    "ios": "9.0"
+  },
+  "source_files": "FoxVideoPlayer/Classes/**/*"
+}
