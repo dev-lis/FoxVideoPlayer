@@ -1,9 +1,9 @@
 # FoxVideoPlayer
 
-[![CI Status](https://img.shields.io/travis/dev-lis/FoxVideoPlayer.svg?style=flat)](https://travis-ci.org/dev-lis/FoxVideoPlayer)
+[![Platforms](https://img.shields.io/badge/Platforms-iOS-blue?style=flat-square)](https://developer.apple.com/macOS)
+[![iOS](https://img.shields.io/badge/iOS-14.0-blue.svg)](https://developer.apple.com/iOS)
 [![Version](https://img.shields.io/cocoapods/v/FoxVideoPlayer.svg?style=flat)](https://cocoapods.org/pods/FoxVideoPlayer)
-[![License](https://img.shields.io/cocoapods/l/FoxVideoPlayer.svg?style=flat)](https://cocoapods.org/pods/FoxVideoPlayer)
-[![Platform](https://img.shields.io/cocoapods/p/FoxVideoPlayer.svg?style=flat)](https://cocoapods.org/pods/FoxVideoPlayer)
+[![License](https://img.shields.io/badge/licenses-MIT-red.svg)](https://opensource.org/licenses/MIT) 
 
 ## Example
 
@@ -18,6 +18,14 @@ it, simply add the following line to your Podfile:
 
 ```ruby
 pod 'FoxVideoPlayer'
+```
+
+## Usages
+```swift
+    if let url = URL(string: <YOUR-URL>) {
+        let playerViewController = FoxVideoPlayerViewController()
+        playerViewController.setup(with: url)
+    }
 ```
 
 ## Author
