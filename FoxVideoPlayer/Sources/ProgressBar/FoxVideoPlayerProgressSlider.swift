@@ -99,11 +99,8 @@ class FoxVideoPlayerProgressSlider: UIControl {
     private var isEnableUpdateImage = false
     
     private var isMagnetedZone: Bool {
-        let showInset = isVisible ? 0 : sideInset
-        let shownWidth = isVisible ? 0 : sideInset * 2
-        let inset = pinContainerLayer.bounds.width / 4 + showInset
-        return currentPinPosition! > lineLayer.value + inset - shownWidth ||
-        currentPinPosition! < lineLayer.value - inset
+        currentPinPosition! > lineLayer.value - pinIncreasedSize / 3 - (isVisible ? 0 : sideInset)
+        && currentPinPosition! < lineLayer.value + pinIncreasedSize / 3 - (isVisible ? 0 : sideInset)
     }
 
     private var isMovingOnVisible: Bool = false {
@@ -121,12 +118,6 @@ class FoxVideoPlayerProgressSlider: UIControl {
     private var currentProgress: CGFloat = 0 {
         didSet {
             lineLayer.progress = currentProgress
-            let inset = isVisible
-                ? pinContainerSize
-                : 0
-            currentPinPosition = currentProgress * (frame.width - inset)
-            if !isVisible { currentPinPosition! -= pinContainerSize / 2 }
-
             if !isMovingOnVisible {
                 layoutSubviews()
             }
@@ -175,22 +166,6 @@ class FoxVideoPlayerProgressSlider: UIControl {
     private func updatePin() {
         guard !isSeeking else { return }
         
-        if currentPinPosition == nil { currentPinPosition = sideInset - pinContainerSize / 2 }
-        
-//        let inset = isVisible
-//        ? sideInset * 2
-//        : 0
-//        var curPinPosition = currentProgress * (frame.width - inset)
-//        if !isVisible { curPinPosition -= sideInset }
-//
-//
-
-//        if curPinPosition.isNaN {
-//            curPinPosition = 0
-//        }
-        
-//        let curPinPosition = currentPinContainerX
-        
         pinContainerLayer.frame = CGRect(
             x: currentPinContainerX,
             y: 0,
@@ -209,7 +184,7 @@ class FoxVideoPlayerProgressSlider: UIControl {
         )
 
         let leftInset = FoxScreen.SafeArea.left + 8
-        let currentInfoInset = currentPinPosition! + pinContainerLayer.frame.width / 2
+        let currentInfoInset = currentPinContainerX + pinContainerLayer.frame.width / 2
         let currentTimeX = currentInfoInset - currentTimeLabel.frame.width / 2 > leftInset
         ?  currentInfoInset - currentTimeLabel.frame.width / 2
         : leftInset
@@ -268,10 +243,11 @@ extension FoxVideoPlayerProgressSlider {
         guard isAnimationCompleted else { return }
         
         isAnimationCompleted = false
+        isVisible = true
 
-//        currentPinPosition = currentProgress * (frame.width - frame.height)
+        let x = currentProgress * (frame.width - sideInset * 2) - pinContainerSize / 2 + (isVisible ? sideInset : 0)
         pinContainerLayer.frame = CGRect(
-            x: currentPinContainerX,
+            x: x,
             y: 0,
             width: pinContainerSize,
             height: pinContainerSize
@@ -279,7 +255,6 @@ extension FoxVideoPlayerProgressSlider {
 
         CATransaction.begin()
         CATransaction.setCompletionBlock {
-            self.isVisible = true
             self.isAnimationCompleted = true
             self.layoutSubviews()
             self.lineLayer.removeAllAnimations()
@@ -335,8 +310,7 @@ extension FoxVideoPlayerProgressSlider {
         guard isAnimationCompleted else { return }
 
         isAnimationCompleted = false
-        
-//        currentPinPosition = currentProgress * frame.width - sideInset
+
         pinContainerLayer.frame = CGRect(
             x: currentPinContainerX,
             y: 0,
@@ -426,17 +400,17 @@ extension FoxVideoPlayerProgressSlider {
     override func continueTracking(_ touch: UITouch, with event: UIEvent?) -> Bool {
         let point = touch.location(in: touch.view)
         
-        currentPinPosition = point.x - pinContainerLayer.frame.width / 2
+        currentPinPosition = point.x - sideInset
 
         if isMagnetedZone {
-            update(x: point.x)
-            isMagnetized = false
-        } else {
             guard !isMagnetized else { return true }
             let position = lineLayer.value + (isVisible ? sideInset : 0)
             update(x: position)
             isMagnetized = true
             vibrate()
+        } else {
+            update(x: point.x)
+            isMagnetized = false
         }
         
         return true
@@ -460,9 +434,9 @@ extension FoxVideoPlayerProgressSlider {
         }
         
         if isMagnetedZone {
-            time?(currentTime)
-        } else {
             didUpdateTime()
+        } else {
+            time?(currentTime)
         }
         
         isMagnetized = true
