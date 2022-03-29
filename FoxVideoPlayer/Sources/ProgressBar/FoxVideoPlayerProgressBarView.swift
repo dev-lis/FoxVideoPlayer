@@ -18,7 +18,7 @@ public protocol FoxVideoPlayerProgressBarViewDelegate: AnyObject {
 
 public class FoxVideoPlayerProgressBarView: UIView {
     private lazy var progressSlider: FoxVideoPlayerProgressSlider = {
-        let slider = FoxVideoPlayerProgressSlider()
+        let slider = FoxVideoPlayerProgressSlider(settings: FoxVideoPlayerProgressBarSliderSettings())
         slider.translatesAutoresizingMaskIntoConstraints = false
         slider.movingOnRaised = { [weak self] isMoving in
             guard let self = self else { return }
@@ -80,11 +80,10 @@ public class FoxVideoPlayerProgressBarView: UIView {
     private var sliderTopInset: CGFloat {
         progressSlider.sliderTopInset + progressSlider.frame.origin.y
     }
+    
     private let height: CGFloat = 66.0
 
     public weak var delegate: FoxVideoPlayerProgressBarViewDelegate?
-    
-    private var didStartPlay = false
 
     private var rate: Float
     private var screenMode: FoxScreenMode
@@ -111,7 +110,7 @@ public class FoxVideoPlayerProgressBarView: UIView {
             progressSlider.topAnchor.constraint(equalTo: topAnchor),
             progressSlider.leftAnchor.constraint(equalTo: leftAnchor),
             progressSlider.rightAnchor.constraint(equalTo: rightAnchor),
-            progressSlider.heightAnchor.constraint(equalToConstant: 34),
+            progressSlider.heightAnchor.constraint(equalToConstant: height / 2),
 
             timerLabel.topAnchor.constraint(equalTo: progressSlider.bottomAnchor),
             timerLabel.leftAnchor.constraint(equalTo: progressSlider.leftAnchor, constant: 24),
@@ -142,8 +141,6 @@ public class FoxVideoPlayerProgressBarView: UIView {
     }
     
     public func setTime(_ time: TimeInterval, duration: TimeInterval) {
-        didStartPlay = true
-        
         progressSlider.duration = CGFloat(duration)
         progressSlider.currentTime = CGFloat(time)
         let progress = CGFloat(time / duration)

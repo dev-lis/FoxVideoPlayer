@@ -10,8 +10,8 @@ import UIKit
 class FoxVideoPlayerProgressSlider: UIControl {
     private lazy var lineLayer: FoxVideoPlayerProgressBarLineLayer = {
         let layer = FoxVideoPlayerProgressBarLineLayer()
-        layer.backgroundColor = UIColor.white.withAlphaComponent(0.44).cgColor
-        layer.cornerRadius = 2
+        layer.fillColor = settings.sliderFillColor
+        layer.backgroundColor = settings.sliderBackgroundColor.cgColor
         layer.masksToBounds = true
         return layer
     }()
@@ -24,9 +24,12 @@ class FoxVideoPlayerProgressSlider: UIControl {
 
     private lazy var pinLayer: CALayer = {
         let layer = CALayer()
-        layer.backgroundColor = UIColor.systemBlue.cgColor
-        layer.frame.size = CGSize(width: 12, height: 12)
-        layer.cornerRadius = 6
+        layer.backgroundColor = settings.sliderFillColor.cgColor
+        layer.frame.size = CGSize(
+            width: pinDefaultSize,
+            height: pinDefaultSize
+        )
+        layer.cornerRadius = pinDefaultSize / 2
         return layer
     }()
 
@@ -62,6 +65,30 @@ class FoxVideoPlayerProgressSlider: UIControl {
     
     private var timer: Timer?
 
+    private var sideInset: CGFloat {
+        settings.sideInsetsOnShownState
+    }
+    
+    private var pinDefaultSize: CGFloat {
+        settings.pinDefaultSize
+    }
+    
+    private var pinIncreasedSize: CGFloat {
+        settings.pinIncreasedSize
+    }
+    
+    private var isRoundedCornersSlider: Bool {
+        settings.isRoundedCornersSlider && settings.sideInsetsOnShownState > 0
+    }
+    
+    private var currentPinContainerX: CGFloat {
+        currentProgress * lineLayer.frame.width - frame.height / 2 + (isVisible ? sideInset : 0)
+    }
+    
+    private var pinContainerSize: CGFloat {
+        frame.height
+    }
+    
     private var previewTime: CGFloat = 0
     private var currentPinPosition: CGFloat?
     private var isAnimationCompleted = true
@@ -72,8 +99,10 @@ class FoxVideoPlayerProgressSlider: UIControl {
     private var isEnableUpdateImage = false
     
     private var isMagnetedZone: Bool {
-        let inset = pinContainerLayer.bounds.width / 4 + (isVisible ? 0 : 16)
-        return currentPinPosition! > lineLayer.value + inset - (isVisible ? 0 : 32) ||
+        let showInset = isVisible ? 0 : sideInset
+        let shownWidth = isVisible ? 0 : sideInset * 2
+        let inset = pinContainerLayer.bounds.width / 4 + showInset
+        return currentPinPosition! > lineLayer.value + inset - shownWidth ||
         currentPinPosition! < lineLayer.value - inset
     }
 
@@ -93,20 +122,22 @@ class FoxVideoPlayerProgressSlider: UIControl {
         didSet {
             lineLayer.progress = currentProgress
             let inset = isVisible
-                ? frame.height
+                ? pinContainerSize
                 : 0
             currentPinPosition = currentProgress * (frame.width - inset)
-            if !isVisible { currentPinPosition! -= frame.height / 2 }
+            if !isVisible { currentPinPosition! -= pinContainerSize / 2 }
 
             if !isMovingOnVisible {
                 layoutSubviews()
             }
         }
     }
+    
+    private let settings: FoxVideoPlayerProgressBarSliderSettings
 
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        self.isExclusiveTouch = true
+    init(settings: FoxVideoPlayerProgressBarSliderSettings) {
+        self.settings = settings
+        super.init(frame: .zero)
         setupUI()
     }
 
@@ -128,8 +159,10 @@ class FoxVideoPlayerProgressSlider: UIControl {
     }
     
     private func updateLine() {
-        let lineX: CGFloat = isVisible ? 16 : 0
-        let lineWidth = isVisible ? frame.size.width - 32 : frame.size.width
+        let lineX: CGFloat = isVisible ? sideInset : 0
+        let lineWidth = isVisible
+        ? frame.size.width - sideInset * 2
+        : frame.size.width
 
         lineLayer.frame = CGRect(
             x: lineX,
@@ -142,30 +175,34 @@ class FoxVideoPlayerProgressSlider: UIControl {
     private func updatePin() {
         guard !isSeeking else { return }
         
-        if currentPinPosition == nil { currentPinPosition = 16 - frame.height / 2 }
+        if currentPinPosition == nil { currentPinPosition = sideInset - pinContainerSize / 2 }
         
-        let inset = isVisible
-            ? frame.height
-            : 0
-        var curPinPosition = currentProgress * (frame.width - inset)
-        if !isVisible { curPinPosition -= 16 }
+//        let inset = isVisible
+//        ? sideInset * 2
+//        : 0
+//        var curPinPosition = currentProgress * (frame.width - inset)
+//        if !isVisible { curPinPosition -= sideInset }
+//
+//
 
-        if curPinPosition.isNaN {
-            curPinPosition = 0
-        }
+//        if curPinPosition.isNaN {
+//            curPinPosition = 0
+//        }
+        
+//        let curPinPosition = currentPinContainerX
         
         pinContainerLayer.frame = CGRect(
-            x: curPinPosition,
+            x: currentPinContainerX,
             y: 0,
             width: frame.height,
             height: frame.height
         )
 
         let pinSide: CGFloat = isVisible
-            ? isIncreased ? 20 : 12
-            : isIncreased ? 20 : 0
+            ? isIncreased ? pinIncreasedSize : pinDefaultSize
+            : isIncreased ? pinIncreasedSize : 0
         pinLayer.frame = CGRect(
-            x: frame.height / 2 - pinLayer.frame.width / 2,
+            x: pinContainerSize / 2 - pinLayer.frame.width / 2,
             y: pinContainerLayer.frame.height / 2 - pinLayer.frame.height / 2,
             width: pinSide,
             height: pinSide
@@ -187,7 +224,7 @@ class FoxVideoPlayerProgressSlider: UIControl {
         : leftInset
         previewImageView.frame.origin = CGPoint(
             x: currentPreviewX,
-            y: -currentTimeLabel.frame.height - previewImageView.frame.height - 16
+            y: -currentTimeLabel.frame.height - previewImageView.frame.height - sideInset
         )
     }
     
@@ -205,7 +242,7 @@ class FoxVideoPlayerProgressSlider: UIControl {
     func setPreviewImageSize(_ size: CGSize) {
         DispatchQueue.main.async {
             self.previewImageView.frame.size = size
-            self.previewImageView.frame.origin.y = -self.currentTimeLabel.frame.height - self.previewImageView.frame.height - 16
+            self.previewImageView.frame.origin.y = -self.currentTimeLabel.frame.height - self.previewImageView.frame.height - self.sideInset
         }
     }
     
@@ -232,12 +269,12 @@ extension FoxVideoPlayerProgressSlider {
         
         isAnimationCompleted = false
 
-        currentPinPosition = currentProgress * (frame.width - frame.height)
+//        currentPinPosition = currentProgress * (frame.width - frame.height)
         pinContainerLayer.frame = CGRect(
-            x: currentPinPosition!,
+            x: currentPinContainerX,
             y: 0,
-            width: frame.height,
-            height: frame.height
+            width: pinContainerSize,
+            height: pinContainerSize
         )
 
         CATransaction.begin()
@@ -247,7 +284,7 @@ extension FoxVideoPlayerProgressSlider {
             self.layoutSubviews()
             self.lineLayer.removeAllAnimations()
             self.pinLayer.removeAllAnimations()
-            self.lineLayer.cornerRadius = 2
+            self.lineLayer.cornerRadius = self.isRoundedCornersSlider ? 2 : 0
         }
 
         var animations = [CABasicAnimation]()
@@ -255,19 +292,21 @@ extension FoxVideoPlayerProgressSlider {
         let positionAnimation = CABasicAnimation(keyPath: "bounds")
         positionAnimation.fromValue = lineLayer.frame
         positionAnimation.toValue = CGRect(
-            x: 16,
+            x: sideInset,
             y: lineLayer.frame.origin.y,
-            width: frame.width - 32,
+            width: frame.width - sideInset * 2,
             height: lineLayer.frame.height
         )
         animations.append(positionAnimation)
 
-        let cornerAnimation = CABasicAnimation(keyPath: "cornerRadius")
-        cornerAnimation.timingFunction = CAMediaTimingFunction(name: .linear)
-        cornerAnimation.fromValue = 0
-        cornerAnimation.toValue = 2
+        if isRoundedCornersSlider {
+            let cornerAnimation = CABasicAnimation(keyPath: "cornerRadius")
+            cornerAnimation.timingFunction = CAMediaTimingFunction(name: .linear)
+            cornerAnimation.fromValue = 0
+            cornerAnimation.toValue = 2
 
-        animations.append(cornerAnimation)
+            animations.append(cornerAnimation)
+        }
 
         let group = CAAnimationGroup()
         group.fillMode = .forwards
@@ -282,10 +321,10 @@ extension FoxVideoPlayerProgressSlider {
         pinAnimation.duration = animateDuration
         pinAnimation.fromValue = pinLayer.frame
         pinAnimation.toValue = CGRect(
-            x: currentPinPosition!,
-            y: pinContainerLayer.frame.height / 2 - 6,
-            width: 12,
-            height: 12
+            x: currentPinContainerX,
+            y: pinContainerLayer.frame.height / 2 - pinDefaultSize / 2,
+            width: pinDefaultSize,
+            height: pinDefaultSize
         )
         pinLayer.add(pinAnimation, forKey: nil)
 
@@ -297,12 +336,12 @@ extension FoxVideoPlayerProgressSlider {
 
         isAnimationCompleted = false
         
-        currentPinPosition = currentProgress * frame.width - 16
+//        currentPinPosition = currentProgress * frame.width - sideInset
         pinContainerLayer.frame = CGRect(
-            x: currentPinPosition!,
+            x: currentPinContainerX,
             y: 0,
-            width: frame.height,
-            height: frame.height
+            width: pinContainerSize,
+            height: pinContainerSize
         )
 
         CATransaction.begin()
@@ -327,12 +366,14 @@ extension FoxVideoPlayerProgressSlider {
         )
         animations.append(positionAnimation)
 
-        let corrnerAnimation = CABasicAnimation(keyPath: "cornerRadius")
-        corrnerAnimation.timingFunction = CAMediaTimingFunction(name: .linear)
-        corrnerAnimation.fromValue = 2
-        corrnerAnimation.toValue = 0
+        if isRoundedCornersSlider {
+            let corrnerAnimation = CABasicAnimation(keyPath: "cornerRadius")
+            corrnerAnimation.timingFunction = CAMediaTimingFunction(name: .linear)
+            corrnerAnimation.fromValue = 2
+            corrnerAnimation.toValue = 0
 
-        animations.append(corrnerAnimation)
+            animations.append(corrnerAnimation)
+        }
 
         let group = CAAnimationGroup()
         group.fillMode = .forwards
@@ -348,7 +389,7 @@ extension FoxVideoPlayerProgressSlider {
         pinAnimation.fromValue = pinLayer.frame
         pinAnimation.toValue = CGRect(
             x: 0,
-            y: pinContainerLayer.frame.height / 2 - 8,
+            y: pinContainerLayer.frame.height / 2,
             width: 0,
             height: 0
         )
@@ -392,7 +433,7 @@ extension FoxVideoPlayerProgressSlider {
             isMagnetized = false
         } else {
             guard !isMagnetized else { return true }
-            let position = lineLayer.value + (isVisible ? 16 : 0)
+            let position = lineLayer.value + (isVisible ? sideInset : 0)
             update(x: position)
             isMagnetized = true
             vibrate()
@@ -437,24 +478,24 @@ extension FoxVideoPlayerProgressSlider {
 private extension FoxVideoPlayerProgressSlider {
     func increasePin() {
         pinLayer.frame = CGRect(
-            x: pinContainerLayer.frame.width / 2 - 10,
-            y: pinContainerLayer.frame.height / 2 - 10,
-            width: 20,
-            height: 20
+            x: pinContainerLayer.frame.width / 2 - pinIncreasedSize / 2,
+            y: pinContainerLayer.frame.height / 2 - pinIncreasedSize / 2,
+            width: pinIncreasedSize,
+            height: pinIncreasedSize
         )
-        pinLayer.cornerRadius = 10
+        pinLayer.cornerRadius = pinIncreasedSize / 2
 
         isIncreased = true
     }
 
     func decreasePin() {
         pinLayer.frame = CGRect(
-            x: pinContainerLayer.frame.width / 2 - 6,
-            y: pinContainerLayer.frame.height / 2 - 6,
-            width: isVisible ? 12 : 0,
-            height: isVisible ? 12 : 0
+            x: pinContainerLayer.frame.width / 2 - pinDefaultSize / 2,
+            y: pinContainerLayer.frame.height / 2 - pinDefaultSize / 2,
+            width: isVisible ? pinDefaultSize : 0,
+            height: isVisible ? pinDefaultSize : 0
         )
-        pinLayer.cornerRadius = 6
+        pinLayer.cornerRadius = pinDefaultSize / 2
 
         isIncreased = false
     }
@@ -555,8 +596,8 @@ private extension FoxVideoPlayerProgressSlider {
     }
     
     func time(for position: CGFloat) -> CGFloat {
-        let insetPoint: CGFloat = isVisible ? 16 : 0
-        let insetWidth: CGFloat = isVisible ? 32 : 0
+        let insetPoint: CGFloat = isVisible ? sideInset : 0
+        let insetWidth: CGFloat = isVisible ? sideInset * 2 : 0
         let point = position - insetPoint
         let width = frame.width - insetWidth
         return duration * point / width

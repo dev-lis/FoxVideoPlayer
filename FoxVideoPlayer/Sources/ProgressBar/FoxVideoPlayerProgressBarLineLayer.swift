@@ -17,12 +17,13 @@ class FoxVideoPlayerProgressBarLineLayer: CALayer {
     var value: CGFloat {
         bounds.width * progress
     }
-
+    
+    var fillColor: UIColor?
+    
     override func draw(in ctx: CGContext) {
-        ctx.setFillColor(UIColor.systemBlue.cgColor)
-        let rect = CGRect(x: 0, y: 0,
-                          width: value,
-                          height: bounds.height)
+        guard let fillColor = fillColor else { return }
+        ctx.setFillColor(fillColor.cgColor)
+        let rect = CGRect(x: 0, y: 0, width: value, height: bounds.height)
         ctx.fill(rect)
     }
 }
