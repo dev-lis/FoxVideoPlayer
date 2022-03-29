@@ -1,0 +1,6 @@
+framework module Pods_FoxVideoPlayer_Tests {
+  umbrella header "Pods-FoxVideoPlayer_Tests-umbrella.h"
+
+  export *
+  module * { export * }
+}
