@@ -20,6 +20,6 @@ Pod::Spec.new do |s|
   s.ios.deployment_target = '13.0'
   s.swift_versions = '5.0'
 
-  s.source_files = 'FoxVideoPlayer/Sources/**/*'
+  s.source_files = 'FoxVideoPlayer/Sources/**/*.{h,m,swift}'
   
 end

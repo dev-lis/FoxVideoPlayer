@@ -1,8 +1,8 @@
 {
   "name": "FoxVideoPlayer",
   "version": "0.1.0",
-  "summary": "A short description of FoxVideoPlayer.",
-  "description": "TODO: Add long description of the pod here.",
+  "summary": "Customizable video player",
+  "description": "You can easily and quickly integrate a video player into your project. You can use all player or some of its components. The player summer insists.",
   "homepage": "https://github.com/dev-lis/FoxVideoPlayer",
   "license": {
     "type": "MIT",
@@ -16,7 +16,9 @@
     "tag": "0.1.0"
   },
   "platforms": {
-    "ios": "9.0"
+    "ios": "13.0"
   },
-  "source_files": "FoxVideoPlayer/Classes/**/*"
+  "swift_versions": "5.0",
+  "source_files": "FoxVideoPlayer/Sources/**/*.{h,m,swift}",
+  "swift_version": "5.0"
 }
