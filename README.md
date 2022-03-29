@@ -22,10 +22,23 @@ pod 'FoxVideoPlayer'
 
 ## Usages
 ```swift
-    if let url = URL(string: <YOUR-URL>) {
-        let playerViewController = FoxVideoPlayerViewController()
-        playerViewController.setup(with: url)
-    }
+if let url = URL(string: <YOUR-URL>) {
+    let playerViewController = FoxVideoPlayerViewController()
+    playerViewController.view.translatesAutoresizingMaskIntoConstraints = false
+    playerViewController.setup(with: url)
+    
+    addChild(playerViewController)
+    playerViewController.didMove(toParent: self)
+    view.addSubview(playerViewController.view)
+
+    NSLayoutConstraint.activate([
+        playerViewController.view.topAnchor.constraint(equalTo: view.topAnchor),
+        playerViewController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+        playerViewController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+        playerViewController.view.heightAnchor.constraint(equalToConstant: playerViewController.height)
+
+    ])
+}
 ```
 
 ## Author
