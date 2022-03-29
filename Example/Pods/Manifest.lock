@@ -1,0 +1,16 @@
+PODS:
+  - FoxVideoPlayer (0.1.0)
+
+DEPENDENCIES:
+  - FoxVideoPlayer (from `../`)
+
+EXTERNAL SOURCES:
+  FoxVideoPlayer:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  FoxVideoPlayer: 52dc66493c5f2966cad0669f3c5a71852544bf5d
+
+PODFILE CHECKSUM: bba86a367ed206b7a459ab65b3337c7126cb2d7e
+
+COCOAPODS: 1.11.3
