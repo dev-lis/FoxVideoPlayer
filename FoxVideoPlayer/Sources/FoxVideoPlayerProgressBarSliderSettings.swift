@@ -17,6 +17,9 @@ public struct FoxVideoPlayerProgressBarSliderSettings {
     public var sliderBackgroundColor: UIColor = .white.withAlphaComponent(0.44)
     public var sliderFillColor: UIColor = .systemBlue
     
+    public var previewTimeLabelFont: UIFont = .systemFont(ofSize: 18, weight: .medium)
+    public var previewTimeLabelColor: UIColor = .white
+    
     public var isRoundedCornersSlider: Bool = true
     
     public init() { }

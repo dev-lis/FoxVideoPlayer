@@ -42,8 +42,8 @@ class FoxVideoPlayerProgressSlider: UIControl {
 
     private lazy var currentTimeLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 18, weight: .medium)
-        label.textColor = .white
+        label.font = settings.previewTimeLabelFont
+        label.textColor = settings.previewTimeLabelColor
         label.textAlignment = .center
         label.alpha = 0
         label.text = " "
@@ -118,9 +118,7 @@ class FoxVideoPlayerProgressSlider: UIControl {
     private var currentProgress: CGFloat = 0 {
         didSet {
             lineLayer.progress = currentProgress
-            if !isMovingOnVisible {
-                layoutSubviews()
-            }
+            layoutSubviews()
         }
     }
     
@@ -142,9 +140,8 @@ class FoxVideoPlayerProgressSlider: UIControl {
 
     override func layoutSubviews() {
         super.layoutSubviews()
-
         guard isAnimationCompleted else { return }
-        
+
         updateLine()
         updatePin()
     }
@@ -159,7 +156,7 @@ class FoxVideoPlayerProgressSlider: UIControl {
             x: lineX,
             y: frame.height / 2 - 2,
             width: lineWidth,
-            height: 4
+            height: settings.sliderHeight
         )
     }
     
@@ -168,9 +165,9 @@ class FoxVideoPlayerProgressSlider: UIControl {
         
         pinContainerLayer.frame = CGRect(
             x: currentPinContainerX,
-            y: 0,
-            width: frame.height,
-            height: frame.height
+            y: lineLayer.frame.midY - pinContainerSize / 2,
+            width: pinContainerSize,
+            height: pinContainerSize
         )
 
         let pinSide: CGFloat = isVisible
@@ -259,7 +256,7 @@ extension FoxVideoPlayerProgressSlider {
             self.layoutSubviews()
             self.lineLayer.removeAllAnimations()
             self.pinLayer.removeAllAnimations()
-            self.lineLayer.cornerRadius = self.isRoundedCornersSlider ? 2 : 0
+            self.lineLayer.cornerRadius = self.isRoundedCornersSlider ? self.settings.sliderHeight / 2 : 0
         }
 
         var animations = [CABasicAnimation]()
@@ -278,7 +275,7 @@ extension FoxVideoPlayerProgressSlider {
             let cornerAnimation = CABasicAnimation(keyPath: "cornerRadius")
             cornerAnimation.timingFunction = CAMediaTimingFunction(name: .linear)
             cornerAnimation.fromValue = 0
-            cornerAnimation.toValue = 2
+            cornerAnimation.toValue = settings.sliderHeight / 2
 
             animations.append(cornerAnimation)
         }
@@ -421,6 +418,11 @@ extension FoxVideoPlayerProgressSlider {
     }
     
     override func endTracking(_ touch: UITouch?, with event: UIEvent?) {
+        guard let touch = touch else { return }
+        let point = touch.location(in: touch.view)
+        currentPinPosition = point.x - sideInset
+        currentTime = time(for: point.x)
+        
         endTracking()
     }
     
