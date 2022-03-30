@@ -228,7 +228,7 @@ public class FoxVideoPlayerView: UIView {
                 object: self.player?.currentItem
             )
 
-            let interval = CMTimeMakeWithSeconds(1, preferredTimescale: Int32(NSEC_PER_SEC))
+            let interval = CMTimeMakeWithSeconds(0.1, preferredTimescale: Int32(NSEC_PER_SEC))
 
             self.playerTimeObserver = self.player?.addPeriodicTimeObserver(forInterval: interval,
                                                                            queue: DispatchQueue.main,
