@@ -89,7 +89,7 @@
 		CA7B313270EBDDE46834EE2D628F0985 /* Pods-FoxVideoPlayer_Tests-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-FoxVideoPlayer_Tests-acknowledgements.plist"; sourceTree = "<group>"; };
 		CB90DBC42B0CAFCC3220035D84FCEE93 /* FoxVideoPlayer.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; path = FoxVideoPlayer.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		CCC31D04063CCED550E0203741087CE7 /* FoxVideoPlayer */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = FoxVideoPlayer; path = FoxVideoPlayer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		CE5894BC27F381010020081A /* FoxVideoPlayerProgressBarSliderSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FoxVideoPlayerProgressBarSliderSettings.swift; path = FoxVideoPlayer/Sources/FoxVideoPlayerProgressBarSliderSettings.swift; sourceTree = "<group>"; };
+		CE5894BC27F381010020081A /* FoxVideoPlayerProgressBarSliderSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FoxVideoPlayerProgressBarSliderSettings.swift; sourceTree = "<group>"; };
 		DC81DF6EED3CBE2C44E7B04C88A76927 /* Pods-FoxVideoPlayer_Tests.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-FoxVideoPlayer_Tests.modulemap"; sourceTree = "<group>"; };
 		EA3B2EEE5C3FF6B4B9DDA0A0AC528E95 /* FoxVideoPlayerProgressSlider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = FoxVideoPlayerProgressSlider.swift; sourceTree = "<group>"; };
 		ECEEB343673A1EB129D4A31E7EA31035 /* FoxVideoPlayer.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = FoxVideoPlayer.release.xcconfig; sourceTree = "<group>"; };
@@ -236,7 +236,7 @@
 		5FC3FF2DD4E2E72AD6E93748D4844444 /* FoxVideoPlayer */ = {
 			isa = PBXGroup;
 			children = (
-				CE5894BC27F381010020081A /* FoxVideoPlayerProgressBarSliderSettings.swift */,
+				CE5894BE27F483830020081A /* Settings */,
 				7F025B73E4E7C05E5DFBC45543434153 /* Aditional */,
 				418B790FD3C55ED0FB5A23BCC560F199 /* Controls */,
 				34253ADC953F7028F49D2639B6D2AB76 /* Extensions */,
@@ -280,6 +280,14 @@
 				5FC3FF2DD4E2E72AD6E93748D4844444 /* FoxVideoPlayer */,
 			);
 			name = "Development Pods";
+			sourceTree = "<group>";
+		};
+		CE5894BE27F483830020081A /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				CE5894BC27F381010020081A /* FoxVideoPlayerProgressBarSliderSettings.swift */,
+			);
+			path = Settings;
 			sourceTree = "<group>";
 		};
 		CF1408CF629C7361332E53B88F7BD30C = {

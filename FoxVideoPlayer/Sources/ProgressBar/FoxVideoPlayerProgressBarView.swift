@@ -89,8 +89,7 @@ public class FoxVideoPlayerProgressBarView: UIView {
     private var screenMode: FoxScreenMode
 
     public init(rate: Float = 1.0,
-                screenMode: FoxScreenMode = .default,
-                isEnableHandleRotation: Bool = true) {
+                screenMode: FoxScreenMode = .default) {
         self.rate = rate
         self.screenMode = screenMode
         super.init(frame: .zero)
