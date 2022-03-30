@@ -32,7 +32,7 @@ public struct FoxVideoPlayerProgressBarSliderSettings {
                 sliderFillColor: UIColor = .systemBlue,
                 previewTimeLabelColor: UIColor = .white,
                 previewTimeLabelFont: UIFont = .systemFont(ofSize: 18, weight: .medium),
-                previewAnimateDuration: TimeInterval = 5,
+                previewAnimateDuration: TimeInterval = 0.2,
                 isRoundedCornersSlider: Bool = true,
                 isEnableVibrate: Bool = true) {
         self.sliderHeight = sliderHeight
