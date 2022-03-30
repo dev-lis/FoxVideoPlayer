@@ -18,7 +18,7 @@ public protocol FoxVideoPlayerProgressBarViewDelegate: AnyObject {
 
 public class FoxVideoPlayerProgressBarView: UIView {
     private lazy var progressSlider: FoxVideoPlayerProgressSlider = {
-        let slider = FoxVideoPlayerProgressSlider(settings: FoxVideoPlayerProgressBarSliderSettings())
+        let slider = FoxVideoPlayerProgressSlider(settings: settings.sliderSettings)
         slider.translatesAutoresizingMaskIntoConstraints = false
         slider.movingOnRaised = { [weak self] isMoving in
             guard let self = self else { return }
@@ -50,9 +50,9 @@ public class FoxVideoPlayerProgressBarView: UIView {
 
     private lazy var timerLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 14, weight: .semibold)
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.textColor = .white
+        label.font = settings.timerLabelFont
+        label.textColor = settings.timerLabelColor
         label.isHidden = true
         return label
     }()
@@ -81,16 +81,19 @@ public class FoxVideoPlayerProgressBarView: UIView {
         progressSlider.sliderTopInset + progressSlider.frame.origin.y
     }
     
-    private let height: CGFloat = 66.0
+    private var height: CGFloat {
+        settings.barHeight
+    }
 
     public weak var delegate: FoxVideoPlayerProgressBarViewDelegate?
 
-    private var rate: Float
     private var screenMode: FoxScreenMode
+    
+    private let settings: FoxVideoPlayerProgressBarSettings
 
-    public init(rate: Float = 1.0,
+    public init(settings: FoxVideoPlayerProgressBarSettings,
                 screenMode: FoxScreenMode = .default) {
-        self.rate = rate
+        self.settings = settings
         self.screenMode = screenMode
         super.init(frame: .zero)
         setupUI()
@@ -112,11 +115,11 @@ public class FoxVideoPlayerProgressBarView: UIView {
             progressSlider.heightAnchor.constraint(equalToConstant: height / 2),
 
             timerLabel.topAnchor.constraint(equalTo: progressSlider.bottomAnchor),
-            timerLabel.leftAnchor.constraint(equalTo: progressSlider.leftAnchor, constant: 24),
+            timerLabel.leftAnchor.constraint(equalTo: progressSlider.leftAnchor, constant: settings.timerLeftInset),
             timerLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -16),
 
             buttonsStackView.topAnchor.constraint(equalTo: progressSlider.bottomAnchor, constant: -16),
-            buttonsStackView.rightAnchor.constraint(equalTo: rightAnchor, constant: -24),
+            buttonsStackView.rightAnchor.constraint(equalTo: rightAnchor, constant: -settings.timerLeftInset),
             buttonsStackView.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
         

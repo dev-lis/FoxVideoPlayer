@@ -410,6 +410,7 @@ extension FoxVideoPlayerProgressSlider {
     override func endTracking(_ touch: UITouch?, with event: UIEvent?) {
         guard let touch = touch else { return }
         let point = touch.location(in: touch.view)
+        currentPinPosition = point.x - sideInset
         currentTime = time(for: point.x)
         
         endTracking()

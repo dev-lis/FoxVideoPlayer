@@ -30,7 +30,7 @@ public class FoxVideoPlayerViewController: UIViewController {
     }()
     
     private lazy var progressBarView: FoxVideoPlayerProgressBarView = {
-        let view = FoxVideoPlayerProgressBarView()
+        let view = FoxVideoPlayerProgressBarView(settings: progressBarSettings)
         view.translatesAutoresizingMaskIntoConstraints = false
         view.delegate = self
         view.isHidden = true
@@ -40,12 +40,22 @@ public class FoxVideoPlayerViewController: UIViewController {
     private var fullScreenController: FoxFullScreenVideoPlayerViewController?
     
     private var progressBarBottomConstraint: NSLayoutConstraint!
-    private let progressBarHeight: CGFloat = 66.0
     
     public var height: CGFloat {
         min(UIScreen.main.bounds.width, UIScreen.main.bounds.height) * 9 / 16
     }
-
+    
+    private var progressBarSettings: FoxVideoPlayerProgressBarSettings = FoxVideoPlayerProgressBarSettings()
+    
+    public init(progressBarSettings: FoxVideoPlayerProgressBarSettings? = nil) {
+        self.progressBarSettings = progressBarSettings ?? FoxVideoPlayerProgressBarSettings()
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     public override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
@@ -157,10 +167,11 @@ extension FoxVideoPlayerViewController: FoxVideoPlayerViewDelegate {
 
 extension FoxVideoPlayerViewController: FoxVideoPlayerControlsViewDelegate {
     public func didTapPlay(_ controls: FoxVideoPlayerControlsView, isPlay: Bool) {
-        if isPlay, progressBarView.isHidden {
-            progressBarView.isHidden = false
+        if progressBarView.isHidden {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                self.progressBarView.isHidden = false
+            }
         }
-        
         isPlay ? playerView.play() : playerView.pause()
     }
     
