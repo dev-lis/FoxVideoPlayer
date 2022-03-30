@@ -84,6 +84,10 @@ public class FoxVideoPlayerProgressBarView: UIView {
     private var height: CGFloat {
         settings.barHeight
     }
+    
+    private var animateDuration: TimeInterval {
+        settings.animateDuration
+    }
 
     public weak var delegate: FoxVideoPlayerProgressBarViewDelegate?
 
@@ -127,14 +131,14 @@ public class FoxVideoPlayerProgressBarView: UIView {
     }
 
     private func showAnimation() {
-        progressSlider.showAnimation()
+        progressSlider.showAnimation(duration: animateDuration)
 
         timerLabel.isHidden = false
         buttonsStackView.isHidden = false
     }
 
     private func hideAnimation() {
-        progressSlider.hideAnimation()
+        progressSlider.hideAnimation(duration: animateDuration)
 
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
             self.timerLabel.isHidden = true
@@ -211,20 +215,20 @@ public class FoxVideoPlayerProgressBarView: UIView {
     }
     
     public func show() {
+        showAnimation()
         bottomConstraint?.constant = 0
-        UIView.animate(withDuration: 0.2) {
+        UIView.animate(withDuration: animateDuration) {
             self.superview?.layoutIfNeeded()
         }
-        showAnimation()
     }
     
     public func hide() {
+        hideAnimation()
         let inset = screenMode == .default ? sliderTopInset : 0
         bottomConstraint?.constant = frame.height - inset
-        UIView.animate(withDuration: 0.2) {
+        UIView.animate(withDuration: animateDuration) {
             self.superview?.layoutIfNeeded()
         }
-        hideAnimation()
     }
     
     public func updateFullScreenButton() {

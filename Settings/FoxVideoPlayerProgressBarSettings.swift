@@ -17,6 +17,8 @@ public struct FoxVideoPlayerProgressBarSettings {
     
     public var timerLabelFont: UIFont
     
+    public var animateDuration: TimeInterval
+    
     public var sliderSettings: FoxVideoPlayerProgressBarSliderSettings
     
     public init(barHeight: CGFloat = 66.0,
@@ -24,12 +26,14 @@ public struct FoxVideoPlayerProgressBarSettings {
                 buttonsStackRightInset: CGFloat = 24.0,
                 timerLabelColor: UIColor = .white,
                 timerLabelFont: UIFont = .systemFont(ofSize: 14, weight: .semibold),
+                animateDuration: TimeInterval = 0.2,
                 sliderSettings: FoxVideoPlayerProgressBarSliderSettings? = nil) {
         self.barHeight = barHeight
         self.timerLeftInset = timerLeftInset
         self.buttonsStackRightInset = buttonsStackRightInset
         self.timerLabelColor = timerLabelColor
         self.timerLabelFont = timerLabelFont
+        self.animateDuration = animateDuration
         self.sliderSettings = sliderSettings ?? FoxVideoPlayerProgressBarSliderSettings()
     }
 }

@@ -58,7 +58,6 @@ class FoxVideoPlayerProgressSlider: UIControl {
     public var duration: CGFloat = 0
     public var currentTime: CGFloat = 0
 
-    public var animateDuration: TimeInterval = 0.2
     public var sliderTopInset: CGFloat {
         lineLayer.frame.maxY
     }
@@ -87,6 +86,10 @@ class FoxVideoPlayerProgressSlider: UIControl {
     
     private var pinContainerSize: CGFloat {
         frame.height
+    }
+    
+    private var animateDuration: TimeInterval {
+        settings.previewAnimateDuration
     }
     
     private var previewTime: CGFloat = 0
@@ -225,7 +228,7 @@ class FoxVideoPlayerProgressSlider: UIControl {
 // MARK: Animation
 
 extension FoxVideoPlayerProgressSlider {
-    func showAnimation() {
+    func showAnimation(duration: TimeInterval) {
         guard isAnimationCompleted else { return }
         
         isAnimationCompleted = false
@@ -272,14 +275,14 @@ extension FoxVideoPlayerProgressSlider {
         let group = CAAnimationGroup()
         group.fillMode = .forwards
         group.isRemovedOnCompletion = false
-        group.duration = animateDuration
+        group.duration = duration
         group.animations = animations
         lineLayer.add(group, forKey: nil)
 
         let pinAnimation = CABasicAnimation(keyPath: "bounds")
         pinAnimation.fillMode = .forwards
         pinAnimation.isRemovedOnCompletion = false
-        pinAnimation.duration = animateDuration
+        pinAnimation.duration = duration
         pinAnimation.fromValue = pinLayer.frame
         pinAnimation.toValue = CGRect(
             x: currentPinContainerX,
@@ -292,7 +295,7 @@ extension FoxVideoPlayerProgressSlider {
         CATransaction.commit()
     }
 
-    func hideAnimation() {
+    func hideAnimation(duration: TimeInterval) {
         guard isAnimationCompleted else { return }
 
         isAnimationCompleted = false
@@ -338,14 +341,14 @@ extension FoxVideoPlayerProgressSlider {
         let group = CAAnimationGroup()
         group.fillMode = .forwards
         group.isRemovedOnCompletion = false
-        group.duration = animateDuration
+        group.duration = duration
         group.animations = animations
         lineLayer.add(group, forKey: nil)
 
         let pinAnimation = CABasicAnimation(keyPath: "bounds")
         pinAnimation.fillMode = .forwards
         pinAnimation.isRemovedOnCompletion = false
-        pinAnimation.duration = animateDuration
+        pinAnimation.duration = duration
         pinAnimation.fromValue = pinLayer.frame
         pinAnimation.toValue = CGRect(
             x: 0,

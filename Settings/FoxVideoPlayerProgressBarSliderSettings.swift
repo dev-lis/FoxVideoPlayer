@@ -15,9 +15,11 @@ public struct FoxVideoPlayerProgressBarSliderSettings {
     
     public var sliderBackgroundColor: UIColor
     public var sliderFillColor: UIColor
+    public var previewTimeLabelColor: UIColor
     
     public var previewTimeLabelFont: UIFont
-    public var previewTimeLabelColor: UIColor
+    
+    public var previewAnimateDuration: TimeInterval
     
     public var isRoundedCornersSlider: Bool
     public var isEnableVibrate: Bool
@@ -28,8 +30,9 @@ public struct FoxVideoPlayerProgressBarSliderSettings {
                 pinIncreasedSize: CGFloat = 20.0,
                 sliderBackgroundColor: UIColor = .white.withAlphaComponent(0.44),
                 sliderFillColor: UIColor = .systemBlue,
-                previewTimeLabelFont: UIFont = .systemFont(ofSize: 18, weight: .medium),
                 previewTimeLabelColor: UIColor = .white,
+                previewTimeLabelFont: UIFont = .systemFont(ofSize: 18, weight: .medium),
+                previewAnimateDuration: TimeInterval = 5,
                 isRoundedCornersSlider: Bool = true,
                 isEnableVibrate: Bool = true) {
         self.sliderHeight = sliderHeight
@@ -38,8 +41,9 @@ public struct FoxVideoPlayerProgressBarSliderSettings {
         self.pinIncreasedSize = pinIncreasedSize
         self.sliderBackgroundColor = sliderBackgroundColor
         self.sliderFillColor = sliderFillColor
-        self.previewTimeLabelFont = previewTimeLabelFont
         self.previewTimeLabelColor = previewTimeLabelColor
+        self.previewTimeLabelFont = previewTimeLabelFont
+        self.previewAnimateDuration = previewAnimateDuration
         self.isRoundedCornersSlider = isRoundedCornersSlider
         self.isEnableVibrate = isEnableVibrate
     }
