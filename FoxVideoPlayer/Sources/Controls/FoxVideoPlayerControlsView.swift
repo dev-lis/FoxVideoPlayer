@@ -117,11 +117,7 @@ public class FoxVideoPlayerControlsView: UIView {
 
     var visible: Bool = false {
         didSet {
-            UIView.animate(withDuration: 0.2) {
-                self.visible
-                    ? self.showControls()
-                    : self.hideControls()
-            }
+            visible ? showControls() : hideControls()
         }
     }
 

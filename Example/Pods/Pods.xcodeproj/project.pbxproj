@@ -24,6 +24,8 @@
 		BCFC92A681ED4698566AD2FAD873FEA1 /* Pods-FoxVideoPlayer_Tests-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = F966084831C428D6950C03E055254664 /* Pods-FoxVideoPlayer_Tests-dummy.m */; };
 		BD8EF1109C41D0EBCF2BED2D7F8E1DAD /* FoxVideoPlayerProgressSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA3B2EEE5C3FF6B4B9DDA0A0AC528E95 /* FoxVideoPlayerProgressSlider.swift */; };
 		BF1650342BC93478E28BF84856ED748A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73010CC983E3809BECEE5348DA1BB8C6 /* Foundation.framework */; };
+		CE5894BD27F381010020081A /* FoxVideoPlayerProgressBarSliderSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE5894BC27F381010020081A /* FoxVideoPlayerProgressBarSliderSettings.swift */; };
+		CE5894C027F4C4B30020081A /* FoxVideoPlayerProgressBarSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE5894BF27F4C4B30020081A /* FoxVideoPlayerProgressBarSettings.swift */; };
 		CED5D8253E6A58F6E2DE6EAD76F8B624 /* FoxScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 124B6D338A9BD9FE083D465C952ED6EA /* FoxScreen.swift */; };
 		D5C8E9898FF69CA6D7439A69C473C311 /* FoxVideoPlayerAsset.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6A677D2879EA225A113593B054767F7 /* FoxVideoPlayerAsset.swift */; };
 		DC726F7C8941D196C1A52A422BE388CB /* UIWindow+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911B7A2764DCC44F877EFD091E47C9A0 /* UIWindow+Extensions.swift */; };
@@ -67,7 +69,7 @@
 		5375F90EEF4B7A462DFFEC51401CE1C2 /* FoxFullScreenVideoPlayerViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = FoxFullScreenVideoPlayerViewController.swift; sourceTree = "<group>"; };
 		56397BD9350B154DB90F98C6A5CD3929 /* Pods-FoxVideoPlayer_Example-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-FoxVideoPlayer_Example-dummy.m"; sourceTree = "<group>"; };
 		73010CC983E3809BECEE5348DA1BB8C6 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS14.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
-		75894E9352F78B6967902D208D5107BC /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; path = LICENSE; sourceTree = "<group>"; };
+		75894E9352F78B6967902D208D5107BC /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		7596D3633E38F4FD47EC53F1DF000D60 /* Pods-FoxVideoPlayer_Example */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = "Pods-FoxVideoPlayer_Example"; path = Pods_FoxVideoPlayer_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		78DB290D54069FC3173B894FD7584148 /* Pods-FoxVideoPlayer_Example-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-FoxVideoPlayer_Example-frameworks.sh"; sourceTree = "<group>"; };
 		8702C34A751468602400E1622B845C76 /* FoxStates.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = FoxStates.swift; sourceTree = "<group>"; };
@@ -80,14 +82,16 @@
 		98DC50496388FCE801FB981282DEE468 /* Pods-FoxVideoPlayer_Tests-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-FoxVideoPlayer_Tests-Info.plist"; sourceTree = "<group>"; };
 		9990D7BE3E92BB6542DCE9321C8DF0AD /* FoxVideoPlayerProgressBarLineLayer.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = FoxVideoPlayerProgressBarLineLayer.swift; sourceTree = "<group>"; };
 		9C6AA9561388E5FF8240E0FA0AE57D0E /* Pods-FoxVideoPlayer_Example-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-FoxVideoPlayer_Example-acknowledgements.markdown"; sourceTree = "<group>"; };
-		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		A1676747A0509D78094004A47E964687 /* Pods-FoxVideoPlayer_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-FoxVideoPlayer_Example.debug.xcconfig"; sourceTree = "<group>"; };
-		A5FFE7CB30DB470709E1F3446D64C759 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; path = README.md; sourceTree = "<group>"; };
+		A5FFE7CB30DB470709E1F3446D64C759 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		A6A677D2879EA225A113593B054767F7 /* FoxVideoPlayerAsset.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = FoxVideoPlayerAsset.swift; sourceTree = "<group>"; };
 		B0B06DFF1DA979299D273E118292C582 /* FoxVideoPlayer-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "FoxVideoPlayer-dummy.m"; sourceTree = "<group>"; };
 		CA7B313270EBDDE46834EE2D628F0985 /* Pods-FoxVideoPlayer_Tests-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-FoxVideoPlayer_Tests-acknowledgements.plist"; sourceTree = "<group>"; };
-		CB90DBC42B0CAFCC3220035D84FCEE93 /* FoxVideoPlayer.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; path = FoxVideoPlayer.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		CB90DBC42B0CAFCC3220035D84FCEE93 /* FoxVideoPlayer.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; path = FoxVideoPlayer.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		CCC31D04063CCED550E0203741087CE7 /* FoxVideoPlayer */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = FoxVideoPlayer; path = FoxVideoPlayer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		CE5894BC27F381010020081A /* FoxVideoPlayerProgressBarSliderSettings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FoxVideoPlayerProgressBarSliderSettings.swift; sourceTree = "<group>"; };
+		CE5894BF27F4C4B30020081A /* FoxVideoPlayerProgressBarSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoxVideoPlayerProgressBarSettings.swift; sourceTree = "<group>"; };
 		DC81DF6EED3CBE2C44E7B04C88A76927 /* Pods-FoxVideoPlayer_Tests.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-FoxVideoPlayer_Tests.modulemap"; sourceTree = "<group>"; };
 		EA3B2EEE5C3FF6B4B9DDA0A0AC528E95 /* FoxVideoPlayerProgressSlider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = FoxVideoPlayerProgressSlider.swift; sourceTree = "<group>"; };
 		ECEEB343673A1EB129D4A31E7EA31035 /* FoxVideoPlayer.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = FoxVideoPlayer.release.xcconfig; sourceTree = "<group>"; };
@@ -234,6 +238,7 @@
 		5FC3FF2DD4E2E72AD6E93748D4844444 /* FoxVideoPlayer */ = {
 			isa = PBXGroup;
 			children = (
+				CE5894BE27F483830020081A /* Settings */,
 				7F025B73E4E7C05E5DFBC45543434153 /* Aditional */,
 				418B790FD3C55ED0FB5A23BCC560F199 /* Controls */,
 				34253ADC953F7028F49D2639B6D2AB76 /* Extensions */,
@@ -277,6 +282,15 @@
 				5FC3FF2DD4E2E72AD6E93748D4844444 /* FoxVideoPlayer */,
 			);
 			name = "Development Pods";
+			sourceTree = "<group>";
+		};
+		CE5894BE27F483830020081A /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				CE5894BC27F381010020081A /* FoxVideoPlayerProgressBarSliderSettings.swift */,
+				CE5894BF27F4C4B30020081A /* FoxVideoPlayerProgressBarSettings.swift */,
+			);
+			path = Settings;
 			sourceTree = "<group>";
 		};
 		CF1408CF629C7361332E53B88F7BD30C = {
@@ -465,7 +479,9 @@
 				E68B70406A920A143881EC7016F5DFE5 /* FoxVideoPlayerSeekButton.swift in Sources */,
 				A4C3A3F3E1A252CF2D982E63F5196488 /* FoxVideoPlayerView.swift in Sources */,
 				B9A2F83F2325668D5EDBEBBD5AF4A700 /* FoxVideoPlayerViewController.swift in Sources */,
+				CE5894BD27F381010020081A /* FoxVideoPlayerProgressBarSliderSettings.swift in Sources */,
 				DC726F7C8941D196C1A52A422BE388CB /* UIWindow+Extensions.swift in Sources */,
+				CE5894C027F4C4B30020081A /* FoxVideoPlayerProgressBarSettings.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -726,8 +742,7 @@
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRIP_INSTALLED_PRODUCT = NO;
-				SWIFT_COMPILATION_MODE = wholemodule;
-				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				SWIFT_VERSION = 5.0;
 				SYMROOT = "${SRCROOT}/../build";
 			};
