@@ -21,6 +21,7 @@ public struct FoxVideoPlayerProgressBarSliderSettings {
     public var previewTimeLabelColor: UIColor = .white
     
     public var isRoundedCornersSlider: Bool = true
+    public var isEnableVibrate: Bool = true
     
     public init() { }
 }

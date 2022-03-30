@@ -91,28 +91,16 @@ class FoxVideoPlayerProgressSlider: UIControl {
     
     private var previewTime: CGFloat = 0
     private var currentPinPosition: CGFloat?
-    private var isAnimationCompleted = true
-    private var isVisible = false
-    private var isIncreased = false
-    private var isSeeking = false
-    private var isMagnetized = true
-    private var isEnableUpdateImage = false
+    private var isAnimationCompleted: Bool = true
+    private var isVisible: Bool = false
+    private var isIncreased: Bool = false
+    private var isSeeking: Bool = false
+    private var isMagnetized: Bool = true
+    private var isEnableUpdateImage: Bool = false
     
     private var isMagnetedZone: Bool {
         currentPinPosition! > lineLayer.value - pinIncreasedSize / 3 - (isVisible ? 0 : sideInset)
         && currentPinPosition! < lineLayer.value + pinIncreasedSize / 3 - (isVisible ? 0 : sideInset)
-    }
-
-    private var isMovingOnVisible: Bool = false {
-        didSet {
-            movingOnRaised?(isMovingOnVisible)
-        }
-    }
-    
-    private var isMovingOnUnvisible: Bool = false {
-        didSet {
-            movingOnHidden?(isMovingOnUnvisible)
-        }
     }
 
     private var currentProgress: CGFloat = 0 {
@@ -140,6 +128,7 @@ class FoxVideoPlayerProgressSlider: UIControl {
 
     override func layoutSubviews() {
         super.layoutSubviews()
+        
         guard isAnimationCompleted else { return }
 
         updateLine()
@@ -373,6 +362,7 @@ extension FoxVideoPlayerProgressSlider {
 extension FoxVideoPlayerProgressSlider {
     override func beginTracking(_ touch: UITouch, with event: UIEvent?) -> Bool {
         let point = touch.location(in: touch.view)
+        updatePin(x: point.x)
         updateTime(for: point.x)
         
         isSeeking = true
@@ -380,9 +370,9 @@ extension FoxVideoPlayerProgressSlider {
         increasePin()
 
         if isVisible {
-            isMovingOnVisible = true
+            movingOnRaised?(true)
         } else {
-            isMovingOnUnvisible = true
+            movingOnHidden?(true)
         }
         
         startUpdatePreviewTimer()
@@ -402,11 +392,11 @@ extension FoxVideoPlayerProgressSlider {
         if isMagnetedZone {
             guard !isMagnetized else { return true }
             let position = lineLayer.value + (isVisible ? sideInset : 0)
-            update(x: position)
+            updatePin(x: position)
             isMagnetized = true
             vibrate()
         } else {
-            update(x: point.x)
+            updatePin(x: point.x)
             isMagnetized = false
         }
         
@@ -420,7 +410,6 @@ extension FoxVideoPlayerProgressSlider {
     override func endTracking(_ touch: UITouch?, with event: UIEvent?) {
         guard let touch = touch else { return }
         let point = touch.location(in: touch.view)
-        currentPinPosition = point.x - sideInset
         currentTime = time(for: point.x)
         
         endTracking()
@@ -429,17 +418,13 @@ extension FoxVideoPlayerProgressSlider {
     private func endTracking() {
         decreasePin()
         
-        if isVisible {
-            isMovingOnVisible = false
-        } else {
-            isMovingOnUnvisible = false
-        }
+        isVisible
+        ? movingOnRaised?(false)
+        : movingOnHidden?(false)
         
-        if isMagnetedZone {
-            didUpdateTime()
-        } else {
-            time?(currentTime)
-        }
+        isMagnetedZone
+        ? didUpdateTime()
+        : time?(currentTime)
         
         isMagnetized = true
 
@@ -496,7 +481,7 @@ private extension FoxVideoPlayerProgressSlider {
 // MARK: Info
 
 private extension FoxVideoPlayerProgressSlider {
-    func update(x: CGFloat) {
+    func updatePin(x: CGFloat) {
         updatePinPosition(for: x)
         updateTime(for: x)
         updatePreview(for: x)
@@ -531,6 +516,7 @@ private extension FoxVideoPlayerProgressSlider {
     }
     
     private func vibrate() {
+        guard settings.isEnableVibrate else { return }
         let generator = UISelectionFeedbackGenerator()
         generator.selectionChanged()
     }
