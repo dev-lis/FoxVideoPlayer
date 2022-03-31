@@ -12,9 +12,7 @@ import FoxVideoPlayer
 class ViewController: UIViewController {
     
     private lazy var playerViewController: FoxVideoPlayerViewController = {
-        let sliderSettings = FoxVideoPlayerProgressBarSliderSettings()
-        let progressBarSettings = FoxVideoPlayerProgressBarSettings(sliderSettings: sliderSettings)
-        let controller = FoxVideoPlayerViewController(progressBarSettings: progressBarSettings)
+        let controller = FoxVideoPlayerViewController()
         controller.view.translatesAutoresizingMaskIntoConstraints = false
         return controller
     }()
