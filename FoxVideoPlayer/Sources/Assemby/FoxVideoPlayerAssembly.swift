@@ -32,7 +32,7 @@ final class FoxVideoPlayerAssembly: Assembly {
                 player
             }
         } else {
-            container.register(FoxVideoPlayer.self) { resolver in
+            container.register(FoxVideoPlayer.self) { _ in
                 FoxVideoPlayerView()
             }
         }
@@ -42,7 +42,7 @@ final class FoxVideoPlayerAssembly: Assembly {
                 controls
             }
         } else {
-            container.register(FoxVideoPlayerControls.self) { resolver in
+            container.register(FoxVideoPlayerControls.self) { _ in
                 FoxVideoPlayerControlsView()
             }
         }
@@ -53,8 +53,21 @@ final class FoxVideoPlayerAssembly: Assembly {
             }
         } else {
             container.register(FoxVideoPlayerProgressBar.self) { resolver in
+                var progressSlider = resolver.resolve(FoxVideoPlayerProgressSlider.self)!
                 let settings = FoxVideoPlayerProgressBarSettings()
-                return FoxVideoPlayerProgressBarView(settings: settings)
+                let progressBar = FoxVideoPlayerProgressBarView(progressSlider: progressSlider, settings: settings)
+                progressSlider.delegate = progressBar
+                return progressBar
+            }
+        }
+        
+        if let progressSlider = dependency.progressSlider {
+            container.register(FoxVideoPlayerProgressSlider.self) { _ in
+                progressSlider
+            }
+        } else {
+            container.register(FoxVideoPlayerProgressSlider.self) { _ in
+                FoxVideoPlayerProgressSliderControl()
             }
         }
         

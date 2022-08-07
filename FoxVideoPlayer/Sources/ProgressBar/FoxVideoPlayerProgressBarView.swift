@@ -9,35 +9,11 @@ import UIKit
 import AVKit
 
 public class FoxVideoPlayerProgressBarView: UIView {
-    private lazy var progressSlider: FoxVideoPlayerProgressSlider = {
-        let slider = FoxVideoPlayerProgressSlider()
-        slider.translatesAutoresizingMaskIntoConstraints = false
-        slider.movingOnRaised = { [weak self] isMoving in
-            guard let self = self else { return }
-            
-            if isMoving {
-                self.hideElements()
-                self.delegate?.didBeginMovingPin(self, state: .visible)
-            } else {
-                self.showElements()
-                self.delegate?.didEndMovingPin(self, state: .visible)
-            }
-        }
-        slider.movingOnHidden = { [weak self] isMoving in
-            guard let self = self else { return }
-            isMoving
-                ? self.delegate?.didBeginMovingPin(self, state: .hidden)
-                : self.delegate?.didEndMovingPin(self, state: .hidden)
-        }
-        slider.time = { [weak self] time in
-            guard let self = self else { return }
-            self.delegate?.setTime(self, time: TimeInterval(time))
-        }
-        slider.imageForTime = { [weak self] time in
-            guard let self = self else { return }
-            self.delegate?.renderImage(self, time: time)
-        }
-        return slider
+    
+    private lazy var sliderContainer: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
     }()
 
     private lazy var timerLabel: UILabel = {
@@ -70,7 +46,7 @@ public class FoxVideoPlayerProgressBarView: UIView {
     private var bottomConstraint: NSLayoutConstraint!
 
     private var sliderTopInset: CGFloat {
-        progressSlider.sliderTopInset + progressSlider.frame.origin.y
+        progressSlider.sliderTopInset
     }
 
     public weak var delegate: FoxVideoPlayerProgressBarDelegate?
@@ -83,9 +59,12 @@ public class FoxVideoPlayerProgressBarView: UIView {
     
     private var screenMode: FoxScreenMode
     
-    private var settings: FoxVideoPlayerProgressBarSettings
+    private let progressSlider: FoxVideoPlayerProgressSlider
+    private let settings: FoxVideoPlayerProgressBarSettings
     
-    public init(settings: FoxVideoPlayerProgressBarSettings) {
+    public init(progressSlider: FoxVideoPlayerProgressSlider,
+                settings: FoxVideoPlayerProgressBarSettings) {
+        self.progressSlider = progressSlider
         self.settings = settings
         self.screenMode = settings.screenMode
         super.init(frame: .zero)
@@ -99,20 +78,21 @@ public class FoxVideoPlayerProgressBarView: UIView {
     private func setupUI() {
         isHidden = true
         
+        progressSlider.add(to: sliderContainer)
+        
+        addSubview(sliderContainer)
         addSubview(buttonsStackView)
-        addSubview(progressSlider)
         addSubview(timerLabel)
 
         NSLayoutConstraint.activate([
-            progressSlider.topAnchor.constraint(equalTo: topAnchor),
-            progressSlider.leftAnchor.constraint(equalTo: leftAnchor),
-            progressSlider.rightAnchor.constraint(equalTo: rightAnchor),
-            progressSlider.heightAnchor.constraint(equalToConstant: 34),
+            sliderContainer.topAnchor.constraint(equalTo: topAnchor),
+            sliderContainer.leftAnchor.constraint(equalTo: leftAnchor),
+            sliderContainer.rightAnchor.constraint(equalTo: rightAnchor),
+            
+            timerLabel.topAnchor.constraint(equalTo: sliderContainer.bottomAnchor),
+            timerLabel.leftAnchor.constraint(equalTo: sliderContainer.leftAnchor, constant: settings.timerLeftInset),
 
-            timerLabel.topAnchor.constraint(equalTo: progressSlider.bottomAnchor),
-            timerLabel.leftAnchor.constraint(equalTo: progressSlider.leftAnchor, constant: settings.timerLeftInset),
-
-            buttonsStackView.topAnchor.constraint(equalTo: progressSlider.bottomAnchor, constant: -16),
+            buttonsStackView.topAnchor.constraint(equalTo: sliderContainer.bottomAnchor, constant: -16),
             buttonsStackView.rightAnchor.constraint(equalTo: rightAnchor, constant: -settings.buttonsStackRightInset),
             buttonsStackView.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
@@ -167,10 +147,7 @@ extension FoxVideoPlayerProgressBarView: FoxVideoPlayerProgressBar {
     public func setTime(_ time: TimeInterval, duration: TimeInterval) {
         didStartPlay = true
         
-        progressSlider.duration = CGFloat(duration)
-        progressSlider.currentTime = CGFloat(time)
-        let progress = CGFloat(time / duration)
-        progressSlider.setProgress(progress)
+        progressSlider.setCurrentTime(CGFloat(time), of: CGFloat(duration))
 
         let timeValue = Int(time)
         let durationValue = Int(duration)
@@ -236,7 +213,7 @@ extension FoxVideoPlayerProgressBarView: FoxVideoPlayerProgressBar {
     }
     
     public func updateFullScreenButton() {
-        progressSlider.layoutSubviews()
+        progressSlider.updateLayout()
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             self.screenModeButton.isSelected = false
         }
@@ -284,3 +261,30 @@ private extension FoxVideoPlayerProgressBarView {
     }
 }
 
+// MARK: FoxVideoPlayerProgressSliderDelegate
+
+extension FoxVideoPlayerProgressBarView: FoxVideoPlayerProgressSliderDelegate {
+    public func movingOnRaised(_ progressSlider: FoxVideoPlayerProgressSlider, isMoving: Bool) {
+        if isMoving {
+            self.hideElements()
+            self.delegate?.didBeginMovingPin(self, state: .visible)
+        } else {
+            self.showElements()
+            self.delegate?.didEndMovingPin(self, state: .visible)
+        }
+    }
+    
+    public func movingOnHidden(_ progressSlider: FoxVideoPlayerProgressSlider, isMoving: Bool) {
+        isMoving
+            ? self.delegate?.didBeginMovingPin(self, state: .hidden)
+            : self.delegate?.didEndMovingPin(self, state: .hidden)
+    }
+    
+    public func updateCurrentTime(_ progressSlider: FoxVideoPlayerProgressSlider, time: CGFloat) {
+        delegate?.setTime(self, time: TimeInterval(time))
+    }
+    
+    public func makeImage(_ progressSlider: FoxVideoPlayerProgressSlider, for time: CGFloat) {
+        delegate?.renderImage(self, time: time)
+    }
+}

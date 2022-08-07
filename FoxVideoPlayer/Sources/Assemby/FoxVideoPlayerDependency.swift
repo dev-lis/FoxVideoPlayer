@@ -12,14 +12,17 @@ public struct FoxVideoPlayerDependency {
     let controls: FoxVideoPlayerControls?
     let progressBar: FoxVideoPlayerProgressBarView?
     let progressBarSettings: FoxVideoPlayerProgressBarSettings?
+    let progressSlider: FoxVideoPlayerProgressSlider?
     
     public init(player: FoxVideoPlayer? = nil,
                 controls: FoxVideoPlayerControls? = nil,
                 progressBar: FoxVideoPlayerProgressBarView? = nil,
-                progressBarSettings: FoxVideoPlayerProgressBarSettings? = nil) {
+                progressBarSettings: FoxVideoPlayerProgressBarSettings? = nil,
+                progressSlider: FoxVideoPlayerProgressSlider? = nil) {
         self.player = player
         self.controls = controls
         self.progressBar = progressBar
         self.progressBarSettings = progressBarSettings
+        self.progressSlider = progressSlider
     }
 }

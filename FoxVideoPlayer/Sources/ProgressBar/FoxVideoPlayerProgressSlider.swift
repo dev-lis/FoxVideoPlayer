@@ -7,7 +7,7 @@
 
 import UIKit
 
-class FoxVideoPlayerProgressSlider: UIControl {
+class FoxVideoPlayerProgressSliderControl: UIControl {
     private lazy var lineLayer: FoxVideoPlayerProgressBarLineLayer = {
         let layer = FoxVideoPlayerProgressBarLineLayer()
         layer.backgroundColor = UIColor.white.withAlphaComponent(0.44).cgColor
@@ -47,18 +47,7 @@ class FoxVideoPlayerProgressSlider: UIControl {
         return label
     }()
 
-    public var movingOnRaised: ((Bool) -> Void)?
-    public var movingOnHidden: ((Bool) -> Void)?
-    public var time: ((CGFloat) -> Void)?
-    public var imageForTime: ((CGFloat) -> Void)?
-
-    public var duration: CGFloat = 0
-    public var currentTime: CGFloat = 0
-
     public var animateDuration: TimeInterval = 0.2
-    public var sliderTopInset: CGFloat {
-        lineLayer.frame.maxY
-    }
     
     private var timer: Timer?
 
@@ -79,15 +68,18 @@ class FoxVideoPlayerProgressSlider: UIControl {
 
     private var isMovingOnVisible: Bool = false {
         didSet {
-            movingOnRaised?(isMovingOnVisible)
+            delegate?.movingOnRaised(self, isMoving: isMovingOnVisible)
         }
     }
     
     private var isMovingOnUnvisible: Bool = false {
         didSet {
-            movingOnHidden?(isMovingOnUnvisible)
+            delegate?.movingOnHidden(self, isMoving: isMovingOnUnvisible)
         }
     }
+    
+    private var duration: CGFloat = 0
+    private var currentTime: CGFloat = 0
 
     private var currentProgress: CGFloat = 0 {
         didSet {
@@ -103,6 +95,8 @@ class FoxVideoPlayerProgressSlider: UIControl {
             }
         }
     }
+    
+    public weak var delegate: FoxVideoPlayerProgressSliderDelegate?
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -112,10 +106,6 @@ class FoxVideoPlayerProgressSlider: UIControl {
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    func setProgress(_ progress: CGFloat) {
-        currentProgress = progress
     }
 
     override func layoutSubviews() {
@@ -191,24 +181,6 @@ class FoxVideoPlayerProgressSlider: UIControl {
         )
     }
     
-    func didUpdateTime() {
-        isSeeking = false
-    }
-    
-    func setPreviewImage(_ image: UIImage?) {
-        DispatchQueue.main.async {
-            self.previewImageView.isHidden = image == nil
-            self.previewImageView.image = image
-        }
-    }
-
-    func setPreviewImageSize(_ size: CGSize) {
-        DispatchQueue.main.async {
-            self.previewImageView.frame.size = size
-            self.previewImageView.frame.origin.y = -self.currentTimeLabel.frame.height - self.previewImageView.frame.height - 16
-        }
-    }
-    
     private func setupUI() {
         addSubview(currentTimeLabel)
         addSubview(previewImageView)
@@ -224,9 +196,56 @@ class FoxVideoPlayerProgressSlider: UIControl {
     }
 }
 
-// MARK: Animation
+// MARK: FoxVideoPlayerProgressSlider
 
-extension FoxVideoPlayerProgressSlider {
+extension FoxVideoPlayerProgressSliderControl: FoxVideoPlayerProgressSlider {
+    
+    public var sliderTopInset: CGFloat {
+        lineLayer.frame.maxY
+    }
+    
+    public func add(to view: UIView) {
+        translatesAutoresizingMaskIntoConstraints = false
+        
+        view.addSubview(self)
+        
+        NSLayoutConstraint.activate([
+            topAnchor.constraint(equalTo: view.topAnchor),
+            leftAnchor.constraint(equalTo: view.leftAnchor),
+            rightAnchor.constraint(equalTo: view.rightAnchor),
+            bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            heightAnchor.constraint(equalToConstant: 34)
+        ])
+    }
+    
+    public func didUpdateTime() {
+        isSeeking = false
+    }
+    
+    public func setCurrentTime(_ currentTime: CGFloat, of duration: CGFloat) {
+        self.currentTime = currentTime
+        self.duration = duration
+        self.currentProgress = currentTime / duration
+    }
+    
+    public func setPreviewImage(_ image: UIImage?) {
+        DispatchQueue.main.async {
+            self.previewImageView.isHidden = image == nil
+            self.previewImageView.image = image
+        }
+    }
+
+    public func setPreviewImageSize(_ size: CGSize) {
+        DispatchQueue.main.async {
+            self.previewImageView.frame.size = size
+            self.previewImageView.frame.origin.y = -self.currentTimeLabel.frame.height - self.previewImageView.frame.height - 16
+        }
+    }
+    
+    func updateLayout() {
+        layoutSubviews()
+    }
+    
     func showAnimation() {
         guard isAnimationCompleted else { return }
         
@@ -358,7 +377,7 @@ extension FoxVideoPlayerProgressSlider {
     }
 }
 
-extension FoxVideoPlayerProgressSlider {
+extension FoxVideoPlayerProgressSliderControl {
     override func beginTracking(_ touch: UITouch, with event: UIEvent?) -> Bool {
         let point = touch.location(in: touch.view)
         updateTime(for: point.x)
@@ -419,7 +438,7 @@ extension FoxVideoPlayerProgressSlider {
         }
         
         if isMagnetedZone {
-            time?(currentTime)
+            delegate?.updateCurrentTime(self, time: currentTime)
         } else {
             didUpdateTime()
         }
@@ -434,7 +453,7 @@ extension FoxVideoPlayerProgressSlider {
 
 // MARK: Private
 
-private extension FoxVideoPlayerProgressSlider {
+private extension FoxVideoPlayerProgressSliderControl {
     func increasePin() {
         pinLayer.frame = CGRect(
             x: pinContainerLayer.frame.width / 2 - 10,
@@ -478,7 +497,7 @@ private extension FoxVideoPlayerProgressSlider {
 
 // MARK: Info
 
-private extension FoxVideoPlayerProgressSlider {
+private extension FoxVideoPlayerProgressSliderControl {
     func update(x: CGFloat) {
         updatePinPosition(for: x)
         updateTime(for: x)
@@ -486,11 +505,11 @@ private extension FoxVideoPlayerProgressSlider {
     }
     
     func startUpdatePreviewTimer() {
-        imageForTime?(previewTime)
+        delegate?.makeImage(self, for: previewTime)
         stopUpdatePreviewTimer()
         timer = Timer.scheduledTimer(withTimeInterval: 0.2, repeats: true) { [weak self] _ in
-            guard let previewTime = self?.previewTime else { return }
-            self?.imageForTime?(previewTime)
+            guard let self = self else { return }
+            self.delegate?.makeImage(self, for: self.previewTime)
         }
     }
     
@@ -521,7 +540,7 @@ private extension FoxVideoPlayerProgressSlider {
 
 // MARK: Time
 
-private extension FoxVideoPlayerProgressSlider {
+private extension FoxVideoPlayerProgressSliderControl {
     func updateTime(for position: CGFloat) {
         currentTime = time(for: position)
         previewTime = currentTime
