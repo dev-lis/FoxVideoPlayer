@@ -14,7 +14,7 @@ public protocol FoxVideoPlayerControlsDelegate: AnyObject {
     func updateVisibleControls(_ controls: FoxVideoPlayerControls, isVisible: Bool)
 }
 
-public protocol FoxVideoPlayerControls: AnyObject {
+public protocol FoxVideoPlayerControls {
     
     var delegate: FoxVideoPlayerControlsDelegate? { get set }
     

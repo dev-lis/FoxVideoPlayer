@@ -42,7 +42,7 @@ public class FoxVideoPlayerProgressBarView: UIView {
 
     private lazy var timerLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 14, weight: .semibold)
+        label.font = settings.timerLabelFont
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .white
         label.isHidden = true
@@ -72,20 +72,22 @@ public class FoxVideoPlayerProgressBarView: UIView {
     private var sliderTopInset: CGFloat {
         progressSlider.sliderTopInset + progressSlider.frame.origin.y
     }
-    private let height: CGFloat = 66.0
 
     public weak var delegate: FoxVideoPlayerProgressBarDelegate?
     
     private var didStartPlay = false
 
-    private var rate: Float
+    private var rate: Float {
+        settings.startRate
+    }
+    
     private var screenMode: FoxScreenMode
-
-    public init(rate: Float = 1.0,
-                screenMode: FoxScreenMode = .default,
-                isEnableHandleRotation: Bool = true) {
-        self.rate = rate
-        self.screenMode = screenMode
+    
+    private var settings: FoxVideoPlayerProgressBarSettings
+    
+    public init(settings: FoxVideoPlayerProgressBarSettings) {
+        self.settings = settings
+        self.screenMode = settings.screenMode
         super.init(frame: .zero)
         setupUI()
     }
@@ -108,11 +110,10 @@ public class FoxVideoPlayerProgressBarView: UIView {
             progressSlider.heightAnchor.constraint(equalToConstant: 34),
 
             timerLabel.topAnchor.constraint(equalTo: progressSlider.bottomAnchor),
-            timerLabel.leftAnchor.constraint(equalTo: progressSlider.leftAnchor, constant: 24),
-            timerLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -16),
+            timerLabel.leftAnchor.constraint(equalTo: progressSlider.leftAnchor, constant: settings.timerLeftInset),
 
             buttonsStackView.topAnchor.constraint(equalTo: progressSlider.bottomAnchor, constant: -16),
-            buttonsStackView.rightAnchor.constraint(equalTo: rightAnchor, constant: -24),
+            buttonsStackView.rightAnchor.constraint(equalTo: rightAnchor, constant: -settings.buttonsStackRightInset),
             buttonsStackView.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
         
@@ -148,13 +149,13 @@ extension FoxVideoPlayerProgressBarView: FoxVideoPlayerProgressBar {
         
         bottomConstraint = bottomAnchor.constraint(
             equalTo: view.bottomAnchor,
-            constant: height - sliderTopInset
+            constant: settings.barHeight - sliderTopInset
         )
         
         NSLayoutConstraint.activate([
             leftAnchor.constraint(equalTo: view.leftAnchor),
             rightAnchor.constraint(equalTo: view.rightAnchor),
-            heightAnchor.constraint(equalToConstant: height),
+            heightAnchor.constraint(equalToConstant: settings.barHeight),
             bottomConstraint,
         ])
     }
@@ -219,7 +220,7 @@ extension FoxVideoPlayerProgressBarView: FoxVideoPlayerProgressBar {
     
     public func show() {
         bottomConstraint?.constant = 0
-        UIView.animate(withDuration: 0.2) {
+        UIView.animate(withDuration: settings.animateDuration) {
             self.superview?.layoutIfNeeded()
         }
         showAnimation()
@@ -228,7 +229,7 @@ extension FoxVideoPlayerProgressBarView: FoxVideoPlayerProgressBar {
     public func hide() {
         let inset = screenMode == .default ? sliderTopInset : 0
         bottomConstraint?.constant = frame.height - inset
-        UIView.animate(withDuration: 0.2) {
+        UIView.animate(withDuration: settings.animateDuration) {
             self.superview?.layoutIfNeeded()
         }
         hideAnimation()
@@ -269,14 +270,14 @@ private extension FoxVideoPlayerProgressBarView {
     }
 
     func showElements() {
-        UIView.animate(withDuration: 0.1) {
+        UIView.animate(withDuration: settings.elementAnimateDuration) {
             self.timerLabel.alpha = 1
             self.buttonsStackView.alpha = 1
         }
     }
 
     func hideElements() {
-        UIView.animate(withDuration: 0.1) {
+        UIView.animate(withDuration: settings.elementAnimateDuration) {
             self.timerLabel.alpha = 0
             self.buttonsStackView.alpha = 0
         }
