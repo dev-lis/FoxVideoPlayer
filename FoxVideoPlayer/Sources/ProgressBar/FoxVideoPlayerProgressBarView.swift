@@ -8,14 +8,6 @@
 import UIKit
 import AVKit
 
-public protocol FoxVideoPlayerProgressBarViewDelegate: AnyObject {
-    func setTime(_ progressBar: FoxVideoPlayerProgressBarView, time: TimeInterval)
-    func didBeginMovingPin(_ progressBar: FoxVideoPlayerProgressBarView, state: FoxProgressBarState)
-    func didEndMovingPin(_ progressBar: FoxVideoPlayerProgressBarView, state: FoxProgressBarState)
-    func didTapChangeScreenMode(_ progressBar: FoxVideoPlayerProgressBarView)
-    func renderImage(_ progressBar: FoxVideoPlayerProgressBarView, time: TimeInterval)
-}
-
 public class FoxVideoPlayerProgressBarView: UIView {
     private lazy var progressSlider: FoxVideoPlayerProgressSlider = {
         let slider = FoxVideoPlayerProgressSlider()
@@ -82,7 +74,7 @@ public class FoxVideoPlayerProgressBarView: UIView {
     }
     private let height: CGFloat = 66.0
 
-    public weak var delegate: FoxVideoPlayerProgressBarViewDelegate?
+    public weak var delegate: FoxVideoPlayerProgressBarDelegate?
     
     private var didStartPlay = false
 
@@ -103,6 +95,8 @@ public class FoxVideoPlayerProgressBarView: UIView {
     }
     
     private func setupUI() {
+        isHidden = true
+        
         addSubview(buttonsStackView)
         addSubview(progressSlider)
         addSubview(timerLabel)
@@ -139,6 +133,34 @@ public class FoxVideoPlayerProgressBarView: UIView {
             self.timerLabel.isHidden = true
             self.buttonsStackView.isHidden = true
         }
+    }
+}
+
+extension FoxVideoPlayerProgressBarView: FoxVideoPlayerProgressBar {
+    public var isVisible: Bool {
+        !isHidden
+    }
+    
+    public func add(to view: UIView) {
+        translatesAutoresizingMaskIntoConstraints = false
+        
+        view.addSubview(self)
+        
+        bottomConstraint = bottomAnchor.constraint(
+            equalTo: view.bottomAnchor,
+            constant: height - sliderTopInset
+        )
+        
+        NSLayoutConstraint.activate([
+            leftAnchor.constraint(equalTo: view.leftAnchor),
+            rightAnchor.constraint(equalTo: view.rightAnchor),
+            heightAnchor.constraint(equalToConstant: height),
+            bottomConstraint,
+        ])
+    }
+    
+    public func setHidden(_ isHidden: Bool) {
+        self.isHidden = isHidden
     }
     
     public func setTime(_ time: TimeInterval, duration: TimeInterval) {
@@ -193,22 +215,6 @@ public class FoxVideoPlayerProgressBarView: UIView {
     
     public func setPreviewImageSize(_ size: CGSize) {
         progressSlider.setPreviewImageSize(size)
-    }
-    
-    public func add(to view: UIView) {
-        view.addSubview(self)
-        
-        bottomConstraint = bottomAnchor.constraint(
-            equalTo: view.bottomAnchor,
-            constant: height - sliderTopInset
-        )
-        
-        NSLayoutConstraint.activate([
-            leftAnchor.constraint(equalTo: view.leftAnchor),
-            rightAnchor.constraint(equalTo: view.rightAnchor),
-            heightAnchor.constraint(equalToConstant: height),
-            bottomConstraint,
-        ])
     }
     
     public func show() {

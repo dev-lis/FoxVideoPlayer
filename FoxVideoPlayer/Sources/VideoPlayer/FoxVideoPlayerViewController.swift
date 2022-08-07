@@ -17,14 +17,7 @@ public class FoxVideoPlayerViewController: UIViewController {
     
     var player: FoxVideoPlayer!
     var controls: FoxVideoPlayerControls!
-    
-    private lazy var progressBarView: FoxVideoPlayerProgressBarView = {
-        let view = FoxVideoPlayerProgressBarView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.delegate = self
-        view.isHidden = true
-        return view
-    }()
+    var progressBar: FoxVideoPlayerProgressBar!
     
     private var fullScreenController: FoxFullScreenVideoPlayerViewController?
     
@@ -67,7 +60,7 @@ private extension FoxVideoPlayerViewController {
         addContainer()
         player.add(to: playerContainerView)
         controls.add(to: playerContainerView)
-        progressBarView.add(to: playerContainerView)
+        progressBar.add(to: playerContainerView)
     }
     
     func addContainer() {
@@ -95,7 +88,7 @@ private extension FoxVideoPlayerViewController {
             .rootViewController?
             .present(controller, animated: false)
         
-        progressBarView.updateScreenMode(.fullScreen)
+        progressBar.updateScreenMode(.fullScreen)
     }
 }
 
@@ -118,7 +111,7 @@ extension FoxVideoPlayerViewController: FoxVideoPlayerDelegate {
     }
     
     public func updateTime(_ player: FoxVideoPlayerView, time: TimeInterval, duration: TimeInterval) {
-        progressBarView.setTime(time, duration: duration)
+        progressBar.setTime(time, duration: duration)
     }
     
     public func willUpdateTime(_ player: FoxVideoPlayerView, isCompleted: Bool, from: FoxUpdateTimeFrom) {
@@ -131,14 +124,14 @@ extension FoxVideoPlayerViewController: FoxVideoPlayerDelegate {
     }
     
     public func didUpdateTime(_ player: FoxVideoPlayerView, isCompleted: Bool) {
-        progressBarView.didUpdateTime()
+        progressBar.didUpdateTime()
         guard !isCompleted else { return }
         controls.loading(false)
         
     }
     
     public func updatePreviewImage(_ player: FoxVideoPlayerView, image: UIImage?) {
-        progressBarView.setPreviewImage(image)
+        progressBar.setPreviewImage(image)
     }
 }
 
@@ -146,8 +139,8 @@ extension FoxVideoPlayerViewController: FoxVideoPlayerDelegate {
 
 extension FoxVideoPlayerViewController: FoxVideoPlayerControlsDelegate {
     public func didTapPlay(_ controls: FoxVideoPlayerControlsView, isPlay: Bool) {
-        if isPlay, progressBarView.isHidden {
-            progressBarView.isHidden = false
+        if isPlay, !progressBar.isVisible {
+            progressBar.setHidden(false)
         }
         
         isPlay ? player.play() : player.pause()
@@ -159,8 +152,8 @@ extension FoxVideoPlayerViewController: FoxVideoPlayerControlsDelegate {
     
     public func updateVisibleControls(_ controls: FoxVideoPlayerControlsView, isVisible: Bool) {
         isVisible
-            ? progressBarView.show()
-            : progressBarView.hide()
+            ? progressBar.show()
+            : progressBar.hide()
     }
     
     public func didTapReplay(_ controls: FoxVideoPlayerControlsView) {
@@ -170,7 +163,7 @@ extension FoxVideoPlayerViewController: FoxVideoPlayerControlsDelegate {
 
 // MARK: FoxVideoPlayerProgressBarViewDelegate
 
-extension FoxVideoPlayerViewController: FoxVideoPlayerProgressBarViewDelegate {
+extension FoxVideoPlayerViewController: FoxVideoPlayerProgressBarDelegate {
     public func setTime(_ progressBar: FoxVideoPlayerProgressBarView, time: TimeInterval) {
         player.setTime(time)
     }
@@ -196,16 +189,16 @@ extension FoxVideoPlayerViewController: FoxVideoPlayerProgressBarViewDelegate {
     public func didTapChangeScreenMode(_ progressBar: FoxVideoPlayerProgressBarView) {
         if let controller = fullScreenController {
             controller.close()
-            progressBarView.updateScreenMode(.default)
+            progressBar.updateScreenMode(.default)
         } else {
             openFullScreen(source: .button)
-            progressBarView.updateScreenMode(.fullScreen)
+            progressBar.updateScreenMode(.fullScreen)
         }
     }
     
     public func renderImage(_ progressBar: FoxVideoPlayerProgressBarView, time: TimeInterval) {
         let previewSize = player.previewImageSize()
-        progressBarView.setPreviewImageSize(previewSize)
+        progressBar.setPreviewImageSize(previewSize)
         player.renderPreviewImage(for: time)
     }
 }
@@ -218,6 +211,6 @@ extension FoxVideoPlayerViewController: FoxFullScreenVideoPlayerViewControllerDe
         
         fullScreenController = nil
         
-        progressBarView.updateScreenMode(.default)
+        progressBar.updateScreenMode(.default)
     }
 }

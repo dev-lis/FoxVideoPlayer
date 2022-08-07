@@ -26,6 +26,16 @@ final class FoxVideoPlayerAssembly: Assembly {
     }
     
     func assemble(container: Container) {
+        if let player = dependency.player {
+            container.register(FoxVideoPlayer.self) { _ in
+                player
+            }
+        } else {
+            container.register(FoxVideoPlayer.self) { resolver in
+                FoxVideoPlayerView()
+            }
+        }
+        
         if let controls = dependency.controls {
             container.register(FoxVideoPlayerControls.self) { _ in
                 controls
@@ -37,11 +47,11 @@ final class FoxVideoPlayerAssembly: Assembly {
         }
         
         if let progressBar = dependency.progressBar {
-            container.register(FoxVideoPlayerProgressBarView.self) { _ in
+            container.register(FoxVideoPlayerProgressBar.self) { _ in
                 progressBar
             }
         } else {
-            container.register(FoxVideoPlayerProgressBarView.self) { resolver in
+            container.register(FoxVideoPlayerProgressBar.self) { resolver in
                 FoxVideoPlayerProgressBarView()
             }
         }
@@ -49,13 +59,17 @@ final class FoxVideoPlayerAssembly: Assembly {
         container.register(FoxVideoPlayerViewController.self) { resolver in
             let videoPlayer = FoxVideoPlayerViewController()
             
-            let player = FoxVideoPlayerView()
-            player.delegate = videoPlayer
+            var player = resolver.resolve(FoxVideoPlayer.self)
+            player?.delegate = videoPlayer
             videoPlayer.player = player
             
             let controls = resolver.resolve(FoxVideoPlayerControls.self)
             controls?.delegate = videoPlayer
             videoPlayer.controls = controls
+            
+            var progressBar = resolver.resolve(FoxVideoPlayerProgressBar.self)
+            progressBar?.delegate = videoPlayer
+            videoPlayer.progressBar = progressBar
             
             return videoPlayer
         }
