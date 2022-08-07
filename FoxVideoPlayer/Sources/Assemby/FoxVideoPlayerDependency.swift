@@ -8,10 +8,10 @@
 import Foundation
 
 public struct FoxVideoPlayerDependency {
-    public var controls: FoxVideoPlayerControlsView?
+    public var controls: FoxVideoPlayerControls?
     public var progressBar: FoxVideoPlayerProgressBarView?
     
-    public init(controls: FoxVideoPlayerControlsView? = nil,
+    public init(controls: FoxVideoPlayerControls? = nil,
                 progressBar: FoxVideoPlayerProgressBarView? = nil) {
         self.controls = controls
         self.progressBar = progressBar

@@ -27,11 +27,11 @@ final class FoxVideoPlayerAssembly: Assembly {
     
     func assemble(container: Container) {
         if let controls = dependency.controls {
-            container.register(FoxVideoPlayerControlsView.self) { _ in
+            container.register(FoxVideoPlayerControls.self) { _ in
                 controls
             }
         } else {
-            container.register(FoxVideoPlayerControlsView.self) { resolver in
+            container.register(FoxVideoPlayerControls.self) { resolver in
                 FoxVideoPlayerControlsView()
             }
         }
@@ -47,7 +47,11 @@ final class FoxVideoPlayerAssembly: Assembly {
         }
         
         container.register(FoxVideoPlayerViewController.self) { resolver in
-            FoxVideoPlayerViewController()
+            let videoPlayer = FoxVideoPlayerViewController()
+            let controls = resolver.resolve(FoxVideoPlayerControls.self)
+            controls?.delegate = videoPlayer
+            videoPlayer.controls = controls
+            return videoPlayer
         }
     }
 }

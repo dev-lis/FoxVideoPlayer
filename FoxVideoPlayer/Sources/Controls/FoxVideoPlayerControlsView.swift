@@ -7,13 +7,6 @@
 
 import UIKit
 
-public protocol FoxVideoPlayerControlsViewDelegate: AnyObject {
-    func didTapPlay(_ controls: FoxVideoPlayerControlsView, isPlay: Bool)
-    func didTapReplay(_ controls: FoxVideoPlayerControlsView)
-    func didTapSeek(_ controls: FoxVideoPlayerControlsView, interval: TimeInterval)
-    func updateVisibleControls(_ controls: FoxVideoPlayerControlsView, isVisible: Bool)
-}
-
 public class FoxVideoPlayerControlsView: UIView {
     private lazy var mainStackView: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: [leftView, centerView, rightView])
@@ -129,8 +122,6 @@ public class FoxVideoPlayerControlsView: UIView {
 
     private var state: FoxVideoPlaybackState = .pause
 
-    public var updatePlaybackState: ((FoxVideoPlaybackState) -> Void)?
-
     public weak var delegate: FoxVideoPlayerControlsViewDelegate?
 
     public override init(frame: CGRect) {
@@ -169,8 +160,58 @@ public class FoxVideoPlayerControlsView: UIView {
         rightView.addGestureRecognizer(frontDoubleTapGesture)
         frontSingleTapGesture.require(toFail: frontDoubleTapGesture)
     }
-    
+
+    private func setupUI() {
+        clipsToBounds = true
+
+        addSubview(mainStackView)
+        centerView.addSubview(playbackButton)
+        centerView.addSubview(replayButton)
+        leftView.addSubview(backwardButton)
+        rightView.addSubview(forwardButton)
+        addSubview(loadIndicator)
+
+        NSLayoutConstraint.activate([
+            mainStackView.topAnchor.constraint(equalTo: topAnchor),
+            mainStackView.leftAnchor.constraint(equalTo: leftAnchor),
+            mainStackView.rightAnchor.constraint(equalTo: rightAnchor),
+            mainStackView.bottomAnchor.constraint(equalTo: bottomAnchor),
+
+            centerView.widthAnchor.constraint(equalToConstant: 80),
+            rightView.widthAnchor.constraint(equalTo: leftView.widthAnchor),
+
+            playbackButton.centerXAnchor.constraint(equalTo: centerView.centerXAnchor),
+            playbackButton.centerYAnchor.constraint(equalTo: centerView.centerYAnchor, constant: -16),
+            playbackButton.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.1),
+            playbackButton.heightAnchor.constraint(equalTo: playbackButton.widthAnchor),
+
+            replayButton.centerXAnchor.constraint(equalTo: centerView.centerXAnchor),
+            replayButton.centerYAnchor.constraint(equalTo: playbackButton.centerYAnchor, constant: 8),
+            replayButton.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.2),
+            replayButton.heightAnchor.constraint(equalTo: replayButton.widthAnchor),
+
+            backwardButton.rightAnchor.constraint(equalTo: leftView.rightAnchor, constant: -40),
+            backwardButton.centerYAnchor.constraint(equalTo: leftView.centerYAnchor, constant: -16),
+            backwardButton.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.1),
+            backwardButton.heightAnchor.constraint(equalTo: backwardButton.widthAnchor),
+
+            forwardButton.leftAnchor.constraint(equalTo: rightView.leftAnchor, constant: 40),
+            forwardButton.centerYAnchor.constraint(equalTo: rightView.centerYAnchor, constant: -16),
+            forwardButton.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.1),
+            forwardButton.heightAnchor.constraint(equalTo: forwardButton.widthAnchor),
+            
+            loadIndicator.centerXAnchor.constraint(equalTo: centerXAnchor),
+            loadIndicator.centerYAnchor.constraint(equalTo: centerYAnchor)
+        ])
+    }
+}
+
+// MARK: - FoxVideoPlayerControls
+
+extension FoxVideoPlayerControlsView: FoxVideoPlayerControls {
     public func add(to view: UIView) {
+        translatesAutoresizingMaskIntoConstraints = false
+        
         view.addSubview(self)
         
         NSLayoutConstraint.activate([
@@ -192,8 +233,6 @@ public class FoxVideoPlayerControlsView: UIView {
     }
 
     public func setPlaybackState(_ state: FoxVideoPlaybackState) {
-        updatePlaybackState?(state)
-
         switch state {
         case .play:
             replayButton.isHidden = true
@@ -248,67 +287,19 @@ public class FoxVideoPlayerControlsView: UIView {
         forwardButton.isHidden = isLoading
         playbackButton.isHidden = isLoading
         loadIndicator.isHidden = !isLoading
-
-        updatePlaybackState?(state)
     }
     
     public func resetVisibleControls() {
         startHideTask()
     }
-
-    private func setupUI() {
-        clipsToBounds = true
-
-        addSubview(mainStackView)
-        centerView.addSubview(playbackButton)
-        centerView.addSubview(replayButton)
-        leftView.addSubview(backwardButton)
-        rightView.addSubview(forwardButton)
-        addSubview(loadIndicator)
-
-        NSLayoutConstraint.activate([
-            mainStackView.topAnchor.constraint(equalTo: topAnchor),
-            mainStackView.leftAnchor.constraint(equalTo: leftAnchor),
-            mainStackView.rightAnchor.constraint(equalTo: rightAnchor),
-            mainStackView.bottomAnchor.constraint(equalTo: bottomAnchor),
-
-            centerView.widthAnchor.constraint(equalToConstant: 80),
-            rightView.widthAnchor.constraint(equalTo: leftView.widthAnchor),
-
-            playbackButton.centerXAnchor.constraint(equalTo: centerView.centerXAnchor),
-            playbackButton.centerYAnchor.constraint(equalTo: centerView.centerYAnchor, constant: -16),
-            playbackButton.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.1),
-            playbackButton.heightAnchor.constraint(equalTo: playbackButton.widthAnchor),
-
-            replayButton.centerXAnchor.constraint(equalTo: centerView.centerXAnchor),
-            replayButton.centerYAnchor.constraint(equalTo: playbackButton.centerYAnchor, constant: 8),
-            replayButton.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.2),
-            replayButton.heightAnchor.constraint(equalTo: replayButton.widthAnchor),
-
-            backwardButton.rightAnchor.constraint(equalTo: leftView.rightAnchor, constant: -40),
-            backwardButton.centerYAnchor.constraint(equalTo: leftView.centerYAnchor, constant: -16),
-            backwardButton.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.1),
-            backwardButton.heightAnchor.constraint(equalTo: backwardButton.widthAnchor),
-
-            forwardButton.leftAnchor.constraint(equalTo: rightView.leftAnchor, constant: 40),
-            forwardButton.centerYAnchor.constraint(equalTo: rightView.centerYAnchor, constant: -16),
-            forwardButton.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.1),
-            forwardButton.heightAnchor.constraint(equalTo: forwardButton.widthAnchor),
-            
-            loadIndicator.centerXAnchor.constraint(equalTo: centerXAnchor),
-            loadIndicator.centerYAnchor.constraint(equalTo: centerYAnchor)
-        ])
-    }
 }
 
-//MARL: Action
+// MARK: - Action
 
 private extension FoxVideoPlayerControlsView {
     @objc func didTapPlayPause() {
         delegate?.didTapPlay(self, isPlay: !playbackButton.isSelected)
         playbackButton.isSelected.toggle()
-        
-        updatePlaybackState?(playbackButton.isSelected ? .play : .pause)
 
         guard visible else { return }
 

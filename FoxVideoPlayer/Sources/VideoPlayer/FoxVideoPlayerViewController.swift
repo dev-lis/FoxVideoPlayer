@@ -22,12 +22,7 @@ public class FoxVideoPlayerViewController: UIViewController {
         return view
     }()
     
-    private lazy var controlsView: FoxVideoPlayerControlsView = {
-        let view = FoxVideoPlayerControlsView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.delegate = self
-        return view
-    }()
+    var controls: FoxVideoPlayerControls!
     
     private lazy var progressBarView: FoxVideoPlayerProgressBarView = {
         let view = FoxVideoPlayerProgressBarView()
@@ -77,7 +72,7 @@ private extension FoxVideoPlayerViewController {
     func setupUI() {
         addContainer()
         playerView.add(to: playerContainerView)
-        controlsView.add(to: playerContainerView)
+        controls.add(to: playerContainerView)
         progressBarView.add(to: playerContainerView)
     }
     
@@ -116,8 +111,8 @@ extension FoxVideoPlayerViewController: FoxVideoPlayerViewDelegate {
     public func updatePlayerState(_ player: FoxVideoPlayerView, state: FoxVideoPlayerState) {
         switch state {
         case .ready:
-            controlsView.loading(false)
-            controlsView.setPlayerState(state)
+            controls.loading(false)
+            controls.setPlayerState(state)
         case .failed:
             // TODO: handle error
             break
@@ -125,7 +120,7 @@ extension FoxVideoPlayerViewController: FoxVideoPlayerViewDelegate {
     }
     
     public func updatePlaybackState(_ player: FoxVideoPlayerView, state: FoxVideoPlaybackState) {
-        controlsView.setPlaybackState(state)
+        controls.setPlaybackState(state)
     }
     
     public func updateTime(_ player: FoxVideoPlayerView, time: TimeInterval, duration: TimeInterval) {
@@ -134,17 +129,17 @@ extension FoxVideoPlayerViewController: FoxVideoPlayerViewDelegate {
     
     public func willUpdateTime(_ player: FoxVideoPlayerView, isCompleted: Bool, from: FoxUpdateTimeFrom) {
         if isCompleted {
-            controlsView.setPlaybackState(.completed)
+            controls.setPlaybackState(.completed)
         } else {
             guard from == .progressBar else { return }
-            controlsView.loading(true)
+            controls.loading(true)
         }
     }
     
     public func didUpdateTime(_ player: FoxVideoPlayerView, isCompleted: Bool) {
         progressBarView.didUpdateTime()
         guard !isCompleted else { return }
-        controlsView.loading(false)
+        controls.loading(false)
         
     }
     
@@ -189,18 +184,18 @@ extension FoxVideoPlayerViewController: FoxVideoPlayerProgressBarViewDelegate {
     public func didBeginMovingPin(_ progressBar: FoxVideoPlayerProgressBarView, state: FoxProgressBarState) {
         switch state {
         case .visible:
-            controlsView.setVisibleControls(false)
+            controls.setVisibleControls(false)
         case .hidden:
-            controlsView.setDarkenBackground(true)
+            controls.setDarkenBackground(true)
         }
     }
     
     public func didEndMovingPin(_ progressBar: FoxVideoPlayerProgressBarView, state: FoxProgressBarState) {
         switch state {
         case .visible:
-            controlsView.setVisibleControls(true)
+            controls.setVisibleControls(true)
         case .hidden:
-            controlsView.setDarkenBackground(false)
+            controls.setDarkenBackground(false)
         }
     }
     
