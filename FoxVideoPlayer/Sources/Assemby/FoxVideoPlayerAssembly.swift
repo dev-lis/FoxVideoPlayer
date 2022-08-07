@@ -7,16 +7,6 @@
 
 import Swinject
 
-prefix operator <?
-prefix func <? <Dependency>(_ resolver: Resolver) -> Dependency? {
-    resolver.resolve(Dependency.self)
-}
-
-prefix operator <~
-prefix func <~ <Dependency>(_ resolver: Resolver) -> Dependency {
-    resolver.resolve(Dependency.self)!
-}
-
 final class FoxVideoPlayerAssembly: Assembly {
     
     private var dependency: FoxVideoPlayerDependency
@@ -67,7 +57,8 @@ final class FoxVideoPlayerAssembly: Assembly {
             }
         } else {
             container.register(FoxVideoPlayerProgressSlider.self) { _ in
-                FoxVideoPlayerProgressSliderControl()
+                let settings = FoxVideoPlayerProgressBarSliderSettings()
+                return FoxVideoPlayerProgressSliderControl(settings: settings)
             }
         }
         

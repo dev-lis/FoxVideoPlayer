@@ -9,36 +9,31 @@ import Foundation
 
 public struct FoxVideoPlayerProgressBarSettings {
     
-    var startRate: Float
-    var screenMode: FoxScreenMode
-    var isEnableHandleRotation: Bool
+    let startRate: Float
+    let screenMode: FoxScreenMode
+    let isEnableHandleRotation: Bool
     
-    var barHeight: CGFloat
-//    var elementTopInset: CGFloat
-    var timerLeftInset: CGFloat
-    var buttonsStackRightInset: CGFloat
+    let barHeight: CGFloat
+    let timerLeftInset: CGFloat
+    let buttonsStackRightInset: CGFloat
     
-    var timerLabelColor: UIColor
+    let timerLabelColor: UIColor
     
-    var timerLabelFont: UIFont
+    let timerLabelFont: UIFont
     
-    var animateDuration: TimeInterval
-    var elementAnimateDuration: TimeInterval
-    
-    var sliderSettings: FoxVideoPlayerProgressBarSliderSettings
+    let animateDuration: TimeInterval
+    let elementAnimateDuration: TimeInterval
     
     public init(startRate: Float = 1.0,
                 screenMode: FoxScreenMode = .default,
                 isEnableHandleRotation: Bool = true,
                 barHeight: CGFloat = 66.0,
-//                elementTopInset: CGFloat = 16.0,
                 timerLeftInset: CGFloat = 24.0,
                 buttonsStackRightInset: CGFloat = 24.0,
                 timerLabelColor: UIColor = .white,
                 timerLabelFont: UIFont = .systemFont(ofSize: 14, weight: .semibold),
                 animateDuration: TimeInterval = 0.2,
-                elementAnimateDuration: TimeInterval = 0.1,
-                sliderSettings: FoxVideoPlayerProgressBarSliderSettings? = nil) {
+                elementAnimateDuration: TimeInterval = 0.1) {
         self.startRate = startRate
         self.screenMode = screenMode
         self.isEnableHandleRotation = isEnableHandleRotation
@@ -49,6 +44,5 @@ public struct FoxVideoPlayerProgressBarSettings {
         self.timerLabelFont = timerLabelFont
         self.animateDuration = animateDuration
         self.elementAnimateDuration = elementAnimateDuration
-        self.sliderSettings = sliderSettings ?? FoxVideoPlayerProgressBarSliderSettings()
     }
 }
