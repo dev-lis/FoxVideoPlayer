@@ -1,16 +1,23 @@
 PODS:
-  - FoxVideoPlayer (0.1.0)
+  - FoxVideoPlayer (0.1.1):
+    - Swinject
+  - Swinject (2.8.2)
 
 DEPENDENCIES:
   - FoxVideoPlayer (from `../`)
+
+SPEC REPOS:
+  trunk:
+    - Swinject
 
 EXTERNAL SOURCES:
   FoxVideoPlayer:
     :path: "../"
 
 SPEC CHECKSUMS:
-  FoxVideoPlayer: 52dc66493c5f2966cad0669f3c5a71852544bf5d
+  FoxVideoPlayer: 0ce40d32d01e5ebc72484a3d1db9692bca2c8293
+  Swinject: b4a11b31992e8668308dc594ba1cb9b3164a37ab
 
-PODFILE CHECKSUM: bba86a367ed206b7a459ab65b3337c7126cb2d7e
+PODFILE CHECKSUM: bd62b5e5e84410940d29e3ca283e61ac516f9a32
 
 COCOAPODS: 1.11.3
