@@ -219,10 +219,12 @@
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-FoxVideoPlayer_Example/Pods-FoxVideoPlayer_Example-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/FoxVideoPlayer/FoxVideoPlayer.framework",
+				"${BUILT_PRODUCTS_DIR}/Swinject/Swinject.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FoxVideoPlayer.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Swinject.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
