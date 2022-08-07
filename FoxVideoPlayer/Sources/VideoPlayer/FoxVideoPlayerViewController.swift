@@ -15,13 +15,7 @@ public class FoxVideoPlayerViewController: UIViewController {
         return view
     }()
     
-    private lazy var playerView: FoxVideoPlayerView = {
-        let view = FoxVideoPlayerView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.delegate = self
-        return view
-    }()
-    
+    var player: FoxVideoPlayer!
     var controls: FoxVideoPlayerControls!
     
     private lazy var progressBarView: FoxVideoPlayerProgressBarView = {
@@ -58,11 +52,11 @@ public class FoxVideoPlayerViewController: UIViewController {
     
     public func setup(with url: URL) {
         let asset = FoxVideoPlayerAsset(url: url)
-        playerView.setup(with: asset)
+        player.setup(with: asset)
     }
     
     public func setup(with asset: FoxVideoPlayerAsset) {
-        playerView.setup(with: asset)
+        player.setup(with: asset)
     }
 }
 
@@ -71,7 +65,7 @@ public class FoxVideoPlayerViewController: UIViewController {
 private extension FoxVideoPlayerViewController {
     func setupUI() {
         addContainer()
-        playerView.add(to: playerContainerView)
+        player.add(to: playerContainerView)
         controls.add(to: playerContainerView)
         progressBarView.add(to: playerContainerView)
     }
@@ -107,7 +101,7 @@ private extension FoxVideoPlayerViewController {
 
 // MARK: FoxVideoPlayerViewDelegate
 
-extension FoxVideoPlayerViewController: FoxVideoPlayerViewDelegate {
+extension FoxVideoPlayerViewController: FoxVideoPlayerDelegate {
     public func updatePlayerState(_ player: FoxVideoPlayerView, state: FoxVideoPlayerState) {
         switch state {
         case .ready:
@@ -150,17 +144,17 @@ extension FoxVideoPlayerViewController: FoxVideoPlayerViewDelegate {
 
 // MARK: FoxVideoPlayerControlsViewDelegate
 
-extension FoxVideoPlayerViewController: FoxVideoPlayerControlsViewDelegate {
+extension FoxVideoPlayerViewController: FoxVideoPlayerControlsDelegate {
     public func didTapPlay(_ controls: FoxVideoPlayerControlsView, isPlay: Bool) {
         if isPlay, progressBarView.isHidden {
             progressBarView.isHidden = false
         }
         
-        isPlay ? playerView.play() : playerView.pause()
+        isPlay ? player.play() : player.pause()
     }
     
     public func didTapSeek(_ controls: FoxVideoPlayerControlsView, interval: TimeInterval) {
-        playerView.seekInterval(interval)
+        player.seekInterval(interval)
     }
     
     public func updateVisibleControls(_ controls: FoxVideoPlayerControlsView, isVisible: Bool) {
@@ -170,7 +164,7 @@ extension FoxVideoPlayerViewController: FoxVideoPlayerControlsViewDelegate {
     }
     
     public func didTapReplay(_ controls: FoxVideoPlayerControlsView) {
-        playerView.relplay()
+        player.relplay()
     }
 }
 
@@ -178,7 +172,7 @@ extension FoxVideoPlayerViewController: FoxVideoPlayerControlsViewDelegate {
 
 extension FoxVideoPlayerViewController: FoxVideoPlayerProgressBarViewDelegate {
     public func setTime(_ progressBar: FoxVideoPlayerProgressBarView, time: TimeInterval) {
-        playerView.setTime(time)
+        player.setTime(time)
     }
     
     public func didBeginMovingPin(_ progressBar: FoxVideoPlayerProgressBarView, state: FoxProgressBarState) {
@@ -210,9 +204,9 @@ extension FoxVideoPlayerViewController: FoxVideoPlayerProgressBarViewDelegate {
     }
     
     public func renderImage(_ progressBar: FoxVideoPlayerProgressBarView, time: TimeInterval) {
-        let previewSize = self.playerView.previewImageSize()
-        self.progressBarView.setPreviewImageSize(previewSize)
-        playerView.renderPreviewImage(for: time)
+        let previewSize = player.previewImageSize()
+        progressBarView.setPreviewImageSize(previewSize)
+        player.renderPreviewImage(for: time)
     }
 }
 

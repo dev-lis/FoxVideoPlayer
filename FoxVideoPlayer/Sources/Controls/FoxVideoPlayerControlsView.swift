@@ -122,7 +122,7 @@ public class FoxVideoPlayerControlsView: UIView {
 
     private var state: FoxVideoPlaybackState = .pause
 
-    public weak var delegate: FoxVideoPlayerControlsViewDelegate?
+    public weak var delegate: FoxVideoPlayerControlsDelegate?
 
     public override init(frame: CGRect) {
         super.init(frame: frame)

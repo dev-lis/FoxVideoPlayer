@@ -48,9 +48,15 @@ final class FoxVideoPlayerAssembly: Assembly {
         
         container.register(FoxVideoPlayerViewController.self) { resolver in
             let videoPlayer = FoxVideoPlayerViewController()
+            
+            let player = FoxVideoPlayerView()
+            player.delegate = videoPlayer
+            videoPlayer.player = player
+            
             let controls = resolver.resolve(FoxVideoPlayerControls.self)
             controls?.delegate = videoPlayer
             videoPlayer.controls = controls
+            
             return videoPlayer
         }
     }

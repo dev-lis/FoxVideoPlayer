@@ -7,7 +7,7 @@
 
 import Foundation
 
-public protocol FoxVideoPlayerControlsViewDelegate: AnyObject {
+public protocol FoxVideoPlayerControlsDelegate: AnyObject {
     func didTapPlay(_ controls: FoxVideoPlayerControlsView, isPlay: Bool)
     func didTapReplay(_ controls: FoxVideoPlayerControlsView)
     func didTapSeek(_ controls: FoxVideoPlayerControlsView, interval: TimeInterval)
@@ -16,7 +16,7 @@ public protocol FoxVideoPlayerControlsViewDelegate: AnyObject {
 
 public protocol FoxVideoPlayerControls: AnyObject {
     
-    var delegate: FoxVideoPlayerControlsViewDelegate? { get set }
+    var delegate: FoxVideoPlayerControlsDelegate? { get set }
     
     func add(to view: UIView)
     func setPlayerState(_ state: FoxVideoPlayerState)

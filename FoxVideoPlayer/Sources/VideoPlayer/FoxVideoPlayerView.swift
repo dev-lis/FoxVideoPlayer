@@ -8,15 +8,6 @@
 import UIKit
 import AVFoundation
 
-public protocol FoxVideoPlayerViewDelegate: AnyObject {
-    func updatePlayerState(_ player: FoxVideoPlayerView, state: FoxVideoPlayerState)
-    func updatePlaybackState(_ player: FoxVideoPlayerView, state: FoxVideoPlaybackState)
-    func updateTime(_ player: FoxVideoPlayerView, time: TimeInterval, duration: TimeInterval)
-    func willUpdateTime(_ player: FoxVideoPlayerView, isCompleted: Bool, from: FoxUpdateTimeFrom)
-    func didUpdateTime(_ player: FoxVideoPlayerView, isCompleted: Bool)
-    func updatePreviewImage(_ player: FoxVideoPlayerView, image: UIImage?)
-}
-
 public class FoxVideoPlayerView: UIView {
     public override class var layerClass: AnyClass {
         return AVPlayerLayer.self
@@ -39,7 +30,7 @@ public class FoxVideoPlayerView: UIView {
     private var playerItem: AVPlayerItem?
     private var playerTimeObserver: Any?
 
-    public weak var delegate: FoxVideoPlayerViewDelegate?
+    public weak var delegate: FoxVideoPlayerDelegate?
 
     private var rate: Float
 
@@ -62,71 +53,23 @@ public class FoxVideoPlayerView: UIView {
             self.player?.audiovisualBackgroundPlaybackPolicy = .continuesIfPossible
         }
     }
-    
-    public func add(to view: UIView) {
-        view.addSubview(self)
-        
-        NSLayoutConstraint.activate([
-            topAnchor.constraint(equalTo: view.topAnchor),
-            leftAnchor.constraint(equalTo: view.leftAnchor),
-            rightAnchor.constraint(equalTo: view.rightAnchor),
-            bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        ])
-    }
 
-    public func setup(with asset: FoxVideoPlayerAsset) {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            self.backgroundColor = .black
-            self.setupPlayerItem(
-                with: AVAsset(url: asset.url),
-                startTime: asset.startTime,
-                rate: asset.rate
-            )
+    private func setupPlayerItem(with asset: AVAsset, startTime: TimeInterval? = nil, rate: Float? = nil) {
+        playerItem = AVPlayerItem(asset: asset)
+        currentAsset = asset
+        
+        addPlayerObservers()
+        
+        player = AVPlayer(playerItem: self.playerItem!)
+        setupBackgroundMode()
+        
+        if let startTime = startTime {
+            setTime(startTime)
         }
-    }
 
-    public func play() {
-        DispatchQueue.main.async {
-            self.player?.play()
-            self.player?.rate = self.rate
-
-            self.startPlaying?()
-            print("Fox Playback state change to: \(FoxVideoPlaybackState.play)")
+        if let rate = rate {
+            setRate(rate)
         }
-    }
-
-    public func pause() {
-        player?.pause()
-        print("Fox Playback state change to: \(FoxVideoPlaybackState.pause)")
-    }
-    
-    public func relplay() {
-        setTime(0)
-        play()
-    }
-
-    public func seekInterval(_ interval: TimeInterval) {
-        guard
-            let currentTime = player?.currentItem?.currentTime().seconds,
-            let duration = player?.currentItem?.asset.duration.seconds,
-            let currentCMTime = player?.currentTime()
-        else { return }
-        let inset = currentTime + interval < duration
-            ? interval
-            : duration - TimeInterval(Int(currentTime))
-        let cmTime = currentCMTime + CMTimeMakeWithSeconds(inset, preferredTimescale: Int32(NSEC_PER_SEC))
-        
-        delegate?.willUpdateTime(self, isCompleted: currentTime + inset >= duration, from: .controls)
-
-        setTime(cmTime: cmTime)
-    }
-    
-    public func setTime(_ time: TimeInterval) {
-        let duration = player?.currentItem?.asset.duration.seconds ?? 0
-        delegate?.willUpdateTime(self, isCompleted: time >= duration, from: .progressBar)
-        
-        let cmTime = CMTimeMakeWithSeconds(time, preferredTimescale: Int32(NSEC_PER_SEC))
-        setTime(cmTime: cmTime)
     }
     
     private func setTime(cmTime: CMTime) {
@@ -148,71 +91,7 @@ public class FoxVideoPlayerView: UIView {
         }
     }
 
-    public func getCurrentTime() -> TimeInterval {
-        let currentTime = player?.currentItem?.currentTime().seconds ?? 0
-        return currentTime
-    }
-
-    public func getDurationTime() -> TimeInterval {
-        let duration = player?.currentItem?.asset.duration.seconds ?? 0
-        return duration
-    }
-
-    public func setRate(_ rate: Float) {
-        DispatchQueue.main.async {
-            self.rate = rate
-
-            guard self.player?.rate != 0 else { return }
-            self.player?.rate = rate
-        }
-    }
-    
-    public func updateRateAfterBackground() {
-        playerRateDidChange(rate: player?.rate ?? 0)
-    }
-    
-    public func renderPreviewImage(for time: TimeInterval) {
-        DispatchQueue.global(qos: .userInteractive).async {
-            let cmTime = CMTime(seconds: time, preferredTimescale: 1000000)
-            guard let asset = self.currentAsset else { return }
-            do {
-                let imageGenerator = AVAssetImageGenerator(asset: asset)
-                let videoFrameCGImage = try imageGenerator.copyCGImage(at: cmTime, actualTime: nil)
-                let image = UIImage(cgImage: videoFrameCGImage)
-                DispatchQueue.main.async {
-                    self.delegate?.updatePreviewImage(self, image: image)
-                }
-            } catch {
-                print("Fox Video Player generate preview image error: \(error.localizedDescription)")
-                self.delegate?.updatePreviewImage(self, image: nil)
-            }
-        }
-    }
-    
-    public func previewImageSize() -> CGSize {
-        let width = frame.height * 16 / 9
-        return CGSize(width: width / 4, height: frame.height / 4)
-    }
-
-    private func setupPlayerItem(with asset: AVAsset, startTime: TimeInterval? = nil, rate: Float? = nil) {
-        playerItem = AVPlayerItem(asset: asset)
-        currentAsset = asset
-        
-        addPlayerObservers()
-        
-        player = AVPlayer(playerItem: self.playerItem!)
-        setupBackgroundMode()
-        
-        if let startTime = startTime {
-            setTime(startTime)
-        }
-
-        if let rate = rate {
-            setRate(rate)
-        }
-    }
-
-    func addPlayerObservers() {
+    private func addPlayerObservers() {
         playerItem?.addObserver(
             self,
             forKeyPath: #keyPath(AVPlayerItem.status),
@@ -310,5 +189,121 @@ public class FoxVideoPlayerView: UIView {
         let state: FoxVideoPlaybackState = .completed
         print("Fox Playback state change to: \(state)")
         delegate?.updatePlaybackState(self, state: state)
+    }
+}
+
+extension FoxVideoPlayerView: FoxVideoPlayer {
+    public func add(to view: UIView) {
+        translatesAutoresizingMaskIntoConstraints = false
+        
+        view.addSubview(self)
+        
+        NSLayoutConstraint.activate([
+            topAnchor.constraint(equalTo: view.topAnchor),
+            leftAnchor.constraint(equalTo: view.leftAnchor),
+            rightAnchor.constraint(equalTo: view.rightAnchor),
+            bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
+    }
+
+    public func setup(with asset: FoxVideoPlayerAsset) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            self.backgroundColor = .black
+            self.setupPlayerItem(
+                with: AVAsset(url: asset.url),
+                startTime: asset.startTime,
+                rate: asset.rate
+            )
+        }
+    }
+
+    public func play() {
+        DispatchQueue.main.async {
+            self.player?.play()
+            self.player?.rate = self.rate
+
+            self.startPlaying?()
+            print("Fox Playback state change to: \(FoxVideoPlaybackState.play)")
+        }
+    }
+
+    public func pause() {
+        player?.pause()
+        print("Fox Playback state change to: \(FoxVideoPlaybackState.pause)")
+    }
+    
+    public func relplay() {
+        setTime(0)
+        play()
+    }
+
+    public func seekInterval(_ interval: TimeInterval) {
+        guard
+            let currentTime = player?.currentItem?.currentTime().seconds,
+            let duration = player?.currentItem?.asset.duration.seconds,
+            let currentCMTime = player?.currentTime()
+        else { return }
+        let inset = currentTime + interval < duration
+            ? interval
+            : duration - TimeInterval(Int(currentTime))
+        let cmTime = currentCMTime + CMTimeMakeWithSeconds(inset, preferredTimescale: Int32(NSEC_PER_SEC))
+        
+        delegate?.willUpdateTime(self, isCompleted: currentTime + inset >= duration, from: .controls)
+
+        setTime(cmTime: cmTime)
+    }
+    
+    public func setTime(_ time: TimeInterval) {
+        let duration = player?.currentItem?.asset.duration.seconds ?? 0
+        delegate?.willUpdateTime(self, isCompleted: time >= duration, from: .progressBar)
+        
+        let cmTime = CMTimeMakeWithSeconds(time, preferredTimescale: Int32(NSEC_PER_SEC))
+        setTime(cmTime: cmTime)
+    }
+
+    public func getCurrentTime() -> TimeInterval {
+        let currentTime = player?.currentItem?.currentTime().seconds ?? 0
+        return currentTime
+    }
+
+    public func getDurationTime() -> TimeInterval {
+        let duration = player?.currentItem?.asset.duration.seconds ?? 0
+        return duration
+    }
+
+    public func setRate(_ rate: Float) {
+        DispatchQueue.main.async {
+            self.rate = rate
+
+            guard self.player?.rate != 0 else { return }
+            self.player?.rate = rate
+        }
+    }
+    
+    public func updateRateAfterBackground() {
+        playerRateDidChange(rate: player?.rate ?? 0)
+    }
+    
+    public func renderPreviewImage(for time: TimeInterval) {
+        DispatchQueue.global(qos: .userInteractive).async {
+            let cmTime = CMTime(seconds: time, preferredTimescale: 1000000)
+            guard let asset = self.currentAsset else { return }
+            do {
+                let imageGenerator = AVAssetImageGenerator(asset: asset)
+                let videoFrameCGImage = try imageGenerator.copyCGImage(at: cmTime, actualTime: nil)
+                let image = UIImage(cgImage: videoFrameCGImage)
+                DispatchQueue.main.async {
+                    self.delegate?.updatePreviewImage(self, image: image)
+                }
+            } catch {
+                print("Fox Video Player generate preview image error: \(error.localizedDescription)")
+                self.delegate?.updatePreviewImage(self, image: nil)
+            }
+        }
+    }
+    
+    public func previewImageSize() -> CGSize {
+        let width = frame.height * 16 / 9
+        return CGSize(width: width / 4, height: frame.height / 4)
     }
 }
