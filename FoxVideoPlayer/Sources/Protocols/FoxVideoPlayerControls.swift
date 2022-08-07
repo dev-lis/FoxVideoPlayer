@@ -8,10 +8,10 @@
 import Foundation
 
 public protocol FoxVideoPlayerControlsDelegate: AnyObject {
-    func didTapPlay(_ controls: FoxVideoPlayerControlsView, isPlay: Bool)
-    func didTapReplay(_ controls: FoxVideoPlayerControlsView)
-    func didTapSeek(_ controls: FoxVideoPlayerControlsView, interval: TimeInterval)
-    func updateVisibleControls(_ controls: FoxVideoPlayerControlsView, isVisible: Bool)
+    func didTapPlay(_ controls: FoxVideoPlayerControls, isPlay: Bool)
+    func didTapReplay(_ controls: FoxVideoPlayerControls)
+    func didTapSeek(_ controls: FoxVideoPlayerControls, interval: TimeInterval)
+    func updateVisibleControls(_ controls: FoxVideoPlayerControls, isVisible: Bool)
 }
 
 public protocol FoxVideoPlayerControls: AnyObject {

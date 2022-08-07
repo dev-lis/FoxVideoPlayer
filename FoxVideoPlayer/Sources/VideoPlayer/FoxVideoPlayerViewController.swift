@@ -95,7 +95,7 @@ private extension FoxVideoPlayerViewController {
 // MARK: FoxVideoPlayerViewDelegate
 
 extension FoxVideoPlayerViewController: FoxVideoPlayerDelegate {
-    public func updatePlayerState(_ player: FoxVideoPlayerView, state: FoxVideoPlayerState) {
+    public func updatePlayerState(_ player: FoxVideoPlayer, state: FoxVideoPlayerState) {
         switch state {
         case .ready:
             controls.loading(false)
@@ -106,15 +106,15 @@ extension FoxVideoPlayerViewController: FoxVideoPlayerDelegate {
         }
     }
     
-    public func updatePlaybackState(_ player: FoxVideoPlayerView, state: FoxVideoPlaybackState) {
+    public func updatePlaybackState(_ player: FoxVideoPlayer, state: FoxVideoPlaybackState) {
         controls.setPlaybackState(state)
     }
     
-    public func updateTime(_ player: FoxVideoPlayerView, time: TimeInterval, duration: TimeInterval) {
+    public func updateTime(_ player: FoxVideoPlayer, time: TimeInterval, duration: TimeInterval) {
         progressBar.setTime(time, duration: duration)
     }
     
-    public func willUpdateTime(_ player: FoxVideoPlayerView, isCompleted: Bool, from: FoxUpdateTimeFrom) {
+    public func willUpdateTime(_ player: FoxVideoPlayer, isCompleted: Bool, from: FoxUpdateTimeFrom) {
         if isCompleted {
             controls.setPlaybackState(.completed)
         } else {
@@ -123,14 +123,14 @@ extension FoxVideoPlayerViewController: FoxVideoPlayerDelegate {
         }
     }
     
-    public func didUpdateTime(_ player: FoxVideoPlayerView, isCompleted: Bool) {
+    public func didUpdateTime(_ player: FoxVideoPlayer, isCompleted: Bool) {
         progressBar.didUpdateTime()
         guard !isCompleted else { return }
         controls.loading(false)
         
     }
     
-    public func updatePreviewImage(_ player: FoxVideoPlayerView, image: UIImage?) {
+    public func updatePreviewImage(_ player: FoxVideoPlayer, image: UIImage?) {
         progressBar.setPreviewImage(image)
     }
 }
@@ -138,7 +138,7 @@ extension FoxVideoPlayerViewController: FoxVideoPlayerDelegate {
 // MARK: FoxVideoPlayerControlsViewDelegate
 
 extension FoxVideoPlayerViewController: FoxVideoPlayerControlsDelegate {
-    public func didTapPlay(_ controls: FoxVideoPlayerControlsView, isPlay: Bool) {
+    public func didTapPlay(_ controls: FoxVideoPlayerControls, isPlay: Bool) {
         if isPlay, !progressBar.isVisible {
             progressBar.setHidden(false)
         }
@@ -146,17 +146,17 @@ extension FoxVideoPlayerViewController: FoxVideoPlayerControlsDelegate {
         isPlay ? player.play() : player.pause()
     }
     
-    public func didTapSeek(_ controls: FoxVideoPlayerControlsView, interval: TimeInterval) {
+    public func didTapSeek(_ controls: FoxVideoPlayerControls, interval: TimeInterval) {
         player.seekInterval(interval)
     }
     
-    public func updateVisibleControls(_ controls: FoxVideoPlayerControlsView, isVisible: Bool) {
+    public func updateVisibleControls(_ controls: FoxVideoPlayerControls, isVisible: Bool) {
         isVisible
             ? progressBar.show()
             : progressBar.hide()
     }
     
-    public func didTapReplay(_ controls: FoxVideoPlayerControlsView) {
+    public func didTapReplay(_ controls: FoxVideoPlayerControls) {
         player.relplay()
     }
 }
@@ -164,11 +164,11 @@ extension FoxVideoPlayerViewController: FoxVideoPlayerControlsDelegate {
 // MARK: FoxVideoPlayerProgressBarViewDelegate
 
 extension FoxVideoPlayerViewController: FoxVideoPlayerProgressBarDelegate {
-    public func setTime(_ progressBar: FoxVideoPlayerProgressBarView, time: TimeInterval) {
+    public func setTime(_ progressBar: FoxVideoPlayerProgressBar, time: TimeInterval) {
         player.setTime(time)
     }
     
-    public func didBeginMovingPin(_ progressBar: FoxVideoPlayerProgressBarView, state: FoxProgressBarState) {
+    public func didBeginMovingPin(_ progressBar: FoxVideoPlayerProgressBar, state: FoxProgressBarState) {
         switch state {
         case .visible:
             controls.setVisibleControls(false)
@@ -177,7 +177,7 @@ extension FoxVideoPlayerViewController: FoxVideoPlayerProgressBarDelegate {
         }
     }
     
-    public func didEndMovingPin(_ progressBar: FoxVideoPlayerProgressBarView, state: FoxProgressBarState) {
+    public func didEndMovingPin(_ progressBar: FoxVideoPlayerProgressBar, state: FoxProgressBarState) {
         switch state {
         case .visible:
             controls.setVisibleControls(true)
@@ -186,7 +186,7 @@ extension FoxVideoPlayerViewController: FoxVideoPlayerProgressBarDelegate {
         }
     }
     
-    public func didTapChangeScreenMode(_ progressBar: FoxVideoPlayerProgressBarView) {
+    public func didTapChangeScreenMode(_ progressBar: FoxVideoPlayerProgressBar) {
         if let controller = fullScreenController {
             controller.close()
             progressBar.updateScreenMode(.default)
@@ -196,7 +196,7 @@ extension FoxVideoPlayerViewController: FoxVideoPlayerProgressBarDelegate {
         }
     }
     
-    public func renderImage(_ progressBar: FoxVideoPlayerProgressBarView, time: TimeInterval) {
+    public func renderImage(_ progressBar: FoxVideoPlayerProgressBar, time: TimeInterval) {
         let previewSize = player.previewImageSize()
         progressBar.setPreviewImageSize(previewSize)
         player.renderPreviewImage(for: time)

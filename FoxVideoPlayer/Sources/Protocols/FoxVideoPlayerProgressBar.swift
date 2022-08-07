@@ -8,11 +8,11 @@
 import Foundation
 
 public protocol FoxVideoPlayerProgressBarDelegate: AnyObject {
-    func setTime(_ progressBar: FoxVideoPlayerProgressBarView, time: TimeInterval)
-    func didBeginMovingPin(_ progressBar: FoxVideoPlayerProgressBarView, state: FoxProgressBarState)
-    func didEndMovingPin(_ progressBar: FoxVideoPlayerProgressBarView, state: FoxProgressBarState)
-    func didTapChangeScreenMode(_ progressBar: FoxVideoPlayerProgressBarView)
-    func renderImage(_ progressBar: FoxVideoPlayerProgressBarView, time: TimeInterval)
+    func setTime(_ progressBar: FoxVideoPlayerProgressBar, time: TimeInterval)
+    func didBeginMovingPin(_ progressBar: FoxVideoPlayerProgressBar, state: FoxProgressBarState)
+    func didEndMovingPin(_ progressBar: FoxVideoPlayerProgressBar, state: FoxProgressBarState)
+    func didTapChangeScreenMode(_ progressBar: FoxVideoPlayerProgressBar)
+    func renderImage(_ progressBar: FoxVideoPlayerProgressBar, time: TimeInterval)
 }
 
 public protocol FoxVideoPlayerProgressBar {

@@ -8,12 +8,12 @@
 import Foundation
 
 public protocol FoxVideoPlayerDelegate: AnyObject {
-    func updatePlayerState(_ player: FoxVideoPlayerView, state: FoxVideoPlayerState)
-    func updatePlaybackState(_ player: FoxVideoPlayerView, state: FoxVideoPlaybackState)
-    func updateTime(_ player: FoxVideoPlayerView, time: TimeInterval, duration: TimeInterval)
-    func willUpdateTime(_ player: FoxVideoPlayerView, isCompleted: Bool, from: FoxUpdateTimeFrom)
-    func didUpdateTime(_ player: FoxVideoPlayerView, isCompleted: Bool)
-    func updatePreviewImage(_ player: FoxVideoPlayerView, image: UIImage?)
+    func updatePlayerState(_ player: FoxVideoPlayer, state: FoxVideoPlayerState)
+    func updatePlaybackState(_ player: FoxVideoPlayer, state: FoxVideoPlaybackState)
+    func updateTime(_ player: FoxVideoPlayer, time: TimeInterval, duration: TimeInterval)
+    func willUpdateTime(_ player: FoxVideoPlayer, isCompleted: Bool, from: FoxUpdateTimeFrom)
+    func didUpdateTime(_ player: FoxVideoPlayer, isCompleted: Bool)
+    func updatePreviewImage(_ player: FoxVideoPlayer, image: UIImage?)
 }
 
 public protocol FoxVideoPlayer {
