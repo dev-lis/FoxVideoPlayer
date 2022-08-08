@@ -41,15 +41,8 @@ public class FoxVideoPlayerControlsView: UIView {
         button.isHidden = true
         button.imageView?.tintColor = .white
         button.imageView?.contentMode = .scaleAspectFill
-        
-        let playConfiguration = UIImage.SymbolConfiguration(pointSize: 40)
-        let playImage = UIImage(systemName: "play.fill", withConfiguration: playConfiguration)
-        button.setImage(playImage, for: .normal)
-        
-        let pauseConfiguration = UIImage.SymbolConfiguration(pointSize: 40)
-        let pauseImage = UIImage(systemName: "pause.fill", withConfiguration: pauseConfiguration)
-        button.setImage(pauseImage, for: .selected)
-        
+        button.setImage(settings.images.play, for: .normal)
+        button.setImage(settings.images.pause, for: .selected)
         button.addTarget(self, action: #selector(didTapPlayPause), for: .touchUpInside)
         return button
     }()
@@ -59,15 +52,8 @@ public class FoxVideoPlayerControlsView: UIView {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.isHidden = true
         button.imageView?.tintColor = .white
-        
-        let playConfiguration = UIImage.SymbolConfiguration(pointSize: 50)
-        let playImage = UIImage(systemName: "play.fill", withConfiguration: playConfiguration)
-        button.setImage(playImage, for: .normal)
-        
-        let replayConfiguration = UIImage.SymbolConfiguration(pointSize: 50)
-        let replayImage = UIImage(systemName: "gobackward", withConfiguration: replayConfiguration)
-        button.setImage(replayImage, for: .selected)
-        
+        button.setImage(settings.images.startPlay, for: .normal)
+        button.setImage(settings.images.replay, for: .selected)
         button.addTarget(self, action: #selector(didTapReplay), for: .touchUpInside)
         return button
     }()
@@ -75,8 +61,7 @@ public class FoxVideoPlayerControlsView: UIView {
     private lazy var backwardButton: SeekButton = {
         let button = SeekButton(direction: .backward)
         button.translatesAutoresizingMaskIntoConstraints = false
-        let configuration = UIImage.SymbolConfiguration(pointSize: 30)
-        button.seekImage = UIImage(systemName: "gobackward", withConfiguration: configuration)
+        button.seekImage = settings.images.backward
         button.setVisible(false)
         button.didTap = { [weak self] interval in
             guard let self = self else { return }
@@ -88,8 +73,7 @@ public class FoxVideoPlayerControlsView: UIView {
     private lazy var forwardButton: SeekButton = {
         let button = SeekButton(direction: .forward)
         button.translatesAutoresizingMaskIntoConstraints = false
-        let configuration = UIImage.SymbolConfiguration(pointSize: 30)
-        button.seekImage = UIImage(systemName: "goforward", withConfiguration: configuration)
+        button.seekImage = settings.images.forward
         button.setVisible(false)
         button.didTap = { [weak self] interval in
             guard let self = self else { return }
@@ -106,11 +90,11 @@ public class FoxVideoPlayerControlsView: UIView {
         return view
     }()
 
-    private var hideTask: DispatchWorkItem?
+    private var animationItem: DispatchWorkItem?
 
-    var visible: Bool = false {
+    private var visible: Bool = false {
         didSet {
-            UIView.animate(withDuration: 0.2) {
+            UIView.animate(withDuration: settings.animateDuration) {
                 self.visible
                     ? self.showControls()
                     : self.hideControls()
@@ -123,9 +107,12 @@ public class FoxVideoPlayerControlsView: UIView {
     private var state: FoxVideoPlaybackState = .pause
 
     public weak var delegate: FoxVideoPlayerControlsDelegate?
-
-    public override init(frame: CGRect) {
-        super.init(frame: frame)
+    
+    private let settings: FoxVideoPlayerControlsSettings
+    
+    public init(settings: FoxVideoPlayerControlsSettings) {
+        self.settings = settings
+        super.init(frame: .zero)
         setupUI()
     }
 
@@ -139,6 +126,8 @@ public class FoxVideoPlayerControlsView: UIView {
         let tap = UITapGestureRecognizer(target: self, action: nil)
         tap.delegate = self
         addGestureRecognizer(tap)
+        
+        guard settings.isEnableSeekOnDoubleTap else { return }
 
         let backSingleTapGesture = UITapGestureRecognizer(target: self, action: nil)
         backSingleTapGesture.numberOfTapsRequired = 1
@@ -258,12 +247,12 @@ extension FoxVideoPlayerControlsView: FoxVideoPlayerControls {
 
         isVisible
             ? startHideTaskWithDelay()
-            : hideTask?.cancel()
+            : animationItem?.cancel()
     }
     
     public func setDarkenBackground(_ isDraken: Bool) {
         backgroundColor = isDraken
-        ? .black.withAlphaComponent(0.46)
+        ? settings.darkenColor
         : .clear
     }
 
@@ -305,7 +294,7 @@ private extension FoxVideoPlayerControlsView {
 
         playbackButton.isSelected
             ? startHideTaskWithDelay()
-            : hideTask?.cancel()
+            : animationItem?.cancel()
     }
 
     @objc func didTapReplay() {
@@ -333,7 +322,7 @@ private extension FoxVideoPlayerControlsView {
         guard state != .completed else { return }
 
         backwardButton.seekAnimation()
-        hideTask?.cancel()
+        animationItem?.cancel()
         startHideTaskWithDelay()
     }
 
@@ -341,7 +330,7 @@ private extension FoxVideoPlayerControlsView {
         guard state != .completed else { return }
 
         forwardButton.seekAnimation()
-        hideTask?.cancel()
+        animationItem?.cancel()
         startHideTaskWithDelay()
     }
 }
@@ -355,7 +344,7 @@ private extension FoxVideoPlayerControlsView {
             playbackButton.alpha = 1
         }
 
-        backgroundColor = .black.withAlphaComponent(0.46)
+        backgroundColor = settings.darkenColor
 
         delegate?.updateVisibleControls(self, isVisible: true)
 
@@ -373,8 +362,8 @@ private extension FoxVideoPlayerControlsView {
     }
 
     func startHideTask() {
-        hideTask?.cancel()
-        hideTask = DispatchWorkItem {
+        animationItem?.cancel()
+        animationItem = DispatchWorkItem {
             self.visible.toggle()
         }
     }
@@ -382,12 +371,12 @@ private extension FoxVideoPlayerControlsView {
     func startHideTaskWithDelay() {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             if !self.playbackButton.isSelected {
-                self.hideTask?.cancel()
+                self.animationItem?.cancel()
                 return
             }
             self.startHideTask()
-            guard let task = self.hideTask else { return }
-            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 3, execute: task)
+            guard let task = self.animationItem else { return }
+            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + self.settings.autoHideControlsDelay, execute: task)
         }
     }
 }
@@ -396,9 +385,13 @@ private extension FoxVideoPlayerControlsView {
 
 extension FoxVideoPlayerControlsView: UIGestureRecognizerDelegate {
     public override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-        startHideTask()
-        guard let task = hideTask else { return true }
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.2, execute: task)
+        if settings.isEnableSeekOnDoubleTap {
+            startHideTask()
+            guard let item = animationItem else { return true }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2, execute: item)
+        } else {
+            visible.toggle()
+        }
         return true
     }
 }

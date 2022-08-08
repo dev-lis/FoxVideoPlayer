@@ -33,7 +33,9 @@ final class FoxVideoPlayerAssembly: Assembly {
             }
         } else {
             container.register(FoxVideoPlayerControls.self) { _ in
-                FoxVideoPlayerControlsView()
+                let settings = FoxVideoPlayerControlsSettings()
+                let controls = FoxVideoPlayerControlsView(settings: settings)
+                return controls
             }
         }
         
