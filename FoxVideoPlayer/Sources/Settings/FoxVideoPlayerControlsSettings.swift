@@ -11,6 +11,7 @@ public struct FoxVideoPlayerControlsSettings {
     
     let darkenColor: UIColor
     let images: Images
+    let insets: Insets
     
     let animateDuration: TimeInterval
     let autoHideControlsDelay: TimeInterval
@@ -19,11 +20,13 @@ public struct FoxVideoPlayerControlsSettings {
     
     public init(darkenColor: UIColor = .black.withAlphaComponent(0.46),
                 images: Images = Images(),
+                insets: Insets = Insets(),
                 animateDuration: TimeInterval = 0.2,
                 autoHideControlsDelay: TimeInterval = 3.0,
                 isEnableSeekOnDoubleTap: Bool = true) {
         self.darkenColor = darkenColor
         self.images = images
+        self.insets = insets
         self.animateDuration = animateDuration
         self.autoHideControlsDelay = autoHideControlsDelay
         self.isEnableSeekOnDoubleTap = isEnableSeekOnDoubleTap
@@ -81,6 +84,28 @@ extension FoxVideoPlayerControlsSettings {
                 let configuration = UIImage.SymbolConfiguration(pointSize: 30)
                 self.forward = UIImage(systemName: "goforward", withConfiguration: configuration)
             }
+        }
+    }
+}
+
+extension FoxVideoPlayerControlsSettings {
+    public struct Insets {
+        let playPauseAreaWidth: CGFloat
+        let playPauseCenterY: CGFloat
+        let startPlayReplayCenterY: CGFloat
+        let backwardForwardCenterY: CGFloat
+        let backwardForwardCenterX: CGFloat
+        
+        public init(playPauseAreaWidth: CGFloat = 80,
+                    playPauseCenterY: CGFloat = -16,
+                    startPlayReplayCenterY: CGFloat = 8,
+                    backwardForwardCenterY: CGFloat = -16,
+                    backwardForwardCenterX: CGFloat = 40) {
+            self.playPauseAreaWidth = playPauseAreaWidth
+            self.playPauseCenterY = playPauseCenterY
+            self.startPlayReplayCenterY = startPlayReplayCenterY
+            self.backwardForwardCenterY = backwardForwardCenterY
+            self.backwardForwardCenterX = backwardForwardCenterX
         }
     }
 }

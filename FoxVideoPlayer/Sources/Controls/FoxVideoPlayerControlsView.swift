@@ -166,26 +166,26 @@ public class FoxVideoPlayerControlsView: UIView {
             mainStackView.rightAnchor.constraint(equalTo: rightAnchor),
             mainStackView.bottomAnchor.constraint(equalTo: bottomAnchor),
 
-            centerView.widthAnchor.constraint(equalToConstant: 80),
+            centerView.widthAnchor.constraint(equalToConstant: settings.insets.playPauseAreaWidth),
             rightView.widthAnchor.constraint(equalTo: leftView.widthAnchor),
 
             playbackButton.centerXAnchor.constraint(equalTo: centerView.centerXAnchor),
-            playbackButton.centerYAnchor.constraint(equalTo: centerView.centerYAnchor, constant: -16),
+            playbackButton.centerYAnchor.constraint(equalTo: centerView.centerYAnchor, constant: settings.insets.playPauseCenterY),
             playbackButton.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.1),
             playbackButton.heightAnchor.constraint(equalTo: playbackButton.widthAnchor),
 
             replayButton.centerXAnchor.constraint(equalTo: centerView.centerXAnchor),
-            replayButton.centerYAnchor.constraint(equalTo: playbackButton.centerYAnchor, constant: 8),
+            replayButton.centerYAnchor.constraint(equalTo: playbackButton.centerYAnchor, constant: settings.insets.startPlayReplayCenterY),
             replayButton.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.2),
             replayButton.heightAnchor.constraint(equalTo: replayButton.widthAnchor),
 
-            backwardButton.rightAnchor.constraint(equalTo: leftView.rightAnchor, constant: -40),
-            backwardButton.centerYAnchor.constraint(equalTo: leftView.centerYAnchor, constant: -16),
+            backwardButton.rightAnchor.constraint(equalTo: leftView.rightAnchor, constant: -settings.insets.backwardForwardCenterX),
+            backwardButton.centerYAnchor.constraint(equalTo: leftView.centerYAnchor, constant: settings.insets.backwardForwardCenterY),
             backwardButton.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.1),
             backwardButton.heightAnchor.constraint(equalTo: backwardButton.widthAnchor),
 
-            forwardButton.leftAnchor.constraint(equalTo: rightView.leftAnchor, constant: 40),
-            forwardButton.centerYAnchor.constraint(equalTo: rightView.centerYAnchor, constant: -16),
+            forwardButton.leftAnchor.constraint(equalTo: rightView.leftAnchor, constant: settings.insets.backwardForwardCenterX),
+            forwardButton.centerYAnchor.constraint(equalTo: rightView.centerYAnchor, constant: settings.insets.backwardForwardCenterY),
             forwardButton.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.1),
             forwardButton.heightAnchor.constraint(equalTo: forwardButton.widthAnchor),
             
