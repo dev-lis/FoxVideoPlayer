@@ -124,7 +124,7 @@ class FoxVideoPlayerProgressSliderControl: UIControl {
     
     private func updateLine() {
         let lineX: CGFloat = isVisible ? settings.sideInsetsOnShownState : 0
-        let lineWidth = isVisible ? frame.size.width - settings.sideInsetsOnShownState : frame.size.width
+        let lineWidth = isVisible ? frame.size.width - settings.sideInsetsOnShownState * 2 : frame.size.width
 
         lineLayer.frame = CGRect(
             x: lineX,
