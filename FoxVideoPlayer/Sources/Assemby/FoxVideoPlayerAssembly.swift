@@ -64,6 +64,17 @@ final class FoxVideoPlayerAssembly: Assembly {
             }
         }
         
+        if let loader = dependency.loader {
+            container.register(FoxVideoPlayerLoader.self) { _ in
+                loader
+            }
+        } else {
+            container.register(FoxVideoPlayerLoader.self) { _ in
+                let settings = FoxVideoPlayerLoaderSettings()
+                return FoxVideoPlayerLoaderView(settings: settings)
+            }
+        }
+        
         container.register(FoxVideoPlayerViewController.self) { resolver in
             let videoPlayer = FoxVideoPlayerViewController()
             
@@ -78,6 +89,9 @@ final class FoxVideoPlayerAssembly: Assembly {
             var progressBar = resolver.resolve(FoxVideoPlayerProgressBar.self)
             progressBar?.delegate = videoPlayer
             videoPlayer.progressBar = progressBar
+            
+            let loader = resolver.resolve(FoxVideoPlayerLoader.self)
+            videoPlayer.loader = loader
             
             return videoPlayer
         }

@@ -18,6 +18,7 @@ public class FoxVideoPlayerViewController: UIViewController {
     var player: FoxVideoPlayer!
     var controls: FoxVideoPlayerControls!
     var progressBar: FoxVideoPlayerProgressBar!
+    var loader: FoxVideoPlayerLoader!
     
     private var fullScreenController: FoxFullScreenVideoPlayerViewController?
     
@@ -61,6 +62,7 @@ private extension FoxVideoPlayerViewController {
         player.add(to: playerContainerView)
         controls.add(to: playerContainerView)
         progressBar.add(to: playerContainerView)
+        loader.add(to: playerContainerView)
     }
     
     func addContainer() {
@@ -98,6 +100,7 @@ extension FoxVideoPlayerViewController: FoxVideoPlayerDelegate {
     public func updatePlayerState(_ player: FoxVideoPlayer, state: FoxVideoPlayerState) {
         switch state {
         case .ready:
+            loader.stop()
             controls.loading(false)
             controls.setPlayerState(state)
         case .failed:
@@ -119,6 +122,7 @@ extension FoxVideoPlayerViewController: FoxVideoPlayerDelegate {
             controls.setPlaybackState(.completed)
         } else {
             guard from == .progressBar else { return }
+            loader.start()
             controls.loading(true)
         }
     }
@@ -126,6 +130,7 @@ extension FoxVideoPlayerViewController: FoxVideoPlayerDelegate {
     public func didUpdateTime(_ player: FoxVideoPlayer, isCompleted: Bool) {
         progressBar.didUpdateTime()
         guard !isCompleted else { return }
+        loader.stop()
         controls.loading(false)
         
     }

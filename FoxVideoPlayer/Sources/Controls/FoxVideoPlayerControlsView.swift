@@ -81,14 +81,6 @@ public class FoxVideoPlayerControlsView: UIView {
         }
         return button
     }()
-    
-    private lazy var loadIndicator: UIActivityIndicatorView = {
-        let view = UIActivityIndicatorView(style: .large)
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.color = .white
-        view.startAnimating()
-        return view
-    }()
 
     private var animationItem: DispatchWorkItem?
 
@@ -158,7 +150,6 @@ public class FoxVideoPlayerControlsView: UIView {
         centerView.addSubview(replayButton)
         leftView.addSubview(backwardButton)
         rightView.addSubview(forwardButton)
-        addSubview(loadIndicator)
 
         NSLayoutConstraint.activate([
             mainStackView.topAnchor.constraint(equalTo: topAnchor),
@@ -187,10 +178,7 @@ public class FoxVideoPlayerControlsView: UIView {
             forwardButton.leftAnchor.constraint(equalTo: rightView.leftAnchor, constant: settings.insets.backwardForwardCenterX),
             forwardButton.centerYAnchor.constraint(equalTo: rightView.centerYAnchor, constant: settings.insets.backwardForwardCenterY),
             forwardButton.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.1),
-            forwardButton.heightAnchor.constraint(equalTo: forwardButton.widthAnchor),
-            
-            loadIndicator.centerXAnchor.constraint(equalTo: centerXAnchor),
-            loadIndicator.centerYAnchor.constraint(equalTo: centerYAnchor)
+            forwardButton.heightAnchor.constraint(equalTo: forwardButton.widthAnchor)
         ])
     }
 }
@@ -275,7 +263,6 @@ extension FoxVideoPlayerControlsView: FoxVideoPlayerControls {
         backwardButton.isHidden = isLoading
         forwardButton.isHidden = isLoading
         playbackButton.isHidden = isLoading
-        loadIndicator.isHidden = !isLoading
     }
     
     public func resetVisibleControls() {
