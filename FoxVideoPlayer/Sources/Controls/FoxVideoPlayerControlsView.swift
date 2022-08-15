@@ -81,6 +81,9 @@ public class FoxVideoPlayerControlsView: UIView {
         }
         return button
     }()
+    
+    private var widthAnchorConstraint: NSLayoutConstraint!
+    private var playPauseCenterYConstraint: NSLayoutConstraint!
 
     private var animationItem: DispatchWorkItem?
 
@@ -95,6 +98,7 @@ public class FoxVideoPlayerControlsView: UIView {
     }
 
     private var addedGestures = false
+    private var didLayout = false
 
     private var state: FoxVideoPlaybackState = .pause
 
@@ -110,6 +114,28 @@ public class FoxVideoPlayerControlsView: UIView {
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    public override func layoutSubviews() {
+        super.layoutSubviews()
+        guard !didLayout else { return }
+        didLayout = true
+        
+        if settings.size.centerAreaWidth <= 40 {
+            widthAnchorConstraint.constant = 40
+        } else if settings.size.centerAreaWidth >= bounds.width / 3 {
+            widthAnchorConstraint.constant = bounds.width / 3
+        } else {
+            widthAnchorConstraint.constant = settings.size.centerAreaWidth
+        }
+        
+        if bounds.height / 2 + settings.size.playPauseCenterYInset <= 0 {
+            playPauseCenterYConstraint.constant = settings.size.playPauseSize / 2 - bounds.height / 2
+        } else if settings.size.playPauseCenterYInset - bounds.height / 2 >= 0 {
+            playPauseCenterYConstraint.constant = bounds.height / 2 - settings.size.playPauseSize / 2
+        } else {
+            playPauseCenterYConstraint.constant = settings.size.playPauseCenterYInset
+        }
     }
 
     private func setupGestures() {
@@ -150,6 +176,9 @@ public class FoxVideoPlayerControlsView: UIView {
         centerView.addSubview(replayButton)
         leftView.addSubview(backwardButton)
         rightView.addSubview(forwardButton)
+        
+        widthAnchorConstraint = centerView.widthAnchor.constraint(equalToConstant: 0)
+        playPauseCenterYConstraint = playbackButton.centerYAnchor.constraint(equalTo: centerView.centerYAnchor)
 
         NSLayoutConstraint.activate([
             mainStackView.topAnchor.constraint(equalTo: topAnchor),
@@ -157,27 +186,27 @@ public class FoxVideoPlayerControlsView: UIView {
             mainStackView.rightAnchor.constraint(equalTo: rightAnchor),
             mainStackView.bottomAnchor.constraint(equalTo: bottomAnchor),
 
-            centerView.widthAnchor.constraint(equalToConstant: settings.insets.playPauseAreaWidth),
+            widthAnchorConstraint,
             rightView.widthAnchor.constraint(equalTo: leftView.widthAnchor),
 
             playbackButton.centerXAnchor.constraint(equalTo: centerView.centerXAnchor),
-            playbackButton.centerYAnchor.constraint(equalTo: centerView.centerYAnchor, constant: settings.insets.playPauseCenterY),
-            playbackButton.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.1),
+            playbackButton.widthAnchor.constraint(equalToConstant: settings.size.playPauseSize),
             playbackButton.heightAnchor.constraint(equalTo: playbackButton.widthAnchor),
+            playPauseCenterYConstraint,
 
             replayButton.centerXAnchor.constraint(equalTo: centerView.centerXAnchor),
-            replayButton.centerYAnchor.constraint(equalTo: playbackButton.centerYAnchor, constant: settings.insets.startPlayReplayCenterY),
-            replayButton.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.2),
+            replayButton.centerYAnchor.constraint(equalTo: centerView.centerYAnchor, constant: settings.size.startPlayReplayCenterYInset),
+            replayButton.widthAnchor.constraint(equalToConstant: settings.size.startPlayReplaySize),
             replayButton.heightAnchor.constraint(equalTo: replayButton.widthAnchor),
 
-            backwardButton.rightAnchor.constraint(equalTo: leftView.rightAnchor, constant: -settings.insets.backwardForwardCenterX),
-            backwardButton.centerYAnchor.constraint(equalTo: leftView.centerYAnchor, constant: settings.insets.backwardForwardCenterY),
-            backwardButton.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.1),
+            backwardButton.rightAnchor.constraint(equalTo: leftView.rightAnchor, constant: -settings.size.backwardForwardCenterXInset),
+            backwardButton.centerYAnchor.constraint(equalTo: leftView.centerYAnchor, constant: settings.size.backwardForwardCenterYInset),
+            backwardButton.widthAnchor.constraint(equalToConstant: settings.size.backwardForwardSize),
             backwardButton.heightAnchor.constraint(equalTo: backwardButton.widthAnchor),
 
-            forwardButton.leftAnchor.constraint(equalTo: rightView.leftAnchor, constant: settings.insets.backwardForwardCenterX),
-            forwardButton.centerYAnchor.constraint(equalTo: rightView.centerYAnchor, constant: settings.insets.backwardForwardCenterY),
-            forwardButton.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 0.1),
+            forwardButton.leftAnchor.constraint(equalTo: rightView.leftAnchor, constant: settings.size.backwardForwardCenterXInset),
+            forwardButton.centerYAnchor.constraint(equalTo: rightView.centerYAnchor, constant: settings.size.backwardForwardCenterYInset),
+            forwardButton.widthAnchor.constraint(equalToConstant: settings.size.backwardForwardSize),
             forwardButton.heightAnchor.constraint(equalTo: forwardButton.widthAnchor)
         ])
     }

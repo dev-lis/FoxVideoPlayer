@@ -11,7 +11,7 @@ public struct FoxVideoPlayerControlsSettings {
     
     let darkenColor: UIColor
     let images: Images
-    let insets: Insets
+    let size: Size
     
     let animateDuration: TimeInterval
     let autoHideControlsDelay: TimeInterval
@@ -20,13 +20,13 @@ public struct FoxVideoPlayerControlsSettings {
     
     public init(darkenColor: UIColor = .black.withAlphaComponent(0.46),
                 images: Images = Images(),
-                insets: Insets = Insets(),
+                size: Size = Size(),
                 animateDuration: TimeInterval = 0.2,
                 autoHideControlsDelay: TimeInterval = 3.0,
                 isEnableSeekOnDoubleTap: Bool = true) {
         self.darkenColor = darkenColor
         self.images = images
-        self.insets = insets
+        self.size = size
         self.animateDuration = animateDuration
         self.autoHideControlsDelay = autoHideControlsDelay
         self.isEnableSeekOnDoubleTap = isEnableSeekOnDoubleTap
@@ -89,23 +89,33 @@ extension FoxVideoPlayerControlsSettings {
 }
 
 extension FoxVideoPlayerControlsSettings {
-    public struct Insets {
-        let playPauseAreaWidth: CGFloat
-        let playPauseCenterY: CGFloat
-        let startPlayReplayCenterY: CGFloat
-        let backwardForwardCenterY: CGFloat
-        let backwardForwardCenterX: CGFloat
+    public struct Size {
+        let centerAreaWidth: CGFloat
+        let playPauseCenterYInset: CGFloat
+        let startPlayReplayCenterYInset: CGFloat
+        let backwardForwardCenterYInset: CGFloat
+        let backwardForwardCenterXInset: CGFloat
         
-        public init(playPauseAreaWidth: CGFloat = 80,
-                    playPauseCenterY: CGFloat = -16,
-                    startPlayReplayCenterY: CGFloat = 8,
-                    backwardForwardCenterY: CGFloat = -16,
-                    backwardForwardCenterX: CGFloat = 40) {
-            self.playPauseAreaWidth = playPauseAreaWidth
-            self.playPauseCenterY = playPauseCenterY
-            self.startPlayReplayCenterY = startPlayReplayCenterY
-            self.backwardForwardCenterY = backwardForwardCenterY
-            self.backwardForwardCenterX = backwardForwardCenterX
+        let playPauseSize: CGFloat
+        let startPlayReplaySize: CGFloat
+        let backwardForwardSize: CGFloat
+        
+        public init(centerAreaWidth: CGFloat = 80,
+                    playPauseCenterYInset: CGFloat = -16,
+                    startPlayReplayCenterYInset: CGFloat = 8,
+                    backwardForwardCenterYInset: CGFloat = -16,
+                    backwardForwardCenterXInset: CGFloat = 0,
+                    playPauseSize: CGFloat = 40,
+                    startPlayReplaySize: CGFloat = 60,
+                    backwardForwardSize: CGFloat = 40) {
+            self.centerAreaWidth = centerAreaWidth
+            self.playPauseCenterYInset = playPauseCenterYInset
+            self.startPlayReplayCenterYInset = startPlayReplayCenterYInset
+            self.backwardForwardCenterYInset = backwardForwardCenterYInset
+            self.backwardForwardCenterXInset = backwardForwardCenterXInset
+            self.playPauseSize = playPauseSize
+            self.startPlayReplaySize = startPlayReplaySize
+            self.backwardForwardSize = backwardForwardSize
         }
     }
 }
