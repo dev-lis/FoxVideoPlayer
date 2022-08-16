@@ -18,7 +18,7 @@ public class FoxVideoPlayerProgressBarView: UIView {
 
     private lazy var timerLabel: UILabel = {
         let label = UILabel()
-        label.font = settings.timerLabelFont
+        label.font = settings.font.timer
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .white
         label.isHidden = true
@@ -90,10 +90,10 @@ public class FoxVideoPlayerProgressBarView: UIView {
             sliderContainer.rightAnchor.constraint(equalTo: rightAnchor),
             
             timerLabel.topAnchor.constraint(equalTo: sliderContainer.bottomAnchor),
-            timerLabel.leftAnchor.constraint(equalTo: sliderContainer.leftAnchor, constant: settings.timerLeftInset),
+            timerLabel.leftAnchor.constraint(equalTo: sliderContainer.leftAnchor, constant: settings.size.timerLeftInset),
 
             buttonsStackView.topAnchor.constraint(equalTo: sliderContainer.bottomAnchor, constant: -16),
-            buttonsStackView.rightAnchor.constraint(equalTo: rightAnchor, constant: -settings.buttonsStackRightInset),
+            buttonsStackView.rightAnchor.constraint(equalTo: rightAnchor, constant: -settings.size.buttonsStackRightInset),
             buttonsStackView.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
         
@@ -127,15 +127,16 @@ extension FoxVideoPlayerProgressBarView: FoxVideoPlayerProgressBar {
         
         view.addSubview(self)
         
+        let bottomInset = settings.flag.isVisibleProgressOnHiddenState ? sliderTopInset : 0
         bottomConstraint = bottomAnchor.constraint(
             equalTo: view.bottomAnchor,
-            constant: settings.barHeight - sliderTopInset
+            constant: settings.size.barHeight - bottomInset
         )
         
         NSLayoutConstraint.activate([
             leftAnchor.constraint(equalTo: view.leftAnchor),
             rightAnchor.constraint(equalTo: view.rightAnchor),
-            heightAnchor.constraint(equalToConstant: settings.barHeight),
+            heightAnchor.constraint(equalToConstant: settings.size.barHeight),
             bottomConstraint,
         ])
     }
@@ -197,16 +198,20 @@ extension FoxVideoPlayerProgressBarView: FoxVideoPlayerProgressBar {
     
     public func show() {
         bottomConstraint?.constant = 0
-        UIView.animate(withDuration: settings.animateDuration) {
+        UIView.animate(withDuration: settings.duration.animate) {
             self.superview?.layoutIfNeeded()
         }
         showAnimation()
     }
     
     public func hide() {
-        let inset = screenMode == .default ? sliderTopInset : 0
+        superview?.clipsToBounds = !settings.flag.isVisibleProgressOnHiddenState
+        
+        let inset = screenMode == .default
+        ? settings.flag.isVisibleProgressOnHiddenState ? sliderTopInset : 0
+        : 0
         bottomConstraint?.constant = frame.height - inset
-        UIView.animate(withDuration: settings.animateDuration) {
+        UIView.animate(withDuration: settings.duration.animate) {
             self.superview?.layoutIfNeeded()
         }
         hideAnimation()
@@ -247,14 +252,14 @@ private extension FoxVideoPlayerProgressBarView {
     }
 
     func showElements() {
-        UIView.animate(withDuration: settings.elementAnimateDuration) {
+        UIView.animate(withDuration: settings.duration.elementAnimate) {
             self.timerLabel.alpha = 1
             self.buttonsStackView.alpha = 1
         }
     }
 
     func hideElements() {
-        UIView.animate(withDuration: settings.elementAnimateDuration) {
+        UIView.animate(withDuration: settings.duration.elementAnimate) {
             self.timerLabel.alpha = 0
             self.buttonsStackView.alpha = 0
         }
