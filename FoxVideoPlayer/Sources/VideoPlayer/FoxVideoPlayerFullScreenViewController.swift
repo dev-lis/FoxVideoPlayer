@@ -1,5 +1,5 @@
 //
-//  FoxFullScreenVideoPlayerViewController.swift
+//  FoxVideoPlayerFullScreenViewController.swift
 //  FoxVideoPlayer
 //
 //  Created by Aleksandr Lis on 28.03.2022.
@@ -7,11 +7,11 @@
 
 import UIKit
 
-public protocol FoxFullScreenVideoPlayerViewControllerDelegate: AnyObject {
-    func didHideFullScreen(_ controller: FoxFullScreenVideoPlayerViewController)
+public protocol FoxVideoPlayerFullScreenViewControllerDelegate: AnyObject {
+    func didHideFullScreen(_ controller: FoxVideoPlayerFullScreenViewController)
 }
 
-public class FoxFullScreenVideoPlayerViewController: UIViewController {
+public class FoxVideoPlayerFullScreenViewController: UIViewController {
     
     private var playerTopConstraint: NSLayoutConstraint!
     private var playerBottomConstraint: NSLayoutConstraint!
@@ -28,7 +28,7 @@ public class FoxFullScreenVideoPlayerViewController: UIViewController {
     
     private let startPlayerOriginY: CGFloat
     
-    public weak var delegate: FoxFullScreenVideoPlayerViewControllerDelegate?
+    public weak var delegate: FoxVideoPlayerFullScreenViewControllerDelegate?
     
     private let playerView: UIView
     private let source: Source

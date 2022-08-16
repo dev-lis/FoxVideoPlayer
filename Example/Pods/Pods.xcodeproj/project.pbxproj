@@ -11,7 +11,7 @@
 		02A35631D80DBE0CE35F0A0AAD00076F /* Swinject-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = E416F148D2425C5D96483EB4E46CAA3D /* Swinject-dummy.m */; };
 		07AC3A1B26AB30C59422DE7FB321E4DA /* FoxVideoPlayerProgressSliderControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54D31411C89DC538A8DD7B7DF02C27E9 /* FoxVideoPlayerProgressSliderControl.swift */; };
 		18D8B9D85B27F325625D41C051A44AC9 /* FoxVideoPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1303C75585908C0CC02546AEB4FD551D /* FoxVideoPlayerView.swift */; };
-		1A8724923EC9A33A46BA62311D38BF56 /* FoxFullScreenVideoPlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 125494510391C6B6BD58E04DC5195F34 /* FoxFullScreenVideoPlayerViewController.swift */; };
+		1A8724923EC9A33A46BA62311D38BF56 /* FoxVideoPlayerFullScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 125494510391C6B6BD58E04DC5195F34 /* FoxVideoPlayerFullScreenViewController.swift */; };
 		2542B5216317B808F41E2A2D2C49EF4E /* Assembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = B11A294434C2BEFE2992817888A46F9D /* Assembly.swift */; };
 		2BFC8CF1DEED4379FCD69BB33691AC85 /* ServiceEntry.TypeForwarding.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9749E0C7492E5581E39B7294394872F /* ServiceEntry.TypeForwarding.swift */; };
 		2EF7B35BCB7CE7C20B25B9511458CD68 /* DebugHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37F8E3305699B8F91A16F6242BB73B9E /* DebugHelper.swift */; };
@@ -101,7 +101,7 @@
 		0FE3AAF75C554715F7C87FAC341C507B /* FoxVideoPlayerProgressBarSliderSettings.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = FoxVideoPlayerProgressBarSliderSettings.swift; sourceTree = "<group>"; };
 		0FF13311598BB4F8BB80748FC3C3D234 /* FoxScreen.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = FoxScreen.swift; sourceTree = "<group>"; };
 		0FF19435DA04C80222FAD861C2C8207F /* SynchronizedResolver.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SynchronizedResolver.swift; path = Sources/SynchronizedResolver.swift; sourceTree = "<group>"; };
-		125494510391C6B6BD58E04DC5195F34 /* FoxFullScreenVideoPlayerViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = FoxFullScreenVideoPlayerViewController.swift; sourceTree = "<group>"; };
+		125494510391C6B6BD58E04DC5195F34 /* FoxVideoPlayerFullScreenViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = FoxVideoPlayerFullScreenViewController.swift; sourceTree = "<group>"; };
 		1303C75585908C0CC02546AEB4FD551D /* FoxVideoPlayerView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = FoxVideoPlayerView.swift; sourceTree = "<group>"; };
 		157EC3C3AA3E459DF9EAE8AE84F70DC1 /* FoxVideoPlayerController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = FoxVideoPlayerController.swift; sourceTree = "<group>"; };
 		196CED711D7615913486B7C8C5F4FBFE /* FoxVideoPlayer.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = FoxVideoPlayer.modulemap; sourceTree = "<group>"; };
@@ -217,7 +217,7 @@
 		318369ECEBAA38DB8A2A91391E23EF6F /* VideoPlayer */ = {
 			isa = PBXGroup;
 			children = (
-				125494510391C6B6BD58E04DC5195F34 /* FoxFullScreenVideoPlayerViewController.swift */,
+				125494510391C6B6BD58E04DC5195F34 /* FoxVideoPlayerFullScreenViewController.swift */,
 				1303C75585908C0CC02546AEB4FD551D /* FoxVideoPlayerView.swift */,
 				3AFF0775DCBCF7F794518B46423BF342 /* FoxVideoPlayerViewController.swift */,
 			);
@@ -630,7 +630,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				560F957E41AC6D8C1E70B4FAFB1C24B5 /* CMTime+Extensions.swift in Sources */,
-				1A8724923EC9A33A46BA62311D38BF56 /* FoxFullScreenVideoPlayerViewController.swift in Sources */,
+				1A8724923EC9A33A46BA62311D38BF56 /* FoxVideoPlayerFullScreenViewController.swift in Sources */,
 				EA42C2BA28AACE7D00165350 /* FoxVideoPlayerLoaderSettings.swift in Sources */,
 				3E2657FA6928CA8EF194AE2CD0B354D3 /* FoxScreen.swift in Sources */,
 				88757271574516957E98D6940E9E9C66 /* FoxStates.swift in Sources */,

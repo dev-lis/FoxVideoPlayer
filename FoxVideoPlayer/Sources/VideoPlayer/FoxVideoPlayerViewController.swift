@@ -20,7 +20,7 @@ public class FoxVideoPlayerViewController: UIViewController {
     var progressBar: FoxVideoPlayerProgressBar!
     var loader: FoxVideoPlayerLoader!
     
-    private var fullScreenController: FoxFullScreenVideoPlayerViewController?
+    private var fullScreenController: FoxVideoPlayerFullScreenViewController?
     
     private var progressBarBottomConstraint: NSLayoutConstraint!
     private let progressBarHeight: CGFloat = 66.0
@@ -76,11 +76,11 @@ private extension FoxVideoPlayerViewController {
         ])
     }
     
-    func openFullScreen(source: FoxFullScreenVideoPlayerViewController.Source) {
+    func openFullScreen(source: FoxVideoPlayerFullScreenViewController.Source) {
         
         playerContainerView.removeFromSuperview()
         
-        let controller = FoxFullScreenVideoPlayerViewController(playerView: playerContainerView, source: source)
+        let controller = FoxVideoPlayerFullScreenViewController(playerView: playerContainerView, source: source)
         controller.delegate = self
         fullScreenController = controller
         
@@ -210,8 +210,8 @@ extension FoxVideoPlayerViewController: FoxVideoPlayerProgressBarDelegate {
 
 // MARK: FullScreenPlayerViewControllerDelegate
 
-extension FoxVideoPlayerViewController: FoxFullScreenVideoPlayerViewControllerDelegate {
-    public func didHideFullScreen(_ controller: FoxFullScreenVideoPlayerViewController) {
+extension FoxVideoPlayerViewController: FoxVideoPlayerFullScreenViewControllerDelegate {
+    public func didHideFullScreen(_ controller: FoxVideoPlayerFullScreenViewController) {
         addContainer()
         
         fullScreenController = nil
