@@ -39,10 +39,10 @@ public class FoxVideoPlayerControlsView: UIView {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.adjustsImageWhenHighlighted = false
         button.isHidden = true
-        button.imageView?.tintColor = .white
+        button.imageView?.tintColor = settings.color.playPause
         button.imageView?.contentMode = .scaleAspectFill
-        button.setImage(settings.images.play, for: .normal)
-        button.setImage(settings.images.pause, for: .selected)
+        button.setImage(settings.image.play, for: .normal)
+        button.setImage(settings.image.pause, for: .selected)
         button.addTarget(self, action: #selector(didTapPlayPause), for: .touchUpInside)
         return button
     }()
@@ -51,9 +51,9 @@ public class FoxVideoPlayerControlsView: UIView {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.isHidden = true
-        button.imageView?.tintColor = .white
-        button.setImage(settings.images.startPlay, for: .normal)
-        button.setImage(settings.images.replay, for: .selected)
+        button.imageView?.tintColor = settings.color.startPlayReplay
+        button.setImage(settings.image.startPlay, for: .normal)
+        button.setImage(settings.image.replay, for: .selected)
         button.addTarget(self, action: #selector(didTapReplay), for: .touchUpInside)
         return button
     }()
@@ -61,7 +61,8 @@ public class FoxVideoPlayerControlsView: UIView {
     private lazy var backwardButton: SeekButton = {
         let button = SeekButton(direction: .backward)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.seekImage = settings.images.backward
+        button.seekImage = settings.image.backward
+        button.color = settings.color.seek
         button.setVisible(false)
         button.didTap = { [weak self] interval in
             guard let self = self else { return }
@@ -73,7 +74,8 @@ public class FoxVideoPlayerControlsView: UIView {
     private lazy var forwardButton: SeekButton = {
         let button = SeekButton(direction: .forward)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.seekImage = settings.images.forward
+        button.seekImage = settings.image.forward
+        button.color = settings.color.seek
         button.setVisible(false)
         button.didTap = { [weak self] interval in
             guard let self = self else { return }
@@ -351,7 +353,7 @@ extension FoxVideoPlayerControlsView: FoxVideoPlayerControls {
     
     public func setDarkenBackground(_ isDraken: Bool) {
         backgroundColor = isDraken
-        ? settings.darkenColor
+        ? settings.color.darken
         : .clear
     }
 
@@ -443,7 +445,7 @@ private extension FoxVideoPlayerControlsView {
             playbackButton.alpha = 1
         }
 
-        backgroundColor = settings.darkenColor
+        backgroundColor = settings.color.darken
 
         delegate?.updateVisibleControls(self, isVisible: true)
 

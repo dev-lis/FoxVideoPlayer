@@ -9,8 +9,8 @@ import UIKit
 
 public struct FoxVideoPlayerControlsSettings {
     
-    let darkenColor: UIColor
-    let images: Images
+    let image: Image
+    let color: Color
     let size: Size
     
     let animateDuration: TimeInterval
@@ -18,14 +18,14 @@ public struct FoxVideoPlayerControlsSettings {
     
     let isEnableSeekOnDoubleTap: Bool
     
-    public init(darkenColor: UIColor = .black.withAlphaComponent(0.46),
-                images: Images = Images(),
+    public init(image: Image = Image(),
+                color: Color = Color(),
                 size: Size = Size(),
                 animateDuration: TimeInterval = 0.2,
                 autoHideControlsDelay: TimeInterval = 3.0,
                 isEnableSeekOnDoubleTap: Bool = true) {
-        self.darkenColor = darkenColor
-        self.images = images
+        self.image = image
+        self.color = color
         self.size = size
         self.animateDuration = animateDuration
         self.autoHideControlsDelay = autoHideControlsDelay
@@ -34,7 +34,26 @@ public struct FoxVideoPlayerControlsSettings {
 }
 
 extension FoxVideoPlayerControlsSettings {
-    public struct Images {
+    public struct Color {
+        let darken: UIColor?
+        let startPlayReplay: UIColor?
+        let playPause: UIColor?
+        let seek: UIColor?
+        
+        public init(darken: UIColor? = .black.withAlphaComponent(0.46),
+                    startPlayReplay: UIColor? = .white,
+                    playPause: UIColor? = .white,
+                    seek: UIColor? = .white) {
+            self.darken = darken
+            self.startPlayReplay = startPlayReplay
+            self.playPause = playPause
+            self.seek = seek
+        }
+    }
+}
+
+extension FoxVideoPlayerControlsSettings {
+    public struct Image {
         let startPlay: UIImage?
         let replay: UIImage?
         let play: UIImage?

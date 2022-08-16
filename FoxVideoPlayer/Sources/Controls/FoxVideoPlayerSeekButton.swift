@@ -58,6 +58,12 @@ class SeekButton: UIView {
             seekImageView.image = seekImage
         }
     }
+    
+    public var color: UIColor? {
+        didSet {
+            seekImageView.tintColor = color
+        }
+    }
 
     private var resetSeekCounerItem: DispatchWorkItem?
     private var singleTap = true
