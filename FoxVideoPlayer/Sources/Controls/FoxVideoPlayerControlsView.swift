@@ -82,8 +82,17 @@ public class FoxVideoPlayerControlsView: UIView {
         return button
     }()
     
-    private var widthAnchorConstraint: NSLayoutConstraint!
+    private var centerWidthConstraint: NSLayoutConstraint!
     private var playPauseCenterYConstraint: NSLayoutConstraint!
+    private var playPauseWidthConstraint: NSLayoutConstraint!
+    private var startPlayReplayCenterYConstraint: NSLayoutConstraint!
+    private var startPlayReplayWidthConstraint: NSLayoutConstraint!
+    private var backwardCenterXConstraint: NSLayoutConstraint!
+    private var backwardCenterYConstraint: NSLayoutConstraint!
+    private var backwardWidthConstraint: NSLayoutConstraint!
+    private var forwardCenterXConstraint: NSLayoutConstraint!
+    private var forwardCenterYConstraint: NSLayoutConstraint!
+    private var forwardWidthConstraint: NSLayoutConstraint!
 
     private var animationItem: DispatchWorkItem?
 
@@ -121,21 +130,7 @@ public class FoxVideoPlayerControlsView: UIView {
         guard !didLayout else { return }
         didLayout = true
         
-        if settings.size.centerAreaWidth <= 40 {
-            widthAnchorConstraint.constant = 40
-        } else if settings.size.centerAreaWidth >= bounds.width / 3 {
-            widthAnchorConstraint.constant = bounds.width / 3
-        } else {
-            widthAnchorConstraint.constant = settings.size.centerAreaWidth
-        }
-        
-        if bounds.height / 2 + settings.size.playPauseCenterYInset <= 0 {
-            playPauseCenterYConstraint.constant = settings.size.playPauseSize / 2 - bounds.height / 2
-        } else if settings.size.playPauseCenterYInset - bounds.height / 2 >= 0 {
-            playPauseCenterYConstraint.constant = bounds.height / 2 - settings.size.playPauseSize / 2
-        } else {
-            playPauseCenterYConstraint.constant = settings.size.playPauseCenterYInset
-        }
+        updateLayout()
     }
 
     private func setupGestures() {
@@ -177,8 +172,17 @@ public class FoxVideoPlayerControlsView: UIView {
         leftView.addSubview(backwardButton)
         rightView.addSubview(forwardButton)
         
-        widthAnchorConstraint = centerView.widthAnchor.constraint(equalToConstant: 0)
+        centerWidthConstraint = centerView.widthAnchor.constraint(equalToConstant: 0)
         playPauseCenterYConstraint = playbackButton.centerYAnchor.constraint(equalTo: centerView.centerYAnchor)
+        playPauseWidthConstraint = playbackButton.widthAnchor.constraint(equalToConstant: 0)
+        startPlayReplayCenterYConstraint = replayButton.centerYAnchor.constraint(equalTo: centerView.centerYAnchor)
+        startPlayReplayWidthConstraint = replayButton.widthAnchor.constraint(equalToConstant: 0)
+        backwardCenterXConstraint = backwardButton.centerXAnchor.constraint(equalTo: leftView.centerXAnchor)
+        backwardCenterYConstraint = backwardButton.centerYAnchor.constraint(equalTo: leftView.centerYAnchor)
+        backwardWidthConstraint = backwardButton.widthAnchor.constraint(equalToConstant: 0)
+        forwardCenterXConstraint = forwardButton.centerXAnchor.constraint(equalTo: rightView.centerXAnchor)
+        forwardCenterYConstraint = forwardButton.centerYAnchor.constraint(equalTo: rightView.centerYAnchor)
+        forwardWidthConstraint = forwardButton.widthAnchor.constraint(equalToConstant: 0)
 
         NSLayoutConstraint.activate([
             mainStackView.topAnchor.constraint(equalTo: topAnchor),
@@ -186,29 +190,107 @@ public class FoxVideoPlayerControlsView: UIView {
             mainStackView.rightAnchor.constraint(equalTo: rightAnchor),
             mainStackView.bottomAnchor.constraint(equalTo: bottomAnchor),
 
-            widthAnchorConstraint,
+            centerWidthConstraint,
             rightView.widthAnchor.constraint(equalTo: leftView.widthAnchor),
 
             playbackButton.centerXAnchor.constraint(equalTo: centerView.centerXAnchor),
-            playbackButton.widthAnchor.constraint(equalToConstant: settings.size.playPauseSize),
             playbackButton.heightAnchor.constraint(equalTo: playbackButton.widthAnchor),
+            playPauseWidthConstraint,
             playPauseCenterYConstraint,
 
             replayButton.centerXAnchor.constraint(equalTo: centerView.centerXAnchor),
-            replayButton.centerYAnchor.constraint(equalTo: centerView.centerYAnchor, constant: settings.size.startPlayReplayCenterYInset),
-            replayButton.widthAnchor.constraint(equalToConstant: settings.size.startPlayReplaySize),
             replayButton.heightAnchor.constraint(equalTo: replayButton.widthAnchor),
+            startPlayReplayCenterYConstraint,
+            startPlayReplayWidthConstraint,
 
-            backwardButton.rightAnchor.constraint(equalTo: leftView.rightAnchor, constant: -settings.size.backwardForwardCenterXInset),
-            backwardButton.centerYAnchor.constraint(equalTo: leftView.centerYAnchor, constant: settings.size.backwardForwardCenterYInset),
-            backwardButton.widthAnchor.constraint(equalToConstant: settings.size.backwardForwardSize),
             backwardButton.heightAnchor.constraint(equalTo: backwardButton.widthAnchor),
-
-            forwardButton.leftAnchor.constraint(equalTo: rightView.leftAnchor, constant: settings.size.backwardForwardCenterXInset),
-            forwardButton.centerYAnchor.constraint(equalTo: rightView.centerYAnchor, constant: settings.size.backwardForwardCenterYInset),
-            forwardButton.widthAnchor.constraint(equalToConstant: settings.size.backwardForwardSize),
-            forwardButton.heightAnchor.constraint(equalTo: forwardButton.widthAnchor)
+            backwardCenterXConstraint,
+            backwardCenterYConstraint,
+            backwardWidthConstraint,
+            
+            forwardButton.heightAnchor.constraint(equalTo: forwardButton.widthAnchor),
+            forwardCenterXConstraint,
+            forwardCenterYConstraint,
+            forwardWidthConstraint
         ])
+    }
+
+    private func updateLayout() {
+        
+        // Center Area
+        
+        if settings.size.centerAreaWidth <= 40 {
+            centerWidthConstraint.constant = 40
+        } else if settings.size.centerAreaWidth >= bounds.width / 3 {
+            centerWidthConstraint.constant = bounds.width / 3
+        } else {
+            centerWidthConstraint.constant = settings.size.centerAreaWidth
+        }
+        
+        // Play & Pause Button
+        
+        if bounds.height / 2 + settings.size.playPauseCenterYInset <= 0 {
+            playPauseCenterYConstraint.constant = settings.size.playPauseButtonSize / 2 - bounds.height / 2
+        } else if settings.size.playPauseCenterYInset - bounds.height / 2 >= 0 {
+            playPauseCenterYConstraint.constant = bounds.height / 2 - settings.size.playPauseButtonSize / 2
+        } else {
+            playPauseCenterYConstraint.constant = settings.size.playPauseCenterYInset
+        }
+        
+        if settings.size.playPauseButtonSize > 8 {
+            playPauseWidthConstraint.constant = settings.size.playPauseButtonSize
+        } else {
+            playPauseWidthConstraint.constant = 8
+        }
+        
+        // Start play & Replay Button
+        
+        if bounds.height / 2 + settings.size.startPlayReplayCenterYInset <= 0 {
+            startPlayReplayCenterYConstraint.constant = settings.size.startPlayReplayButtonSize / 2 - bounds.height / 2
+        } else if settings.size.startPlayReplayCenterYInset - bounds.height / 2 >= 0 {
+            startPlayReplayCenterYConstraint.constant = bounds.height / 2 - settings.size.startPlayReplayButtonSize / 2
+        } else {
+            startPlayReplayCenterYConstraint.constant = settings.size.startPlayReplayCenterYInset
+        }
+            
+        if settings.size.startPlayReplayButtonSize > 8 {
+            startPlayReplayWidthConstraint.constant = settings.size.startPlayReplayButtonSize
+        } else {
+            startPlayReplayWidthConstraint.constant = 8
+        }
+        
+        // Seek Buttons
+        
+        let sideWidth = (bounds.width - settings.size.centerAreaWidth) / 2
+        if sideWidth / 2 + settings.size.seekButtonsCenterXInset <= 0 {
+            backwardCenterXConstraint.constant = settings.size.seekButtonsSize / 2 - sideWidth / 2
+            forwardCenterXConstraint.constant = sideWidth / 2 - settings.size.seekButtonsSize / 2
+        } else if settings.size.seekButtonsCenterXInset - sideWidth / 2 >= 0 {
+            backwardCenterXConstraint.constant = sideWidth / 2 - settings.size.seekButtonsSize / 2
+            forwardCenterXConstraint.constant = settings.size.seekButtonsSize / 2 - sideWidth / 2
+        } else {
+            backwardCenterXConstraint.constant = settings.size.seekButtonsCenterXInset
+            forwardCenterXConstraint.constant = -settings.size.seekButtonsCenterXInset
+        }
+        
+        if bounds.height / 2 + settings.size.seekButtonsCenterYInset <= 0 {
+            backwardCenterYConstraint.constant = settings.size.seekButtonsSize / 2 - bounds.height / 2
+            forwardCenterYConstraint.constant = settings.size.seekButtonsSize / 2 - bounds.height / 2
+        } else if settings.size.seekButtonsCenterYInset - bounds.height / 2 >= 0 {
+            backwardCenterYConstraint.constant = bounds.height / 2 - settings.size.seekButtonsSize / 2
+            forwardCenterYConstraint.constant = bounds.height / 2 - settings.size.seekButtonsSize / 2
+        } else {
+            backwardCenterYConstraint.constant = settings.size.seekButtonsCenterYInset
+            forwardCenterYConstraint.constant = settings.size.seekButtonsCenterYInset
+        }
+        
+        if settings.size.seekButtonsSize > 8 {
+            backwardWidthConstraint.constant = settings.size.seekButtonsSize
+            forwardWidthConstraint.constant = settings.size.seekButtonsSize
+        } else {
+            backwardWidthConstraint.constant = 8
+            forwardWidthConstraint.constant = 8
+        }
     }
 }
 
@@ -352,6 +434,7 @@ private extension FoxVideoPlayerControlsView {
 }
 
 //MARK: Private
+
 private extension FoxVideoPlayerControlsView {
     func showControls() {
         if state != .completed {

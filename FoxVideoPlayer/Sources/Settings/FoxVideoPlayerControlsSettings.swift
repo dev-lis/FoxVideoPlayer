@@ -91,31 +91,31 @@ extension FoxVideoPlayerControlsSettings {
 extension FoxVideoPlayerControlsSettings {
     public struct Size {
         let centerAreaWidth: CGFloat
-        let playPauseCenterYInset: CGFloat
         let startPlayReplayCenterYInset: CGFloat
-        let backwardForwardCenterYInset: CGFloat
-        let backwardForwardCenterXInset: CGFloat
+        let playPauseCenterYInset: CGFloat
+        let seekButtonsCenterYInset: CGFloat
+        let seekButtonsCenterXInset: CGFloat
         
-        let playPauseSize: CGFloat
-        let startPlayReplaySize: CGFloat
-        let backwardForwardSize: CGFloat
+        let playPauseButtonSize: CGFloat
+        let startPlayReplayButtonSize: CGFloat
+        let seekButtonsSize: CGFloat
         
         public init(centerAreaWidth: CGFloat = 80,
-                    playPauseCenterYInset: CGFloat = -16,
                     startPlayReplayCenterYInset: CGFloat = 8,
-                    backwardForwardCenterYInset: CGFloat = -16,
-                    backwardForwardCenterXInset: CGFloat = 0,
-                    playPauseSize: CGFloat = 40,
-                    startPlayReplaySize: CGFloat = 60,
-                    backwardForwardSize: CGFloat = 40) {
+                    playPauseCenterYInset: CGFloat = -16,
+                    seekButtonsCenterYInset: CGFloat = -16,
+                    seekButtonsCenterXInset: CGFloat = 40,
+                    playPauseButtonSize: CGFloat = 40,
+                    startPlayReplayButtonSize: CGFloat = 60,
+                    seekButtonsSize: CGFloat = 40) {
             self.centerAreaWidth = centerAreaWidth
-            self.playPauseCenterYInset = playPauseCenterYInset
             self.startPlayReplayCenterYInset = startPlayReplayCenterYInset
-            self.backwardForwardCenterYInset = backwardForwardCenterYInset
-            self.backwardForwardCenterXInset = backwardForwardCenterXInset
-            self.playPauseSize = playPauseSize
-            self.startPlayReplaySize = startPlayReplaySize
-            self.backwardForwardSize = backwardForwardSize
+            self.playPauseCenterYInset = playPauseCenterYInset
+            self.seekButtonsCenterYInset = seekButtonsCenterYInset
+            self.seekButtonsCenterXInset = seekButtonsCenterXInset
+            self.playPauseButtonSize = playPauseButtonSize
+            self.startPlayReplayButtonSize = startPlayReplayButtonSize
+            self.seekButtonsSize = seekButtonsSize
         }
     }
 }
