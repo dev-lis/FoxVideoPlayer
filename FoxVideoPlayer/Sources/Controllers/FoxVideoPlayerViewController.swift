@@ -22,9 +22,6 @@ public class FoxVideoPlayerViewController: UIViewController {
     
     private var fullScreenController: FoxVideoPlayerFullScreenViewController?
     
-    private var progressBarBottomConstraint: NSLayoutConstraint!
-    private let progressBarHeight: CGFloat = 66.0
-    
     public var height: CGFloat {
         min(UIScreen.main.bounds.width, UIScreen.main.bounds.height) * 9 / 16
     }

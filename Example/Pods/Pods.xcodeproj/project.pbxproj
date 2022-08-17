@@ -158,7 +158,7 @@
 		C28FBE50003C9B653E9ECCB042FB20D9 /* Container.Logging.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Container.Logging.swift; path = Sources/Container.Logging.swift; sourceTree = "<group>"; };
 		C85F9CF25339AB69124BAD847BCA6057 /* Pods-FoxVideoPlayer_Example-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-FoxVideoPlayer_Example-acknowledgements.markdown"; sourceTree = "<group>"; };
 		C99046E3A88D36C7E3F8319269A97235 /* Resolver.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Resolver.swift; path = Sources/Resolver.swift; sourceTree = "<group>"; };
-		CCC31D04063CCED550E0203741087CE7 /* FoxVideoPlayer */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = FoxVideoPlayer; path = FoxVideoPlayer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		CCC31D04063CCED550E0203741087CE7 /* FoxVideoPlayer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FoxVideoPlayer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D26E6F23A43F11C4430800870CE16670 /* Pods-FoxVideoPlayer_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-FoxVideoPlayer_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		D4CC59F98533AEB3FBC130089E826AEB /* FoxVideoPlayerProgressBarView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = FoxVideoPlayerProgressBarView.swift; sourceTree = "<group>"; };
 		D7465190BEB7F170163245577DAED566 /* Swinject.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = Swinject.h; path = Sources/Swinject.h; sourceTree = "<group>"; };
@@ -214,15 +214,14 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
-		318369ECEBAA38DB8A2A91391E23EF6F /* VideoPlayer */ = {
+		318369ECEBAA38DB8A2A91391E23EF6F /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
 				125494510391C6B6BD58E04DC5195F34 /* FoxVideoPlayerFullScreenViewController.swift */,
-				1303C75585908C0CC02546AEB4FD551D /* FoxVideoPlayerView.swift */,
 				3AFF0775DCBCF7F794518B46423BF342 /* FoxVideoPlayerViewController.swift */,
 			);
-			name = VideoPlayer;
-			path = FoxVideoPlayer/Sources/VideoPlayer;
+			name = Controllers;
+			path = FoxVideoPlayer/Sources/Controllers;
 			sourceTree = "<group>";
 		};
 		578452D2E740E91742655AC8F1636D1F /* iOS */ = {
@@ -386,10 +385,11 @@
 				92C8215C285CC6115DA9FF5E3D8010CC /* Loader */,
 				7D704968B46877E2F512C0EA90F544E7 /* Pod */,
 				861536FC8D3DB7B4F46CB5CCD053060F /* ProgressBar */,
+				EA42C2BB28AC270900165350 /* VideoPlayer */,
 				ED5E9D780B698C22F49B6F0925B5C869 /* Protocols */,
 				6359C5D6BC60C6C0D592E0C2949C5F35 /* Settings */,
 				FFC658AFA61A5AADD2F35E9A821650F8 /* Support Files */,
-				318369ECEBAA38DB8A2A91391E23EF6F /* VideoPlayer */,
+				318369ECEBAA38DB8A2A91391E23EF6F /* Controllers */,
 			);
 			name = FoxVideoPlayer;
 			path = ../..;
@@ -437,6 +437,14 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		EA42C2BB28AC270900165350 /* VideoPlayer */ = {
+			isa = PBXGroup;
+			children = (
+				1303C75585908C0CC02546AEB4FD551D /* FoxVideoPlayerView.swift */,
+			);
+			path = VideoPlayer;
+			sourceTree = "<group>";
+		};
 		ED5E9D780B698C22F49B6F0925B5C869 /* Protocols */ = {
 			isa = PBXGroup;
 			children = (
@@ -453,7 +461,7 @@
 		FA7DE727F790B00C3E80F67DD72E755D /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				CCC31D04063CCED550E0203741087CE7 /* FoxVideoPlayer */,
+				CCC31D04063CCED550E0203741087CE7 /* FoxVideoPlayer.framework */,
 				7596D3633E38F4FD47EC53F1DF000D60 /* Pods-FoxVideoPlayer_Example */,
 				8ACA110EF3B35B3FCC08297B3799D9AD /* Swinject */,
 			);
@@ -560,7 +568,7 @@
 			);
 			name = FoxVideoPlayer;
 			productName = FoxVideoPlayer;
-			productReference = CCC31D04063CCED550E0203741087CE7 /* FoxVideoPlayer */;
+			productReference = CCC31D04063CCED550E0203741087CE7 /* FoxVideoPlayer.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 /* End PBXNativeTarget section */
@@ -733,6 +741,7 @@
 				INFOPLIST_FILE = "Target Support Files/FoxVideoPlayer/FoxVideoPlayer-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				"IPHONEOS_DEPLOYMENT_TARGET[sdk=macosx*]" = 13.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MODULEMAP_FILE = "Target Support Files/FoxVideoPlayer/FoxVideoPlayer.modulemap";
 				PRODUCT_MODULE_NAME = FoxVideoPlayer;
@@ -1025,6 +1034,7 @@
 				INFOPLIST_FILE = "Target Support Files/FoxVideoPlayer/FoxVideoPlayer-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				"IPHONEOS_DEPLOYMENT_TARGET[sdk=macosx*]" = 13.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MODULEMAP_FILE = "Target Support Files/FoxVideoPlayer/FoxVideoPlayer.modulemap";
 				PRODUCT_MODULE_NAME = FoxVideoPlayer;
