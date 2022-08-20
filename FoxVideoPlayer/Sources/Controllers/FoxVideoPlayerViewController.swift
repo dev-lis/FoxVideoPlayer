@@ -15,12 +15,13 @@ public class FoxVideoPlayerViewController: UIViewController {
         return view
     }()
     
+    private var didOpenFullScreen = false
+    
     var player: FoxVideoPlayer!
     var controls: FoxVideoPlayerControls!
     var progressBar: FoxVideoPlayerProgressBar!
     var loader: FoxVideoPlayerLoader!
-    
-    private var fullScreenController: FoxVideoPlayerFullScreenViewController?
+    var fullScreen: FoxVideoPlayerFullScreen!
     
     public var height: CGFloat {
         min(UIScreen.main.bounds.width, UIScreen.main.bounds.height) * 9 / 16
@@ -34,10 +35,10 @@ public class FoxVideoPlayerViewController: UIViewController {
     public override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
 
-        guard fullScreenController == nil else { return }
+        guard !didOpenFullScreen else { return }
         
         UIDevice.current.orientation.isPortrait
-        ? fullScreenController?.close()
+        ? fullScreen.close()
         : openFullScreen(source: .rotate)
     }
     
@@ -73,21 +74,13 @@ private extension FoxVideoPlayerViewController {
         ])
     }
     
-    func openFullScreen(source: FoxVideoPlayerFullScreenViewController.Source) {
-        
+    func openFullScreen(source: Source) {
         playerContainerView.removeFromSuperview()
         
-        let controller = FoxVideoPlayerFullScreenViewController(playerView: playerContainerView, source: source)
-        controller.delegate = self
-        fullScreenController = controller
-        
-        UIApplication.shared.windows
-            .filter { $0.isKeyWindow }
-            .first?
-            .rootViewController?
-            .present(controller, animated: false)
-        
+        fullScreen.open(playerContainerView, source: source)
         progressBar.updateScreenMode(.fullScreen)
+        
+        didOpenFullScreen = true
     }
 }
 
@@ -189,8 +182,8 @@ extension FoxVideoPlayerViewController: FoxVideoPlayerProgressBarDelegate {
     }
     
     public func didTapChangeScreenMode(_ progressBar: FoxVideoPlayerProgressBar) {
-        if let controller = fullScreenController {
-            controller.close()
+        if didOpenFullScreen {
+            fullScreen.close()
             progressBar.updateScreenMode(.default)
         } else {
             openFullScreen(source: .button)
@@ -208,11 +201,15 @@ extension FoxVideoPlayerViewController: FoxVideoPlayerProgressBarDelegate {
 // MARK: FullScreenPlayerViewControllerDelegate
 
 extension FoxVideoPlayerViewController: FoxVideoPlayerFullScreenViewControllerDelegate {
+    public func willHideFullScreen(_ controller: FoxVideoPlayerFullScreenViewController) {
+        
+    }
+    
     public func didHideFullScreen(_ controller: FoxVideoPlayerFullScreenViewController) {
         addContainer()
         
-        fullScreenController = nil
-        
         progressBar.updateScreenMode(.default)
+        
+        didOpenFullScreen = false
     }
 }

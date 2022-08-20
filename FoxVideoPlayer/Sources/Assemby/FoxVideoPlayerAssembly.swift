@@ -75,6 +75,16 @@ final class FoxVideoPlayerAssembly: Assembly {
             }
         }
         
+        if let fullScreen = dependency.fullScreen {
+            container.register(FoxVideoPlayerFullScreen.self) { _ in
+                fullScreen
+            }
+        } else {
+            container.register(FoxVideoPlayerFullScreen.self) { _ in
+                FoxVideoPlayerFullScreenViewController()
+            }
+        }
+        
         container.register(FoxVideoPlayerViewController.self) { resolver in
             let videoPlayer = FoxVideoPlayerViewController()
             
@@ -92,6 +102,10 @@ final class FoxVideoPlayerAssembly: Assembly {
             
             let loader = resolver.resolve(FoxVideoPlayerLoader.self)
             videoPlayer.loader = loader
+            
+            var fullScreen = resolver.resolve(FoxVideoPlayerFullScreen.self)
+            fullScreen?.delegate = videoPlayer
+            videoPlayer.fullScreen = fullScreen
             
             return videoPlayer
         }

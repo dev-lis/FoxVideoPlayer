@@ -7,39 +7,24 @@
 
 import UIKit
 
-public protocol FoxVideoPlayerFullScreenViewControllerDelegate: AnyObject {
-    func didHideFullScreen(_ controller: FoxVideoPlayerFullScreenViewController)
-}
-
 public class FoxVideoPlayerFullScreenViewController: UIViewController {
     
     private var playerTopConstraint: NSLayoutConstraint!
     private var playerBottomConstraint: NSLayoutConstraint!
     private var playerHeightConstraint: NSLayoutConstraint!
     
-    public enum Source {
-        case button
-        case rotate
-    }
-    
     private var startPlayerHeight: CGFloat {
         UIScreen.main.bounds.height - UIScreen.main.bounds.height * 9 / 16 - startPlayerOriginY
     }
     
-    private let startPlayerOriginY: CGFloat
+    private var startPlayerOriginY: CGFloat!
+    private var playerView: UIView!
+    private var source: Source = .button
     
     public weak var delegate: FoxVideoPlayerFullScreenViewControllerDelegate?
     
-    private let playerView: UIView
-    private let source: Source
-    
-    public init(playerView: UIView, source: Source) {
-        self.playerView = playerView
-        self.source = source
-        self.startPlayerOriginY = playerView.frame.origin.y
-        
+    public init() {
         super.init(nibName: nil, bundle: nil)
-        
         modalPresentationStyle = .overCurrentContext
     }
     
@@ -68,10 +53,6 @@ public class FoxVideoPlayerFullScreenViewController: UIViewController {
         }
     }
     
-    public func close() {
-        rotate(to: .portrait)
-    }
-    
     private func start() {
         switch source {
         case .button:
@@ -85,6 +66,7 @@ public class FoxVideoPlayerFullScreenViewController: UIViewController {
     }
     
     private func dismiss() {
+        delegate?.willHideFullScreen(self)
         dismiss(animated: false) {
             self.playerView.removeFromSuperview()
             self.delegate?.didHideFullScreen(self)
@@ -119,5 +101,24 @@ public class FoxVideoPlayerFullScreenViewController: UIViewController {
             playerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             playerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
         ])
+    }
+}
+
+extension FoxVideoPlayerFullScreenViewController: FoxVideoPlayerFullScreen {
+    public func open(_ playerView: UIView, source: Source) {
+        self.playerView = playerView
+        self.startPlayerOriginY = playerView.frame.origin.y
+        self.source = source
+        setupUI()
+        
+        UIApplication.shared.windows
+            .filter { $0.isKeyWindow }
+            .first?
+            .rootViewController?
+            .present(self, animated: false)
+    }
+    
+    public func close() {
+        rotate(to: .portrait)
     }
 }
