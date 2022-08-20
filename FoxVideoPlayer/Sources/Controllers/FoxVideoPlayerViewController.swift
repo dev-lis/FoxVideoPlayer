@@ -16,10 +16,12 @@ public class FoxVideoPlayerViewController: UIViewController {
     }()
     
     private var didOpenFullScreen = false
+    private var asset: FoxVideoPlayerAsset?
     
     var player: FoxVideoPlayer!
     var controls: FoxVideoPlayerControls!
     var progressBar: FoxVideoPlayerProgressBar!
+    var placeholder: FoxVideoPlayerPlaceholder!
     var loader: FoxVideoPlayerLoader!
     var fullScreen: FoxVideoPlayerFullScreen!
     
@@ -44,10 +46,12 @@ public class FoxVideoPlayerViewController: UIViewController {
     
     public func setup(with url: URL) {
         let asset = FoxVideoPlayerAsset(url: url)
+        self.asset = asset
         player.setup(with: asset)
     }
     
     public func setup(with asset: FoxVideoPlayerAsset) {
+        self.asset = asset
         player.setup(with: asset)
     }
 }
@@ -61,6 +65,7 @@ private extension FoxVideoPlayerViewController {
         controls.add(to: playerContainerView)
         progressBar.add(to: playerContainerView)
         loader.add(to: playerContainerView)
+        placeholder.add(to: playerContainerView)
     }
     
     func addContainer() {
@@ -88,14 +93,14 @@ private extension FoxVideoPlayerViewController {
 
 extension FoxVideoPlayerViewController: FoxVideoPlayerDelegate {
     public func updatePlayerState(_ player: FoxVideoPlayer, state: FoxVideoPlayerState) {
+        loader.stop()
+        controls.loading(false)
+        controls.setPlayerState(state)
         switch state {
         case .ready:
-            loader.stop()
-            controls.loading(false)
-            controls.setPlayerState(state)
+            placeholder.hide()
         case .failed:
-            // TODO: handle error
-            break
+            placeholder.show()
         }
     }
     
@@ -211,5 +216,16 @@ extension FoxVideoPlayerViewController: FoxVideoPlayerFullScreenViewControllerDe
         progressBar.updateScreenMode(.default)
         
         didOpenFullScreen = false
+    }
+}
+
+// MARK: FoxVideoPlayerPlaceholderDelegate
+
+extension FoxVideoPlayerViewController: FoxVideoPlayerPlaceholderDelegate {
+    public func repeate(_ placeholder: FoxVideoPlayerPlaceholder) {
+        guard let asset = asset else { return }
+        player.setup(with: asset)
+        placeholder.hide()
+        loader.start()
     }
 }

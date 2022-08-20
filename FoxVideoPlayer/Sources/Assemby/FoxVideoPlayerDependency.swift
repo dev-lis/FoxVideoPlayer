@@ -13,6 +13,7 @@ public struct FoxVideoPlayerDependency {
     let progressBar: FoxVideoPlayerProgressBarView?
     let progressBarSettings: FoxVideoPlayerProgressBarSettings?
     let progressSlider: FoxVideoPlayerProgressSlider?
+    let placeholder: FoxVideoPlayerPlaceholder?
     let loader: FoxVideoPlayerLoader?
     let fullScreen: FoxVideoPlayerFullScreen?
     
@@ -21,6 +22,7 @@ public struct FoxVideoPlayerDependency {
                 progressBar: FoxVideoPlayerProgressBarView? = nil,
                 progressBarSettings: FoxVideoPlayerProgressBarSettings? = nil,
                 progressSlider: FoxVideoPlayerProgressSlider? = nil,
+                placeholder: FoxVideoPlayerPlaceholder? = nil,
                 loader: FoxVideoPlayerLoader? = nil,
                 fullScreen: FoxVideoPlayerFullScreen? = nil) {
         self.player = player
@@ -28,6 +30,7 @@ public struct FoxVideoPlayerDependency {
         self.progressBar = progressBar
         self.progressBarSettings = progressBarSettings
         self.progressSlider = progressSlider
+        self.placeholder = placeholder
         self.loader = loader
         self.fullScreen = fullScreen
     }

@@ -64,6 +64,16 @@ final class FoxVideoPlayerAssembly: Assembly {
             }
         }
         
+        if let placeholder = dependency.placeholder {
+            container.register(FoxVideoPlayerPlaceholder.self) { _ in
+                placeholder
+            }
+        } else {
+            container.register(FoxVideoPlayerPlaceholder.self) { _ in
+                FoxVideoPlayerPlaceholderView()
+            }
+        }
+        
         if let loader = dependency.loader {
             container.register(FoxVideoPlayerLoader.self) { _ in
                 loader
@@ -99,6 +109,10 @@ final class FoxVideoPlayerAssembly: Assembly {
             var progressBar = resolver.resolve(FoxVideoPlayerProgressBar.self)
             progressBar?.delegate = videoPlayer
             videoPlayer.progressBar = progressBar
+            
+            var placeholder = resolver.resolve(FoxVideoPlayerPlaceholder.self)
+            placeholder?.delegate = videoPlayer
+            videoPlayer.placeholder = placeholder
             
             let loader = resolver.resolve(FoxVideoPlayerLoader.self)
             videoPlayer.loader = loader

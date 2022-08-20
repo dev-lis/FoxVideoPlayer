@@ -56,6 +56,8 @@
 		C7E0A693A10501D2DDBD433DE23B1632 /* Swinject-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = E416F148D2425C5D96483EB4E46CAA3D /* Swinject-dummy.m */; };
 		CB1E11FFC0C67948E79AAF77DC647364 /* FoxVideoPlayerProgressSliderControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E542B03F2180B8699A3A8988B7A76C1 /* FoxVideoPlayerProgressSliderControl.swift */; };
 		CEFA407C28B154FC0055887A /* FoxVideoPlayerFullScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEFA407B28B154FC0055887A /* FoxVideoPlayerFullScreen.swift */; };
+		CEFA407E28B169070055887A /* FoxVideoPlayerPlaceholder.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEFA407D28B169070055887A /* FoxVideoPlayerPlaceholder.swift */; };
+		CEFA408128B16EAF0055887A /* FoxVideoPlayerPlaceholderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEFA408028B16EAF0055887A /* FoxVideoPlayerPlaceholderView.swift */; };
 		CFA5BC780CDFFD36192269442722084F /* UIWindow+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32B8FB8B29F8F1BCAF3DC20B0E396483 /* UIWindow+Extensions.swift */; };
 		D9E78DA83984657280086C7C9CAED8AE /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73010CC983E3809BECEE5348DA1BB8C6 /* Foundation.framework */; };
 		E37FA99A6F23107C0D8E314C5C897814 /* SynchronizedResolver.Arguments.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27D8DEC39F1BB1934972C107EB8D429D /* SynchronizedResolver.Arguments.swift */; };
@@ -160,6 +162,8 @@
 		CAC4CE67AB1D2BA7498ECA56D1766B2F /* CMTime+Extensions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "CMTime+Extensions.swift"; sourceTree = "<group>"; };
 		CCC31D04063CCED550E0203741087CE7 /* FoxVideoPlayer */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = FoxVideoPlayer; path = FoxVideoPlayer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CEFA407B28B154FC0055887A /* FoxVideoPlayerFullScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoxVideoPlayerFullScreen.swift; sourceTree = "<group>"; };
+		CEFA407D28B169070055887A /* FoxVideoPlayerPlaceholder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoxVideoPlayerPlaceholder.swift; sourceTree = "<group>"; };
+		CEFA408028B16EAF0055887A /* FoxVideoPlayerPlaceholderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoxVideoPlayerPlaceholderView.swift; sourceTree = "<group>"; };
 		D26E6F23A43F11C4430800870CE16670 /* Pods-FoxVideoPlayer_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-FoxVideoPlayer_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		D2CF0A27CA42B53B6CDDA8DB6C622F61 /* FoxVideoPlayer-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "FoxVideoPlayer-prefix.pch"; sourceTree = "<group>"; };
 		D7465190BEB7F170163245577DAED566 /* Swinject.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = Swinject.h; path = Sources/Swinject.h; sourceTree = "<group>"; };
@@ -260,6 +264,7 @@
 				059243B66780D6C40509FDE1944EBBBC /* FoxVideoPlayerProgressBar.swift */,
 				A652966E42B059F8D7557FB6C460BBAA /* FoxVideoPlayerProgressSlider.swift */,
 				CEFA407B28B154FC0055887A /* FoxVideoPlayerFullScreen.swift */,
+				CEFA407D28B169070055887A /* FoxVideoPlayerPlaceholder.swift */,
 			);
 			name = Protocols;
 			path = FoxVideoPlayer/Sources/Protocols;
@@ -303,6 +308,7 @@
 		76BA88C3CCEF51634F12CAC3DA2038B7 /* FoxVideoPlayer */ = {
 			isa = PBXGroup;
 			children = (
+				CEFA407F28B16E570055887A /* Placeholder */,
 				36E453220778773302A47DD09487D99B /* Aditional */,
 				B4AB3A2D03A9C3B597AE50ED50131D35 /* Assemby */,
 				B625220FBDB785D7508B94C1EFDE34F1 /* Controllers */,
@@ -443,6 +449,14 @@
 			);
 			name = Loader;
 			path = FoxVideoPlayer/Sources/Loader;
+			sourceTree = "<group>";
+		};
+		CEFA407F28B16E570055887A /* Placeholder */ = {
+			isa = PBXGroup;
+			children = (
+				CEFA408028B16EAF0055887A /* FoxVideoPlayerPlaceholderView.swift */,
+			);
+			path = Placeholder;
 			sourceTree = "<group>";
 		};
 		CF1408CF629C7361332E53B88F7BD30C = {
@@ -698,7 +712,9 @@
 				8611A893F34BFA41A3D273F5BF4F981C /* FoxVideoPlayerProgressSlider.swift in Sources */,
 				CB1E11FFC0C67948E79AAF77DC647364 /* FoxVideoPlayerProgressSliderControl.swift in Sources */,
 				F727043142E73C594151314A32546A26 /* FoxVideoPlayerSeekButton.swift in Sources */,
+				CEFA407E28B169070055887A /* FoxVideoPlayerPlaceholder.swift in Sources */,
 				AF1B023F9069794C2CB042946782476D /* FoxVideoPlayerView.swift in Sources */,
+				CEFA408128B16EAF0055887A /* FoxVideoPlayerPlaceholderView.swift in Sources */,
 				642FBF43F9E22BD8D5A0B3A650EB4997 /* FoxVideoPlayerViewController.swift in Sources */,
 				CFA5BC780CDFFD36192269442722084F /* UIWindow+Extensions.swift in Sources */,
 			);

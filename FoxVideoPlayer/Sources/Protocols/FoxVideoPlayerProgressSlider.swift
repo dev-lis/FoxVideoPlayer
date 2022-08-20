@@ -15,6 +15,7 @@ public protocol FoxVideoPlayerProgressSliderDelegate: AnyObject {
 }
 
 public protocol FoxVideoPlayerProgressSlider {
+    
     var sliderTopInset: CGFloat { get }
     
     var delegate: FoxVideoPlayerProgressSliderDelegate? { get set }

@@ -318,7 +318,8 @@ extension FoxVideoPlayerControlsView: FoxVideoPlayerControls {
             replayButton.isHidden = false
             playbackButton.isHidden = true
         default:
-            break
+            replayButton.isHidden = true
+            playbackButton.isHidden = true
         }
     }
 
