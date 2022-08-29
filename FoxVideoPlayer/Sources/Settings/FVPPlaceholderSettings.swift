@@ -1,5 +1,5 @@
 //
-//  FoxVideoPlayerPlaceholderSettings.swift
+//  FVPPlaceholderSettings.swift
 //  FoxVideoPlayer
 //
 //  Created by Aleksandr Lis on 29.08.2022.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct FoxVideoPlayerPlaceholderSettings {
+public struct FVPPlaceholderSettings {
     
     let text: Text
     let image: Image
@@ -25,7 +25,7 @@ public struct FoxVideoPlayerPlaceholderSettings {
     }
 }
 
-extension FoxVideoPlayerPlaceholderSettings {
+extension FVPPlaceholderSettings {
     public struct Text {
         let error: String?
         let button: String?
@@ -38,7 +38,7 @@ extension FoxVideoPlayerPlaceholderSettings {
     }
 }
 
-extension FoxVideoPlayerPlaceholderSettings {
+extension FVPPlaceholderSettings {
     public struct Image {
         let button: UIImage?
         
@@ -48,7 +48,7 @@ extension FoxVideoPlayerPlaceholderSettings {
     }
 }
 
-extension FoxVideoPlayerPlaceholderSettings {
+extension FVPPlaceholderSettings {
     public struct Color {
         let background: UIColor
         let textColor: UIColor
@@ -64,7 +64,7 @@ extension FoxVideoPlayerPlaceholderSettings {
     }
 }
 
-extension FoxVideoPlayerPlaceholderSettings {
+extension FVPPlaceholderSettings {
     public struct Size {
         let textCenterXInset: CGFloat
         let textCenterYInset: CGFloat

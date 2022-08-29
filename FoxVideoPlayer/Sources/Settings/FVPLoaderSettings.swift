@@ -1,5 +1,5 @@
 //
-//  FoxVideoPlayerLoaderSettings.swift
+//  FVPLoaderSettings.swift
 //  FoxVideoPlayer
 //
 //  Created by Aleksandr Lis on 16.08.2022.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-public struct FoxVideoPlayerLoaderSettings {
+public struct FVPLoaderSettings {
     
     let style: UIActivityIndicatorView.Style
     let color: UIColor
@@ -22,7 +22,7 @@ public struct FoxVideoPlayerLoaderSettings {
     }
 }
 
-extension FoxVideoPlayerLoaderSettings {
+extension FVPLoaderSettings {
     public struct Size {
         let centerXInset: CGFloat
         let centerYInset: CGFloat

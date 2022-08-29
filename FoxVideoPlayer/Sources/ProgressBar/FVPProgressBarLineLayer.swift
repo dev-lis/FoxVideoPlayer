@@ -1,5 +1,5 @@
 //
-//  FoxVideoPlayerProgressBarLineLayer.swift
+//  FVPProgressBarLineLayer.swift
 //  FoxVideoPlayer
 //
 //  Created by Aleksandr Lis on 22.03.2022.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-class FoxVideoPlayerProgressBarLineLayer: CALayer {
+class FVPProgressBarLineLayer: CALayer {
     var progress: CGFloat = 0 {
         didSet {
             setNeedsDisplay()

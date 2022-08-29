@@ -1,5 +1,5 @@
 //
-//  FoxVideoPlayerView.swift
+//  FVPVideoPlayerView.swift
 //  FoxVideoPlayer
 //
 //  Created by Aleksandr Lis on 22.03.2022.
@@ -8,7 +8,7 @@
 import UIKit
 import AVFoundation
 
-public class FoxVideoPlayerView: UIView {
+public class FVPVideoPlayerView: UIView {
     public override class var layerClass: AnyClass {
         return AVPlayerLayer.self
     }
@@ -30,7 +30,7 @@ public class FoxVideoPlayerView: UIView {
     private var playerItem: AVPlayerItem?
     private var playerTimeObserver: Any?
 
-    public weak var delegate: FoxVideoPlayerDelegate?
+    public weak var delegate: FVPVideoPlayerDelegate?
 
     private var rate: Float
 
@@ -159,7 +159,7 @@ public class FoxVideoPlayerView: UIView {
     // MARK: Observation Helpers
 
     private func playerItemStatusDidChange(status: AVPlayerItem.Status) {
-        let state: FoxVideoPlayerState
+        let state: FVPVideoState
         switch status {
         case .readyToPlay:
             state = .ready
@@ -171,7 +171,7 @@ public class FoxVideoPlayerView: UIView {
     }
 
     private func playerRateDidChange(rate: Float) {
-        let state: FoxVideoPlaybackState
+        let state: FVPPlaybackState
         if rate == 0 {
             state = .pause
         } else if let currentTime = player?.currentItem?.currentTime().seconds,
@@ -186,13 +186,15 @@ public class FoxVideoPlayerView: UIView {
     }
 
     @objc private func playerDidFinishPlaying() {
-        let state: FoxVideoPlaybackState = .completed
+        let state: FVPPlaybackState = .completed
         print("Fox Playback state change to: \(state)")
         delegate?.updatePlaybackState(self, state: state)
     }
 }
 
-extension FoxVideoPlayerView: FoxVideoPlayer {
+// MARK: FVPVideoPlayer
+
+extension FVPVideoPlayerView: FVPVideoPlayer {
     public func add(to view: UIView) {
         translatesAutoresizingMaskIntoConstraints = false
         
@@ -206,7 +208,7 @@ extension FoxVideoPlayerView: FoxVideoPlayer {
         ])
     }
 
-    public func setup(with asset: FoxVideoPlayerAsset) {
+    public func setup(with asset: FVPAsset) {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             self.backgroundColor = .black
             self.setupPlayerItem(
@@ -223,13 +225,13 @@ extension FoxVideoPlayerView: FoxVideoPlayer {
             self.player?.rate = self.rate
 
             self.startPlaying?()
-            print("Fox Playback state change to: \(FoxVideoPlaybackState.play)")
+            print("Fox Playback state change to: \(FVPPlaybackState.play)")
         }
     }
 
     public func pause() {
         player?.pause()
-        print("Fox Playback state change to: \(FoxVideoPlaybackState.pause)")
+        print("Fox Playback state change to: \(FVPPlaybackState.pause)")
     }
     
     public func relplay() {

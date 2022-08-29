@@ -1,5 +1,5 @@
 //
-//  FoxVideoPlayerProgressBarSettings.swift
+//  FVPProgressBarSettings.swift
 //  FoxVideoPlayer
 //
 //  Created by Aleksandr Lis on 08.08.2022.
@@ -7,10 +7,10 @@
 
 import Foundation
 
-public struct FoxVideoPlayerProgressBarSettings {
+public struct FVPProgressBarSettings {
     
     let startRate: Float
-    let screenMode: FoxScreenMode
+    let screenMode: FVPScreenMode
     
     let color: Color
     let font: Font
@@ -19,7 +19,7 @@ public struct FoxVideoPlayerProgressBarSettings {
     let flag: Flag
     
     public init(startRate: Float = 1.0,
-                screenMode: FoxScreenMode = .default,
+                screenMode: FVPScreenMode = .default,
                 color: Color = Color(),
                 font: Font = Font(),
                 size: Size = Size(),
@@ -35,7 +35,7 @@ public struct FoxVideoPlayerProgressBarSettings {
     }
 }
 
-extension FoxVideoPlayerProgressBarSettings {
+extension FVPProgressBarSettings {
     public struct Color {
         let timer: UIColor
         
@@ -45,7 +45,7 @@ extension FoxVideoPlayerProgressBarSettings {
     }
 }
 
-extension FoxVideoPlayerProgressBarSettings {
+extension FVPProgressBarSettings {
     public struct Font {
         let timer: UIFont
         
@@ -55,7 +55,7 @@ extension FoxVideoPlayerProgressBarSettings {
     }
 }
 
-extension FoxVideoPlayerProgressBarSettings {
+extension FVPProgressBarSettings {
     public struct Size {
         let barHeight: CGFloat
         let timerLeftInset: CGFloat
@@ -71,7 +71,7 @@ extension FoxVideoPlayerProgressBarSettings {
     }
 }
 
-extension FoxVideoPlayerProgressBarSettings {
+extension FVPProgressBarSettings {
     public struct Duration {
         let animate: TimeInterval
         let elementAnimate: TimeInterval
@@ -84,7 +84,7 @@ extension FoxVideoPlayerProgressBarSettings {
     }
 }
 
-extension FoxVideoPlayerProgressBarSettings {
+extension FVPProgressBarSettings {
     public struct Flag {
         let isEnableHandleRotation: Bool
         let isVisibleProgressOnHiddenState: Bool

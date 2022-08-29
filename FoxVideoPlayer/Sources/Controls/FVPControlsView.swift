@@ -1,5 +1,5 @@
 //
-//  FoxVideoPlayerControlsView.swift
+//  FVPControlsView.swift
 //  FoxVideoPlayer
 //
 //  Created by Aleksandr Lis on 22.03.2022.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-public class FoxVideoPlayerControlsView: UIView {
+public class FVPControlsView: UIView {
     private lazy var mainStackView: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: [leftView, centerView, rightView])
         stackView.axis = .horizontal
@@ -58,8 +58,8 @@ public class FoxVideoPlayerControlsView: UIView {
         return button
     }()
 
-    private lazy var backwardButton: SeekButton = {
-        let button = SeekButton(direction: .backward)
+    private lazy var backwardButton: FVPSeekButton = {
+        let button = FVPSeekButton(direction: .backward)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.seekImage = settings.image.backward
         button.color = settings.color.seek
@@ -71,8 +71,8 @@ public class FoxVideoPlayerControlsView: UIView {
         return button
     }()
 
-    private lazy var forwardButton: SeekButton = {
-        let button = SeekButton(direction: .forward)
+    private lazy var forwardButton: FVPSeekButton = {
+        let button = FVPSeekButton(direction: .forward)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.seekImage = settings.image.forward
         button.color = settings.color.seek
@@ -111,13 +111,13 @@ public class FoxVideoPlayerControlsView: UIView {
     private var addedGestures = false
     private var didLayout = false
 
-    private var state: FoxVideoPlaybackState = .pause
+    private var state: FVPPlaybackState = .pause
 
-    public weak var delegate: FoxVideoPlayerControlsDelegate?
+    public weak var delegate: FVPControlsDelegate?
     
-    private let settings: FoxVideoPlayerControlsSettings
+    private let settings: FVPControlsSettings
     
-    public init(settings: FoxVideoPlayerControlsSettings) {
+    public init(settings: FVPControlsSettings) {
         self.settings = settings
         super.init(frame: .zero)
         setupUI()
@@ -298,7 +298,7 @@ public class FoxVideoPlayerControlsView: UIView {
 
 // MARK: - FoxVideoPlayerControls
 
-extension FoxVideoPlayerControlsView: FoxVideoPlayerControls {
+extension FVPControlsView: FVPControls {
     public func add(to view: UIView) {
         translatesAutoresizingMaskIntoConstraints = false
         
@@ -312,7 +312,7 @@ extension FoxVideoPlayerControlsView: FoxVideoPlayerControls {
         ])
     }
 
-    public func setPlayerState(_ state: FoxVideoPlayerState) {
+    public func setPlayerState(_ state: FVPVideoState) {
         switch state {
         case .ready:
             replayButton.isHidden = false
@@ -323,7 +323,7 @@ extension FoxVideoPlayerControlsView: FoxVideoPlayerControls {
         }
     }
 
-    public func setPlaybackState(_ state: FoxVideoPlaybackState) {
+    public func setPlaybackState(_ state: FVPPlaybackState) {
         switch state {
         case .play:
             replayButton.isHidden = true
@@ -386,7 +386,7 @@ extension FoxVideoPlayerControlsView: FoxVideoPlayerControls {
 
 // MARK: - Action
 
-private extension FoxVideoPlayerControlsView {
+private extension FVPControlsView {
     @objc func didTapPlayPause() {
         delegate?.didTapPlay(self, isPlay: !playbackButton.isSelected)
         playbackButton.isSelected.toggle()
@@ -438,7 +438,7 @@ private extension FoxVideoPlayerControlsView {
 
 //MARK: Private
 
-private extension FoxVideoPlayerControlsView {
+private extension FVPControlsView {
     func showControls() {
         if state != .completed {
             backwardButton.setVisible(true)
@@ -485,7 +485,7 @@ private extension FoxVideoPlayerControlsView {
 
 // MARK: UIGestureRecognizerDelegate
 
-extension FoxVideoPlayerControlsView: UIGestureRecognizerDelegate {
+extension FVPControlsView: UIGestureRecognizerDelegate {
     public override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         if settings.isEnableSeekOnDoubleTap {
             startHideTask()

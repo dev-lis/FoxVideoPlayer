@@ -1,5 +1,5 @@
 //
-//  FoxVideoPlayerFullScreenViewController.swift
+//  FVPFullScreenViewController.swift
 //  FoxVideoPlayer
 //
 //  Created by Aleksandr Lis on 28.03.2022.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-public class FoxVideoPlayerFullScreenViewController: UIViewController {
+public class FVPFullScreenViewController: UIViewController {
     
     private var playerTopConstraint: NSLayoutConstraint!
     private var playerBottomConstraint: NSLayoutConstraint!
@@ -21,7 +21,7 @@ public class FoxVideoPlayerFullScreenViewController: UIViewController {
     private var playerView: UIView!
     private var source: Source = .button
     
-    public weak var delegate: FoxVideoPlayerFullScreenViewControllerDelegate?
+    public weak var delegate: FVPFullScreenDelegate?
     
     public init() {
         super.init(nibName: nil, bundle: nil)
@@ -104,7 +104,7 @@ public class FoxVideoPlayerFullScreenViewController: UIViewController {
     }
 }
 
-extension FoxVideoPlayerFullScreenViewController: FoxVideoPlayerFullScreen {
+extension FVPFullScreenViewController: FVPFullScreen {
     public func open(_ playerView: UIView, source: Source) {
         self.playerView = playerView
         self.startPlayerOriginY = playerView.frame.origin.y

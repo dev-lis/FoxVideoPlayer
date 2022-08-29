@@ -1,5 +1,5 @@
 //
-//  FoxVideoPlayerProgressPreviewImageView.swift
+//  FVPProgressPreviewImageView.swift
 //  FoxVideoPlayer
 //
 //  Created by Aleksandr Lis on 29.03.2022.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-public class FoxVideoPlayerProgressPreviewImageView: UIView {
+public class FVPProgressPreviewImageView: UIView {
     
     private lazy var imageView: UIImageView = {
         let imageView = UIImageView()

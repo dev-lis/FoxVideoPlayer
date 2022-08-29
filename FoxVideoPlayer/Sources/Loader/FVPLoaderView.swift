@@ -1,5 +1,5 @@
 //
-//  FoxVideoPlayerLoaderView.swift
+//  FVPLoaderView.swift
 //  FoxVideoPlayer
 //
 //  Created by Aleksandr Lis on 14.08.2022.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-class FoxVideoPlayerLoaderView: UIView {
+class FVPLoaderView: UIView {
     private lazy var loadIndicator: UIActivityIndicatorView = {
         let view = UIActivityIndicatorView(style: settings.style)
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -22,9 +22,9 @@ class FoxVideoPlayerLoaderView: UIView {
     
     private var didLayout = false
     
-    private let settings: FoxVideoPlayerLoaderSettings
+    private let settings: FVPLoaderSettings
     
-    init(settings: FoxVideoPlayerLoaderSettings) {
+    init(settings: FVPLoaderSettings) {
         self.settings = settings
         super.init(frame: .zero)
         setupUI()
@@ -77,7 +77,7 @@ class FoxVideoPlayerLoaderView: UIView {
 
 // MARK: FoxVideoPlayerLoader
 
-extension FoxVideoPlayerLoaderView: FoxVideoPlayerLoader {
+extension FVPLoaderView: FVPLoader {
     
     func add(to view: UIView) {
         translatesAutoresizingMaskIntoConstraints = false

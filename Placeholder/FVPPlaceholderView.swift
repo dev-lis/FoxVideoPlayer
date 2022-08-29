@@ -1,5 +1,5 @@
 //
-//  FoxVideoPlayerPlaceholderView.swift
+//  FVPPlaceholderView.swift
 //  FoxVideoPlayer
 //
 //  Created by Aleksandr Lis on 21.08.2022.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-public class FoxVideoPlayerPlaceholderView: UIView {
+public class FVPPlaceholderView: UIView {
     
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
@@ -29,11 +29,11 @@ public class FoxVideoPlayerPlaceholderView: UIView {
         return button
     }()
     
-    public weak var delegate: FoxVideoPlayerPlaceholderDelegate?
+    public weak var delegate: FVPPlaceholderDelegate?
     
-    private let settings: FoxVideoPlayerPlaceholderSettings
+    private let settings: FVPPlaceholderSettings
     
-    public init(settings: FoxVideoPlayerPlaceholderSettings) {
+    public init(settings: FVPPlaceholderSettings) {
         self.settings = settings
         super.init(frame: .zero)
         setupUI()
@@ -68,7 +68,7 @@ public class FoxVideoPlayerPlaceholderView: UIView {
 
 // MARK: FoxVideoPlayerPlaceholder
 
-extension FoxVideoPlayerPlaceholderView: FoxVideoPlayerPlaceholder {
+extension FVPPlaceholderView: FVPPlaceholder {
     
     public func add(to view: UIView) {
         translatesAutoresizingMaskIntoConstraints = false

@@ -1,5 +1,5 @@
 //
-//  FoxVideoPlayerProgressBarView.swift
+//  FVPProgressBarView.swift
 //  FoxVideoPlayer
 //
 //  Created by Aleksandr Lis on 22.03.2022.
@@ -8,7 +8,7 @@
 import UIKit
 import AVKit
 
-public class FoxVideoPlayerProgressBarView: UIView {
+public class FVPProgressBarView: UIView {
     
     private lazy var sliderContainer: UIView = {
         let view = UIView()
@@ -49,7 +49,7 @@ public class FoxVideoPlayerProgressBarView: UIView {
         progressSlider.sliderTopInset
     }
 
-    public weak var delegate: FoxVideoPlayerProgressBarDelegate?
+    public weak var delegate: FVPProgressBarDelegate?
     
     private var didStartPlay = false
 
@@ -57,13 +57,13 @@ public class FoxVideoPlayerProgressBarView: UIView {
         settings.startRate
     }
     
-    private var screenMode: FoxScreenMode
+    private var screenMode: FVPScreenMode
     
-    private let progressSlider: FoxVideoPlayerProgressSlider
-    private let settings: FoxVideoPlayerProgressBarSettings
+    private let progressSlider: FVPProgressSlider
+    private let settings: FVPProgressBarSettings
     
-    public init(progressSlider: FoxVideoPlayerProgressSlider,
-                settings: FoxVideoPlayerProgressBarSettings) {
+    public init(progressSlider: FVPProgressSlider,
+                settings: FVPProgressBarSettings) {
         self.progressSlider = progressSlider
         self.settings = settings
         self.screenMode = settings.screenMode
@@ -117,7 +117,7 @@ public class FoxVideoPlayerProgressBarView: UIView {
     }
 }
 
-extension FoxVideoPlayerProgressBarView: FoxVideoPlayerProgressBar {
+extension FVPProgressBarView: FVPProgressBar {
     public var isVisible: Bool {
         !isHidden
     }
@@ -178,7 +178,7 @@ extension FoxVideoPlayerProgressBarView: FoxVideoPlayerProgressBar {
         progressSlider.didUpdateTime()
     }
     
-    public func updateScreenMode(_ mode: FoxScreenMode) {
+    public func updateScreenMode(_ mode: FVPScreenMode) {
         screenMode = mode
 
         let image = screenMode == .default
@@ -226,7 +226,7 @@ extension FoxVideoPlayerProgressBarView: FoxVideoPlayerProgressBar {
 }
 
 // MARK: Action
-private extension FoxVideoPlayerProgressBarView {
+private extension FVPProgressBarView {
     @objc func didTapRate() {
         
     }
@@ -241,7 +241,7 @@ private extension FoxVideoPlayerProgressBarView {
 }
 
 // MARK: Private
-private extension FoxVideoPlayerProgressBarView {
+private extension FVPProgressBarView {
     func secondsToHoursMinutesSeconds(seconds: Int) -> (hours: Int, minutes: Int, seconds: Int) {
         return (hours: seconds / 3600, minutes: (seconds % 3600) / 60, seconds: (seconds % 3600) % 60)
     }
@@ -268,8 +268,8 @@ private extension FoxVideoPlayerProgressBarView {
 
 // MARK: FoxVideoPlayerProgressSliderDelegate
 
-extension FoxVideoPlayerProgressBarView: FoxVideoPlayerProgressSliderDelegate {
-    public func movingOnRaised(_ progressSlider: FoxVideoPlayerProgressSlider, isMoving: Bool) {
+extension FVPProgressBarView: FVPProgressSliderDelegate {
+    public func movingOnRaised(_ progressSlider: FVPProgressSlider, isMoving: Bool) {
         if isMoving {
             self.hideElements()
             self.delegate?.didBeginMovingPin(self, state: .visible)
@@ -279,17 +279,17 @@ extension FoxVideoPlayerProgressBarView: FoxVideoPlayerProgressSliderDelegate {
         }
     }
     
-    public func movingOnHidden(_ progressSlider: FoxVideoPlayerProgressSlider, isMoving: Bool) {
+    public func movingOnHidden(_ progressSlider: FVPProgressSlider, isMoving: Bool) {
         isMoving
             ? self.delegate?.didBeginMovingPin(self, state: .hidden)
             : self.delegate?.didEndMovingPin(self, state: .hidden)
     }
     
-    public func updateCurrentTime(_ progressSlider: FoxVideoPlayerProgressSlider, time: CGFloat) {
+    public func updateCurrentTime(_ progressSlider: FVPProgressSlider, time: CGFloat) {
         delegate?.setTime(self, time: TimeInterval(time))
     }
     
-    public func makeImage(_ progressSlider: FoxVideoPlayerProgressSlider, for time: CGFloat) {
+    public func makeImage(_ progressSlider: FVPProgressSlider, for time: CGFloat) {
         delegate?.renderImage(self, time: time)
     }
 }

@@ -1,5 +1,5 @@
 //
-//  FoxVideoPlayerControlsSettings.swift
+//  FVPControlsSettings.swift
 //  FoxVideoPlayer
 //
 //  Created by Aleksandr Lis on 08.08.2022.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-public struct FoxVideoPlayerControlsSettings {
+public struct FVPControlsSettings {
     
     let image: Image
     let color: Color
@@ -33,7 +33,7 @@ public struct FoxVideoPlayerControlsSettings {
     }
 }
 
-extension FoxVideoPlayerControlsSettings {
+extension FVPControlsSettings {
     public struct Color {
         let darken: UIColor?
         let startPlayReplay: UIColor?
@@ -52,7 +52,7 @@ extension FoxVideoPlayerControlsSettings {
     }
 }
 
-extension FoxVideoPlayerControlsSettings {
+extension FVPControlsSettings {
     public struct Image {
         let startPlay: UIImage?
         let replay: UIImage?
@@ -107,7 +107,7 @@ extension FoxVideoPlayerControlsSettings {
     }
 }
 
-extension FoxVideoPlayerControlsSettings {
+extension FVPControlsSettings {
     public struct Size {
         let centerAreaWidth: CGFloat
         let startPlayReplayCenterYInset: CGFloat

@@ -1,5 +1,5 @@
 //
-//  FoxVideoPlayerProgressSliderControl.swift
+//  FVPProgressSliderControl.swift
 //  FoxVideoPlayer
 //
 //  Created by Aleksandr Lis on 22.03.2022.
@@ -7,9 +7,9 @@
 
 import UIKit
 
-class FoxVideoPlayerProgressSliderControl: UIControl {
-    private lazy var lineLayer: FoxVideoPlayerProgressBarLineLayer = {
-        let layer = FoxVideoPlayerProgressBarLineLayer()
+class FVPProgressSliderControl: UIControl {
+    private lazy var lineLayer: FVPProgressBarLineLayer = {
+        let layer = FVPProgressBarLineLayer()
         layer.backgroundColor = settings.color.sliderBackground.cgColor
         layer.cornerRadius = settings.size.sliderHeight / 2
         layer.masksToBounds = true
@@ -30,8 +30,8 @@ class FoxVideoPlayerProgressSliderControl: UIControl {
         return layer
     }()
 
-    private lazy var previewImageView: FoxVideoPlayerProgressPreviewImageView = {
-        let view = FoxVideoPlayerProgressPreviewImageView()
+    private lazy var previewImageView: FVPProgressPreviewImageView = {
+        let view = FVPProgressPreviewImageView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.alpha = 0
         return view
@@ -98,11 +98,11 @@ class FoxVideoPlayerProgressSliderControl: UIControl {
         return -previewTimeLabel.frame.height - previewImageView.frame.height - settings.size.previewLabelBottomInset - settings.size.previewImageBottomInset
     }
     
-    public weak var delegate: FoxVideoPlayerProgressSliderDelegate?
+    public weak var delegate: FVPProgressSliderDelegate?
     
-    private let settings: FoxVideoPlayerProgressBarSliderSettings
+    private let settings: FVPProgressBarSliderSettings
     
-    init(settings: FoxVideoPlayerProgressBarSliderSettings) {
+    init(settings: FVPProgressBarSliderSettings) {
         self.settings = settings
         super.init(frame: .zero)
         self.isExclusiveTouch = true
@@ -166,7 +166,7 @@ class FoxVideoPlayerProgressSliderControl: UIControl {
             height: pinSide
         )
 
-        let leftInset = FoxScreen.SafeArea.left + 8
+        let leftInset = FVPScreen.SafeArea.left + 8
         let currentInfoInset = currentPinPosition! + pinContainerLayer.frame.width / 2
         let currentTimeX = currentInfoInset - previewTimeLabel.frame.width / 2 > leftInset
         ?  currentInfoInset - previewTimeLabel.frame.width / 2
@@ -190,7 +190,7 @@ class FoxVideoPlayerProgressSliderControl: UIControl {
         addSubview(previewTimeLabel)
         addSubview(previewImageView)
         
-        let inset = FoxScreen.SafeArea.left + 8
+        let inset = FVPScreen.SafeArea.left + 8
         previewTimeLabel.frame.origin.x = inset
         previewImageView.frame.origin.x = inset
 
@@ -203,7 +203,7 @@ class FoxVideoPlayerProgressSliderControl: UIControl {
 
 // MARK: FoxVideoPlayerProgressSlider
 
-extension FoxVideoPlayerProgressSliderControl: FoxVideoPlayerProgressSlider {
+extension FVPProgressSliderControl: FVPProgressSlider {
     
     public var sliderTopInset: CGFloat {
         lineLayer.frame.maxY
@@ -382,7 +382,7 @@ extension FoxVideoPlayerProgressSliderControl: FoxVideoPlayerProgressSlider {
     }
 }
 
-extension FoxVideoPlayerProgressSliderControl {
+extension FVPProgressSliderControl {
     override func beginTracking(_ touch: UITouch, with event: UIEvent?) -> Bool {
         let point = touch.location(in: touch.view)
         updateTime(for: point.x)
@@ -458,7 +458,7 @@ extension FoxVideoPlayerProgressSliderControl {
 
 // MARK: Private
 
-private extension FoxVideoPlayerProgressSliderControl {
+private extension FVPProgressSliderControl {
     func increasePin() {
         pinLayer.frame = CGRect(
             x: pinContainerLayer.frame.width / 2 - settings.size.pinIncreasedSize / 2,
@@ -502,7 +502,7 @@ private extension FoxVideoPlayerProgressSliderControl {
 
 // MARK: Info
 
-private extension FoxVideoPlayerProgressSliderControl {
+private extension FVPProgressSliderControl {
     func update(x: CGFloat) {
         updatePinPosition(for: x)
         updateTime(for: x)
@@ -545,7 +545,7 @@ private extension FoxVideoPlayerProgressSliderControl {
 
 // MARK: Time
 
-private extension FoxVideoPlayerProgressSliderControl {
+private extension FVPProgressSliderControl {
     func updateTime(for position: CGFloat) {
         currentTime = time(for: position)
         previewTime = currentTime
@@ -553,8 +553,8 @@ private extension FoxVideoPlayerProgressSliderControl {
         previewTimeLabel.text = String(timePart.minutes) + ":" + getTimeString(timeValue: timePart.seconds)
         previewTimeLabel.sizeToFit()
         
-        let leftInset = FoxScreen.SafeArea.left + 8
-        let rightInset = frame.width - FoxScreen.SafeArea.right - 8
+        let leftInset = FVPScreen.SafeArea.left + 8
+        let rightInset = frame.width - FVPScreen.SafeArea.right - 8
 
         if position - previewTimeLabel.frame.width / 2 < leftInset {
             previewTimeLabel.frame.origin.x = leftInset
@@ -566,8 +566,8 @@ private extension FoxVideoPlayerProgressSliderControl {
     }
     
     func updatePreview(for position: CGFloat) {
-        let leftInset = FoxScreen.SafeArea.left + 8
-        let rightInset = frame.width - FoxScreen.SafeArea.right - 8
+        let leftInset = FVPScreen.SafeArea.left + 8
+        let rightInset = frame.width - FVPScreen.SafeArea.right - 8
 
         if position - previewImageView.frame.width / 2 < leftInset {
             previewImageView.frame.origin.x = leftInset

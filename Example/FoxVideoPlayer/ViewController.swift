@@ -19,8 +19,8 @@ class ViewController: UIViewController {
     func setupUI() {
         view.backgroundColor = .white
         
-        let dependency = FoxVideoPlayerDependency()
-        let playerController = FoxVideoPlayerController(dependency: dependency)
+        let dependency = FVPDependency()
+        let playerController = FVPController(dependency: dependency)
         let playerViewController = playerController.getVideoPlayer()
         
         addChild(playerViewController)

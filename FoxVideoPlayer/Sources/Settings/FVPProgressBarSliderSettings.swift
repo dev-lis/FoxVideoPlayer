@@ -1,5 +1,5 @@
 //
-//  FoxVideoPlayerProgressBarSliderSettings.swift
+//  FVPProgressBarSliderSettings.swift
 //  FoxVideoPlayer
 //
 //  Created by Aleksandr Lis on 30.03.2022.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct FoxVideoPlayerProgressBarSliderSettings {
+public struct FVPProgressBarSliderSettings {
     let color: Color
     let font: Font
     let size: Size
@@ -27,7 +27,7 @@ public struct FoxVideoPlayerProgressBarSliderSettings {
     }
 }
 
-extension FoxVideoPlayerProgressBarSliderSettings {
+extension FVPProgressBarSliderSettings {
     public struct Color {
         let sliderBackground: UIColor
         let sliderFill: UIColor
@@ -43,7 +43,7 @@ extension FoxVideoPlayerProgressBarSliderSettings {
     }
 }
 
-extension FoxVideoPlayerProgressBarSliderSettings {
+extension FVPProgressBarSliderSettings {
     public struct Font {
         let previewTime: UIFont
         
@@ -53,7 +53,7 @@ extension FoxVideoPlayerProgressBarSliderSettings {
     }
 }
 
-extension FoxVideoPlayerProgressBarSliderSettings {
+extension FVPProgressBarSliderSettings {
     public struct Size {
         let sliderHeight: CGFloat
         let sideInsetsOnShownState: CGFloat
@@ -78,7 +78,7 @@ extension FoxVideoPlayerProgressBarSliderSettings {
     }
 }
 
-extension FoxVideoPlayerProgressBarSliderSettings {
+extension FVPProgressBarSliderSettings {
     public struct Duration {
         let animation: TimeInterval
         
@@ -88,7 +88,7 @@ extension FoxVideoPlayerProgressBarSliderSettings {
     }
 }
 
-extension FoxVideoPlayerProgressBarSliderSettings {
+extension FVPProgressBarSliderSettings {
     public struct Flag {
         let isRoundedCornersSlider: Bool
         let isEnableVibrate: Bool
