@@ -70,7 +70,8 @@ final class FoxVideoPlayerAssembly: Assembly {
             }
         } else {
             container.register(FoxVideoPlayerPlaceholder.self) { _ in
-                FoxVideoPlayerPlaceholderView()
+                let settings = FoxVideoPlayerPlaceholderSettings()
+                return FoxVideoPlayerPlaceholderView(settings: settings)
             }
         }
         

@@ -64,6 +64,7 @@
 		E474A84E766DB74A2B717365FF45324C /* Pods-FoxVideoPlayer_Example-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 32E7C2F76331607BB39ADE0E542C39FE /* Pods-FoxVideoPlayer_Example-dummy.m */; };
 		E7CCFAAD05D66C884FC84BC09CE22387 /* FoxVideoPlayerControlsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A0A142FFA2C5863C1A5113CA52D59B /* FoxVideoPlayerControlsView.swift */; };
 		EA9C5CDE0416B42224A20448920C8D93 /* ObjectScope.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ABF6A6CFAE336993A21640F49748834 /* ObjectScope.swift */; };
+		EAE8329928BD217A00B0B360 /* FoxVideoPlayerPlaceholderSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAE8329828BD217A00B0B360 /* FoxVideoPlayerPlaceholderSettings.swift */; };
 		EC8526D2011312C2064286B0C091D42D /* FoxVideoPlayerFullScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E445D75DC40ED5EF09A51647324CECDE /* FoxVideoPlayerFullScreenViewController.swift */; };
 		F4A768C3FCDEC534BC1230EE28586962 /* Swinject-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 96F4A75B93A7AB62ECE45171B9AB9661 /* Swinject-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F727043142E73C594151314A32546A26 /* FoxVideoPlayerSeekButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C283BA3A0A311EBCB71B171174D67E86 /* FoxVideoPlayerSeekButton.swift */; };
@@ -178,6 +179,7 @@
 		E68C622D9A68F073AA0B029A23D4E227 /* FoxVideoPlayerProgressBarLineLayer.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = FoxVideoPlayerProgressBarLineLayer.swift; sourceTree = "<group>"; };
 		E876193ED5C266E3DD677C7D68A016BF /* UnavailableItems.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = UnavailableItems.swift; path = Sources/UnavailableItems.swift; sourceTree = "<group>"; };
 		E9749E0C7492E5581E39B7294394872F /* ServiceEntry.TypeForwarding.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ServiceEntry.TypeForwarding.swift; path = Sources/ServiceEntry.TypeForwarding.swift; sourceTree = "<group>"; };
+		EAE8329828BD217A00B0B360 /* FoxVideoPlayerPlaceholderSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoxVideoPlayerPlaceholderSettings.swift; sourceTree = "<group>"; };
 		EE85629151ECD5D8C10AD65819C46822 /* Container.TypeForwarding.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Container.TypeForwarding.swift; path = Sources/Container.TypeForwarding.swift; sourceTree = "<group>"; };
 		F1914BFADB382AE9F0782C6CFC051C58 /* FoxVideoPlayer-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "FoxVideoPlayer-Info.plist"; sourceTree = "<group>"; };
 		FB5CFE6D34D6CBDB09A77B7372B3FF77 /* ServiceEntry.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ServiceEntry.swift; path = Sources/ServiceEntry.swift; sourceTree = "<group>"; };
@@ -486,6 +488,7 @@
 				7919E864D172CE3F70339ACD77C35CDB /* FoxVideoPlayerLoaderSettings.swift */,
 				5917C189581110BB010D8D1C05492E9A /* FoxVideoPlayerProgressBarSettings.swift */,
 				9A8D700E782D701B82E5787F6330A760 /* FoxVideoPlayerProgressBarSliderSettings.swift */,
+				EAE8329828BD217A00B0B360 /* FoxVideoPlayerPlaceholderSettings.swift */,
 			);
 			name = Settings;
 			path = FoxVideoPlayer/Sources/Settings;
@@ -700,6 +703,7 @@
 				E7CCFAAD05D66C884FC84BC09CE22387 /* FoxVideoPlayerControlsView.swift in Sources */,
 				C176E55770175DF33E0862B77D7CA705 /* FoxVideoPlayerDependency.swift in Sources */,
 				EC8526D2011312C2064286B0C091D42D /* FoxVideoPlayerFullScreenViewController.swift in Sources */,
+				EAE8329928BD217A00B0B360 /* FoxVideoPlayerPlaceholderSettings.swift in Sources */,
 				A80ED742F79133C3483E65DC99F065A1 /* FoxVideoPlayerLoader.swift in Sources */,
 				6971A967A2BFBB9455A351BCEBDDB46F /* FoxVideoPlayerLoaderSettings.swift in Sources */,
 				8EA173D7A974D2ADA1F148E69EAB43AB /* FoxVideoPlayerLoaderView.swift in Sources */,

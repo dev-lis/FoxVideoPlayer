@@ -12,23 +12,29 @@ public class FoxVideoPlayerPlaceholderView: UIView {
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "Error"
+        label.text = settings.text.error
         label.textAlignment = .center
-        label.textColor = .white
+        label.textColor = settings.color.textColor
+        label.numberOfLines = 0
         return label
     }()
     
     private lazy var button: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle("Repeat", for: .normal)
+        button.setTitle(settings.text.button, for: .normal)
+        button.setTitleColor(settings.color.buttonTextColor, for: .normal)
+        button.setImage(settings.image.button, for: .normal)
         button.addTarget(self, action: #selector(didTapButton), for: .touchUpInside)
         return button
     }()
     
     public weak var delegate: FoxVideoPlayerPlaceholderDelegate?
     
-    public init() {
+    private let settings: FoxVideoPlayerPlaceholderSettings
+    
+    public init(settings: FoxVideoPlayerPlaceholderSettings) {
+        self.settings = settings
         super.init(frame: .zero)
         setupUI()
     }
@@ -38,19 +44,20 @@ public class FoxVideoPlayerPlaceholderView: UIView {
     }
     
     private func setupUI() {
-        backgroundColor = .black
+        backgroundColor = settings.color.background
         isHidden = true
         
         addSubview(titleLabel)
         addSubview(button)
         
         NSLayoutConstraint.activate([
-            titleLabel.leftAnchor.constraint(equalTo: leftAnchor, constant: 16),
-            titleLabel.rightAnchor.constraint(equalTo: rightAnchor, constant: -16),
-            titleLabel.bottomAnchor.constraint(equalTo: centerYAnchor, constant: -8),
+            titleLabel.leftAnchor.constraint(greaterThanOrEqualTo: leftAnchor, constant: 8),
+            titleLabel.rightAnchor.constraint(lessThanOrEqualTo: rightAnchor, constant: -8),
+            titleLabel.bottomAnchor.constraint(equalTo: centerYAnchor, constant: settings.size.textCenterYInset),
+            titleLabel.centerXAnchor.constraint(equalTo: centerXAnchor, constant: settings.size.textCenterXInset),
             
-            button.topAnchor.constraint(equalTo: centerYAnchor, constant: 8),
-            button.centerXAnchor.constraint(equalTo: centerXAnchor)
+            button.topAnchor.constraint(equalTo: centerYAnchor, constant: settings.size.buttonCenterYInset),
+            button.centerXAnchor.constraint(equalTo: centerXAnchor, constant: settings.size.butoonCenterXInset)
         ])
     }
     
