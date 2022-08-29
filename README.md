@@ -11,78 +11,61 @@ FoxVideoPlayer is available through [CocoaPods](https://cocoapods.org). To insta
 it, simply add the following line to your Podfile:
 
 ```ruby
-pod 'FoxVideoPlayer', '~> 0.1.1'
+pod 'FoxVideoPlayer', '~> 1.0.0'
 ```
 
+## Description
+Fox Video Player consists of few components:
+
+- FVPVideoPlayer - main part of player whitch should implement playback video.
+- FVPControls - contains elements to controll playback video:
+    - startPlay/replay
+    - play/pause
+    - backward
+    - forward
+- FVPProgressBar - element allows observe and rewind video. This elemet also contains button for activate full screen mode.
+- FVPProgressSlider - part of `FVPProgressBar`
+- FVPPlaceholder - if somthing went wrong, you should show some message with information, and button for try to reload.
+- FVPLoader - loading indicator
+- FVPFullScreen - component for inplement full screen mode player.
+
+You can customising any player components. Just create instance it with settings, where you can update needed values, and set new one to FVPDependency.. Each component has settings property:
+
+- FVPVideoPlayerSettings
+- FVPControlsSettings
+- FVPProgressBarSettings
+- FVPProgressBarSliderSettings
+- FVPPlaceholderSettings
+- FVPLoaderSettings
+
+You also can create your own component. You just need implement protocol for any or all.
+
 ## Usages
+
 ```swift
-if let url = URL(string: <YOUR-URL>) {
-    let sliderSettings = FoxVideoPlayerProgressBarSliderSettings()
-    let progressBarSettings = FoxVideoPlayerProgressBarSettings(sliderSettings: sliderSettings)
-    let controller = FoxVideoPlayerViewController(progressBarSettings: progressBarSettings)
-    playerViewController.view.translatesAutoresizingMaskIntoConstraints = false
+let dependency = FVPDependency()
+let playerController = FVPController(dependency: dependency)
+let playerViewController = playerController.getVideoPlayer()
+        
+addChild(playerViewController)
+playerViewController.didMove(toParent: self)
+view.addSubview(playerViewController.view)
+
+NSLayoutConstraint.activate([
+    playerViewController.view.topAnchor.constraint(equalTo: view.topAnchor),
+    playerViewController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+    playerViewController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+    playerViewController.view.heightAnchor.constraint(equalToConstant: playerViewController.height)
+
+])
+        
+if let url = URL(string: "https://bitdash-a.akamaihd.net/content/MI201109210084_1/m3u8s/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.m3u8") {
     playerViewController.setup(with: url)
-    
-    addChild(playerViewController)
-    playerViewController.didMove(toParent: self)
-    view.addSubview(playerViewController.view)
-
-    NSLayoutConstraint.activate([
-        playerViewController.view.topAnchor.constraint(equalTo: view.topAnchor),
-        playerViewController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-        playerViewController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-        playerViewController.view.heightAnchor.constraint(equalToConstant: playerViewController.height)
-
-    ])
 }
 ```
 
-## Customization
+## Settings
 You can also customize the appearance of the player.
-
-### FoxVideoPlayerProgressBarSliderSettings
-```swift
-/// Height of progress slider line. Default value is 4.0.
-var sliderHeight: CGFloat
-/// Side insets of progress slider on shown state. Default value is 16.0.
-var sideInsetsOnShownState: CGFloat
-/// Size of progress pin on default state. Default value is 12.0.
-var pinDefaultSize: CGFloat
-/// Size of progress pin on tap and swipe. Default value is 20.0.
-var pinIncreasedSize: CGFloat
-/// Slider line color. Default value is UIColor.white.withAlphaComponent(0.44).
-var sliderBackgroundColor: UIColor
-/// Slider progress line color. Default value is UIColor.systemBlue.
-var sliderFillColor: UIColor
-/// Color of current time label which shown on tap and swipe. Default value is UIColor.white.
-var previewTimeLabelColor: UIColor
-/// Font of current time label which shown on tap and swipe. Default value is. UIFont.systemFont(ofSize: 18, weight: .medium)
-var previewTimeLabelFont: UIFont
-/// Duration of the animation show preview time label. Default value is 0.2.
-var previewAnimateDuration: TimeInterval
-/// Rounded corners slider line on shown state.  Default value is true.
-var isRoundedCornersSlider: Bool
-/// Enable vibrate on tap slider. Default value is true.
-var isEnableVibrate: Bool
-```
-
-### FoxVideoPlayerProgressBarSettings
-```swift
-/// Height of progress bar. Default value is 66.0.
-var barHeight: CGFloat
-/// Left inset of timer. Default value is 24.0.
-var timerLeftInset: CGFloat
-/// Right inset os stack buttons. Default value is 24.0.
-var buttonsStackRightInset: CGFloat
-/// Timer color. Default value is UIColor.white.
-var timerLabelColor: UIColor
-/// Timer font. Default value is UIFont.systemFont(ofSize: 14, weight: .semibold).
-var timerLabelFont: UIFont
-/// Slider progress line color. Default value is 0.2.
-var animateDuration: TimeInterval
-/// Settings of progress slider.
-var sliderSettings: FoxVideoPlayerProgressBarSliderSettings
-```
 
 ## Author
 
