@@ -20,10 +20,5 @@
   },
   "swift_versions": "5.0",
   "source_files": "FoxVideoPlayer/Sources/**/*.{h,m,swift}",
-  "dependencies": {
-    "Swinject": [
-
-    ]
-  },
   "swift_version": "5.0"
 }
