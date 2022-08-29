@@ -1,6 +1,6 @@
 {
   "name": "FoxVideoPlayer",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "summary": "Customizable video player",
   "description": "You can easily and quickly integrate a video player into your project. You can use all player or some of its components. The player summer insists.",
   "homepage": "https://github.com/dev-lis/FoxVideoPlayer",
@@ -13,7 +13,7 @@
   },
   "source": {
     "git": "https://github.com/dev-lis/FoxVideoPlayer.git",
-    "tag": "0.1.0"
+    "tag": "0.1.1"
   },
   "platforms": {
     "ios": "13.0"

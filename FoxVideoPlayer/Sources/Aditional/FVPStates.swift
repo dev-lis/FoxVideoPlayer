@@ -1,5 +1,5 @@
 //
-//  FoxStates.swift
+//  FVPStates.swift
 //  FoxVideoPlayer
 //
 //  Created by Aleksandr Lis on 22.03.2022.
@@ -7,28 +7,28 @@
 
 import Foundation
 
-public enum FoxVideoPlayerState {
+public enum FVPVideoState {
     case ready
     case failed
 }
 
-public enum FoxVideoPlaybackState {
+public enum FVPPlaybackState {
     case pause
     case play
     case completed
 }
 
-public enum FoxProgressBarState {
+public enum FVPProgressBarState {
     case visible
     case hidden
 }
 
-public enum FoxScreenMode {
+public enum FVPScreenMode {
     case `default`
     case fullScreen
 }
 
-public enum FoxUpdateTimeFrom {
+public enum FVPUpdateTimeFrom {
     case controls
     case progressBar
 }

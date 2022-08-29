@@ -1,5 +1,5 @@
 //
-//  FoxVideoPlayerSeekButton.swift
+//  FVPSeekButton.swift
 //  FoxVideoPlayer
 //
 //  Created by Aleksandr Lis on 22.03.2022.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-class SeekButton: UIView {
+class FVPSeekButton: UIView {
     private lazy var seekButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -56,6 +56,12 @@ class SeekButton: UIView {
     public var seekImage: UIImage? {
         didSet {
             seekImageView.image = seekImage
+        }
+    }
+    
+    public var color: UIColor? {
+        didSet {
+            seekImageView.tintColor = color
         }
     }
 
