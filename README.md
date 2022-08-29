@@ -17,26 +17,26 @@ pod 'FoxVideoPlayer', '~> 1.0.0'
 ## Description
 Fox Video Player consists of few components:
 
-- FVPVideoPlayer - main part of player whitch should implement playback video.
-- FVPControls - contains elements to controll playback video:
-    - startPlay/replay
-    - play/pause
-    - backward
-    - forward
-- FVPProgressBar - element allows observe and rewind video. This elemet also contains button for activate full screen mode.
-- FVPProgressSlider - part of `FVPProgressBar`
-- FVPPlaceholder - if somthing went wrong, you should show some message with information, and button for try to reload.
-- FVPLoader - loading indicator
-- FVPFullScreen - component for inplement full screen mode player.
+- **FVPVideoPlayer** - main part of player whitch should implement playback video.
+- **FVPControls** - contains elements to controll playback video:
+    - **startPlay/replay**
+    - **play/pause**
+    - **backward**
+    - **forward**
+- **FVPProgressBar** - element allows observe and rewind video. This elemet also contains button for activate full screen mode.
+- **FVPProgressSlider** - part of `FVPProgressBar`
+- **FVPPlaceholder** - if somthing went wrong, you should show some message with information, and button for try to reload.
+- **FVPLoader** - loading indicator
+- **FVPFullScreen** - component for inplement full screen mode player.
 
 You can customising any player components. Just create instance it with settings, where you can update needed values, and set new one to FVPDependency.. Each component has settings property:
 
-- FVPVideoPlayerSettings
-- FVPControlsSettings
-- FVPProgressBarSettings
-- FVPProgressBarSliderSettings
-- FVPPlaceholderSettings
-- FVPLoaderSettings
+- **FVPVideoPlayerSettings**
+- **FVPControlsSettings**
+- **FVPProgressBarSettings**
+- **FVPProgressBarSliderSettings**
+- **FVPPlaceholderSettings**
+- **FVPLoaderSettings**
 
 You also can create your own component. You just need implement protocol for any or all.
 
