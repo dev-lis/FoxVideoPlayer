@@ -5,22 +5,22 @@
 //  Created by Aleksandr Lis on 07.08.2022.
 //
 
-import Swinject
+import Foundation
 
 public class FoxVideoPlayerController {
     
-    private var resolver: Resolver {
+    private var resolver: FVPResolver {
         assembler.resolver
     }
     
-    private let assembler: Assembler
+    private let assembler: FVPAssembler
 
     public init(dependency: FoxVideoPlayerDependency) {
-        let assembly = FoxVideoPlayerAssembly(dependency: dependency)
-        assembler = Assembler([assembly])
+        self.assembler = FoxVideoPlayerAssembly(dependency: dependency)
     }
     
     public func getVideoPlayer() -> FoxVideoPlayerViewController {
-        resolver.resolve(FoxVideoPlayerViewController.self)!
+        let controller: FoxVideoPlayerViewController = resolver.resolve()!
+        return controller
     }
 }

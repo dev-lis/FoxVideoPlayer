@@ -5,47 +5,62 @@
 //  Created by Aleksandr Lis on 07.08.2022.
 //
 
-import Swinject
+import Foundation
 
-final class FoxVideoPlayerAssembly: Assembly {
+protocol FVPAssembler {
+    var resolver: FVPResolver { get }
+}
+
+final class FoxVideoPlayerAssembly: FVPAssembler {
+    
+    var resolver: FVPResolver {
+        serviceLocator.resolver
+    }
+    
+    private let serviceLocator: FVPServiceLocating = FVPServiceLocator()
     
     private var dependency: FoxVideoPlayerDependency
     
     init(dependency: FoxVideoPlayerDependency) {
         self.dependency = dependency
+        assemble()
     }
     
-    func assemble(container: Container) {
-        
-        if let player = dependency.player {
-            container.register(FoxVideoPlayer.self) { _ in
-                player
-            }
-        } else {
-            container.register(FoxVideoPlayer.self) { _ in
-                FoxVideoPlayerView()
+    private func assemble() {
+        serviceLocator.register(FoxVideoPlayer.self) { _ in
+            if let player = dependency.player {
+                return player
+            } else {
+                let player = FoxVideoPlayerView()
+                return player
             }
         }
         
-        if let controls = dependency.controls {
-            container.register(FoxVideoPlayerControls.self) { _ in
-                controls
-            }
-        } else {
-            container.register(FoxVideoPlayerControls.self) { _ in
+        serviceLocator.register(FoxVideoPlayerControls.self) { _ in
+            if let controls = dependency.controls {
+                return controls
+            } else {
                 let settings = FoxVideoPlayerControlsSettings()
                 let controls = FoxVideoPlayerControlsView(settings: settings)
                 return controls
             }
         }
         
-        if let progressBar = dependency.progressBar {
-            container.register(FoxVideoPlayerProgressBar.self) { _ in
-                progressBar
+        serviceLocator.register(FoxVideoPlayerProgressSlider.self) { _ in
+            if let progressSlider = dependency.progressSlider {
+                return progressSlider
+            } else {
+                let settings = FoxVideoPlayerProgressBarSliderSettings()
+                let progressSlider = FoxVideoPlayerProgressSliderControl(settings: settings)
+                return progressSlider
             }
-        } else {
-            container.register(FoxVideoPlayerProgressBar.self) { resolver in
-                var progressSlider = resolver.resolve(FoxVideoPlayerProgressSlider.self)!
+        }
+        
+        serviceLocator.register(FoxVideoPlayerProgressBar.self) { resolver in
+            if let progressBar = dependency.progressBar {
+                return progressBar
+            } else {
+                var progressSlider: FoxVideoPlayerProgressSlider = resolver.resolve()!
                 let settings = FoxVideoPlayerProgressBarSettings()
                 let progressBar = FoxVideoPlayerProgressBarView(progressSlider: progressSlider, settings: settings)
                 progressSlider.delegate = progressBar
@@ -53,74 +68,66 @@ final class FoxVideoPlayerAssembly: Assembly {
             }
         }
         
-        if let progressSlider = dependency.progressSlider {
-            container.register(FoxVideoPlayerProgressSlider.self) { _ in
-                progressSlider
-            }
-        } else {
-            container.register(FoxVideoPlayerProgressSlider.self) { _ in
-                let settings = FoxVideoPlayerProgressBarSliderSettings()
-                return FoxVideoPlayerProgressSliderControl(settings: settings)
-            }
-        }
-        
-        if let placeholder = dependency.placeholder {
-            container.register(FoxVideoPlayerPlaceholder.self) { _ in
-                placeholder
-            }
-        } else {
-            container.register(FoxVideoPlayerPlaceholder.self) { _ in
+        serviceLocator.register(FoxVideoPlayerPlaceholder.self) { _ in
+            if let placeholder = dependency.placeholder {
+                return placeholder
+            } else {
                 let settings = FoxVideoPlayerPlaceholderSettings()
-                return FoxVideoPlayerPlaceholderView(settings: settings)
+                let placeholder = FoxVideoPlayerPlaceholderView(settings: settings)
+                return placeholder
             }
         }
         
-        if let loader = dependency.loader {
-            container.register(FoxVideoPlayerLoader.self) { _ in
-                loader
-            }
-        } else {
-            container.register(FoxVideoPlayerLoader.self) { _ in
+        serviceLocator.register(FoxVideoPlayerLoader.self) { _ in
+            if let loader = dependency.loader {
+                return loader
+            } else {
                 let settings = FoxVideoPlayerLoaderSettings()
-                return FoxVideoPlayerLoaderView(settings: settings)
+                let loader = FoxVideoPlayerLoaderView(settings: settings)
+                return loader
             }
         }
         
-        if let fullScreen = dependency.fullScreen {
-            container.register(FoxVideoPlayerFullScreen.self) { _ in
-                fullScreen
-            }
-        } else {
-            container.register(FoxVideoPlayerFullScreen.self) { _ in
-                FoxVideoPlayerFullScreenViewController()
+        serviceLocator.register(FoxVideoPlayerFullScreen.self) { _ in
+            if let fullScreen = dependency.fullScreen {
+                return fullScreen
+            } else {
+                let fullScreen = FoxVideoPlayerFullScreenViewController()
+                return fullScreen
             }
         }
         
-        container.register(FoxVideoPlayerViewController.self) { resolver in
+        serviceLocator.register(FoxVideoPlayerViewController.self) { resolver in
             let videoPlayer = FoxVideoPlayerViewController()
             
-            var player = resolver.resolve(FoxVideoPlayer.self)
-            player?.delegate = videoPlayer
-            videoPlayer.player = player
+            if var player: FoxVideoPlayer = resolver.resolve() {
+                player.delegate = videoPlayer
+                videoPlayer.player = player
+            }
             
-            var controls = resolver.resolve(FoxVideoPlayerControls.self)
-            controls?.delegate = videoPlayer
-            videoPlayer.controls = controls
+            if var controls: FoxVideoPlayerControls = resolver.resolve() {
+                controls.delegate = videoPlayer
+                videoPlayer.controls = controls
+            }
             
-            var progressBar = resolver.resolve(FoxVideoPlayerProgressBar.self)
-            progressBar?.delegate = videoPlayer
-            videoPlayer.progressBar = progressBar
+            if var progressBar: FoxVideoPlayerProgressBar = resolver.resolve() {
+                progressBar.delegate = videoPlayer
+                videoPlayer.progressBar = progressBar
+            }
             
-            var placeholder = resolver.resolve(FoxVideoPlayerPlaceholder.self)
-            placeholder?.delegate = videoPlayer
-            videoPlayer.placeholder = placeholder
+            if var placeholder: FoxVideoPlayerPlaceholder = resolver.resolve() {
+                placeholder.delegate = videoPlayer
+                videoPlayer.placeholder = placeholder
+            }
             
-            let loader = resolver.resolve(FoxVideoPlayerLoader.self)
-            videoPlayer.loader = loader
+            if let loader: FoxVideoPlayerLoader = resolver.resolve() {
+                videoPlayer.loader = loader
+            }
             
-            var fullScreen = resolver.resolve(FoxVideoPlayerFullScreen.self)
-            fullScreen?.delegate = videoPlayer
-            videoPlayer.fullScreen = fullScreen
+            if var fullScreen: FoxVideoPlayerFullScreen = resolver.resolve() {
+                fullScreen.delegate = videoPlayer
+                videoPlayer.fullScreen = fullScreen
+            }
             
             return videoPlayer
         }
