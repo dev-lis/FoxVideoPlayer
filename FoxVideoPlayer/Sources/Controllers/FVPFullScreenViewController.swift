@@ -1,5 +1,5 @@
 //
-//  FoxFullScreenVideoPlayerViewController.swift
+//  FVPFullScreenViewController.swift
 //  FoxVideoPlayer
 //
 //  Created by Aleksandr Lis on 28.03.2022.
@@ -7,39 +7,24 @@
 
 import UIKit
 
-public protocol FoxFullScreenVideoPlayerViewControllerDelegate: AnyObject {
-    func didHideFullScreen(_ controller: FoxFullScreenVideoPlayerViewController)
-}
-
-public class FoxFullScreenVideoPlayerViewController: UIViewController {
+public class FVPFullScreenViewController: UIViewController {
     
     private var playerTopConstraint: NSLayoutConstraint!
     private var playerBottomConstraint: NSLayoutConstraint!
     private var playerHeightConstraint: NSLayoutConstraint!
     
-    public enum Source {
-        case button
-        case rotate
-    }
-    
     private var startPlayerHeight: CGFloat {
         UIScreen.main.bounds.height - UIScreen.main.bounds.height * 9 / 16 - startPlayerOriginY
     }
     
-    private let startPlayerOriginY: CGFloat
+    private var startPlayerOriginY: CGFloat!
+    private var playerView: UIView!
+    private var source: Source = .button
     
-    public weak var delegate: FoxFullScreenVideoPlayerViewControllerDelegate?
+    public weak var delegate: FVPFullScreenDelegate?
     
-    private let playerView: UIView
-    private let source: Source
-    
-    public init(playerView: UIView, source: Source) {
-        self.playerView = playerView
-        self.source = source
-        self.startPlayerOriginY = playerView.frame.origin.y
-        
+    public init() {
         super.init(nibName: nil, bundle: nil)
-        
         modalPresentationStyle = .overCurrentContext
     }
     
@@ -68,10 +53,6 @@ public class FoxFullScreenVideoPlayerViewController: UIViewController {
         }
     }
     
-    public func close() {
-        rotate(to: .portrait)
-    }
-    
     private func start() {
         switch source {
         case .button:
@@ -85,6 +66,7 @@ public class FoxFullScreenVideoPlayerViewController: UIViewController {
     }
     
     private func dismiss() {
+        delegate?.willHideFullScreen(self)
         dismiss(animated: false) {
             self.playerView.removeFromSuperview()
             self.delegate?.didHideFullScreen(self)
@@ -119,5 +101,24 @@ public class FoxFullScreenVideoPlayerViewController: UIViewController {
             playerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             playerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
         ])
+    }
+}
+
+extension FVPFullScreenViewController: FVPFullScreen {
+    public func open(_ playerView: UIView, source: Source) {
+        self.playerView = playerView
+        self.startPlayerOriginY = playerView.frame.origin.y
+        self.source = source
+        setupUI()
+        
+        UIApplication.shared.windows
+            .filter { $0.isKeyWindow }
+            .first?
+            .rootViewController?
+            .present(self, animated: false)
+    }
+    
+    public func close() {
+        rotate(to: .portrait)
     }
 }

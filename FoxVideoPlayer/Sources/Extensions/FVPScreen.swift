@@ -1,5 +1,5 @@
 //
-//  FoxScreen.swift
+//  FVPScreen.swift
 //  FoxVideoPlayer
 //
 //  Created by Aleksandr Lis on 22.03.2022.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-enum FoxScreen {
+enum FVPScreen {
     enum SafeArea {
         static var top: CGFloat {
             UIApplication.shared.windows.first?.safeAreaInsets.top ?? 0

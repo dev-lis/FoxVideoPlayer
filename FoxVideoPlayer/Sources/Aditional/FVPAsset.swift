@@ -1,5 +1,5 @@
 //
-//  FoxVideoPlayerAsset.swift
+//  FVPAsset.swift
 //  FoxVideoPlayer
 //
 //  Created by Aleksandr Lis on 22.03.2022.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct FoxVideoPlayerAsset {
+public struct FVPAsset {
     let url: URL
     let startTime: TimeInterval?
     let rate: Float?

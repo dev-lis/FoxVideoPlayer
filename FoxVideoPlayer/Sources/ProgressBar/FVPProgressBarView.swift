@@ -1,5 +1,5 @@
 //
-//  FoxVideoPlayerProgressBarView.swift
+//  FVPProgressBarView.swift
 //  FoxVideoPlayer
 //
 //  Created by Aleksandr Lis on 22.03.2022.
@@ -8,49 +8,17 @@
 import UIKit
 import AVKit
 
-public protocol FoxVideoPlayerProgressBarViewDelegate: AnyObject {
-    func setTime(_ progressBar: FoxVideoPlayerProgressBarView, time: TimeInterval)
-    func didBeginMovingPin(_ progressBar: FoxVideoPlayerProgressBarView, state: FoxProgressBarState)
-    func didEndMovingPin(_ progressBar: FoxVideoPlayerProgressBarView, state: FoxProgressBarState)
-    func didTapChangeScreenMode(_ progressBar: FoxVideoPlayerProgressBarView)
-    func renderImage(_ progressBar: FoxVideoPlayerProgressBarView, time: TimeInterval)
-}
-
-public class FoxVideoPlayerProgressBarView: UIView {
-    private lazy var progressSlider: FoxVideoPlayerProgressSlider = {
-        let slider = FoxVideoPlayerProgressSlider()
-        slider.translatesAutoresizingMaskIntoConstraints = false
-        slider.movingOnRaised = { [weak self] isMoving in
-            guard let self = self else { return }
-            
-            if isMoving {
-                self.hideElements()
-                self.delegate?.didBeginMovingPin(self, state: .visible)
-            } else {
-                self.showElements()
-                self.delegate?.didEndMovingPin(self, state: .visible)
-            }
-        }
-        slider.movingOnHidden = { [weak self] isMoving in
-            guard let self = self else { return }
-            isMoving
-                ? self.delegate?.didBeginMovingPin(self, state: .hidden)
-                : self.delegate?.didEndMovingPin(self, state: .hidden)
-        }
-        slider.time = { [weak self] time in
-            guard let self = self else { return }
-            self.delegate?.setTime(self, time: TimeInterval(time))
-        }
-        slider.imageForTime = { [weak self] time in
-            guard let self = self else { return }
-            self.delegate?.renderImage(self, time: time)
-        }
-        return slider
+public class FVPProgressBarView: UIView {
+    
+    private lazy var sliderContainer: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
     }()
 
     private lazy var timerLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 14, weight: .semibold)
+        label.font = settings.font.timer
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .white
         label.isHidden = true
@@ -78,22 +46,27 @@ public class FoxVideoPlayerProgressBarView: UIView {
     private var bottomConstraint: NSLayoutConstraint!
 
     private var sliderTopInset: CGFloat {
-        progressSlider.sliderTopInset + progressSlider.frame.origin.y
+        progressSlider.sliderTopInset
     }
-    private let height: CGFloat = 66.0
 
-    public weak var delegate: FoxVideoPlayerProgressBarViewDelegate?
+    public weak var delegate: FVPProgressBarDelegate?
     
     private var didStartPlay = false
 
-    private var rate: Float
-    private var screenMode: FoxScreenMode
-
-    public init(rate: Float = 1.0,
-                screenMode: FoxScreenMode = .default,
-                isEnableHandleRotation: Bool = true) {
-        self.rate = rate
-        self.screenMode = screenMode
+    private var rate: Float {
+        settings.startRate
+    }
+    
+    private var screenMode: FVPScreenMode
+    
+    private let progressSlider: FVPProgressSlider
+    private let settings: FVPProgressBarSettings
+    
+    public init(progressSlider: FVPProgressSlider,
+                settings: FVPProgressBarSettings) {
+        self.progressSlider = progressSlider
+        self.settings = settings
+        self.screenMode = settings.screenMode
         super.init(frame: .zero)
         setupUI()
     }
@@ -103,22 +76,24 @@ public class FoxVideoPlayerProgressBarView: UIView {
     }
     
     private func setupUI() {
+        isHidden = true
+        
+        progressSlider.add(to: sliderContainer)
+        
+        addSubview(sliderContainer)
         addSubview(buttonsStackView)
-        addSubview(progressSlider)
         addSubview(timerLabel)
 
         NSLayoutConstraint.activate([
-            progressSlider.topAnchor.constraint(equalTo: topAnchor),
-            progressSlider.leftAnchor.constraint(equalTo: leftAnchor),
-            progressSlider.rightAnchor.constraint(equalTo: rightAnchor),
-            progressSlider.heightAnchor.constraint(equalToConstant: 34),
+            sliderContainer.topAnchor.constraint(equalTo: topAnchor),
+            sliderContainer.leftAnchor.constraint(equalTo: leftAnchor),
+            sliderContainer.rightAnchor.constraint(equalTo: rightAnchor),
+            
+            timerLabel.topAnchor.constraint(equalTo: sliderContainer.bottomAnchor),
+            timerLabel.leftAnchor.constraint(equalTo: sliderContainer.leftAnchor, constant: settings.size.timerLeftInset),
 
-            timerLabel.topAnchor.constraint(equalTo: progressSlider.bottomAnchor),
-            timerLabel.leftAnchor.constraint(equalTo: progressSlider.leftAnchor, constant: 24),
-            timerLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -16),
-
-            buttonsStackView.topAnchor.constraint(equalTo: progressSlider.bottomAnchor, constant: -16),
-            buttonsStackView.rightAnchor.constraint(equalTo: rightAnchor, constant: -24),
+            buttonsStackView.topAnchor.constraint(equalTo: sliderContainer.bottomAnchor, constant: -16),
+            buttonsStackView.rightAnchor.constraint(equalTo: rightAnchor, constant: -settings.size.buttonsStackRightInset),
             buttonsStackView.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
         
@@ -140,14 +115,40 @@ public class FoxVideoPlayerProgressBarView: UIView {
             self.buttonsStackView.isHidden = true
         }
     }
+}
+
+extension FVPProgressBarView: FVPProgressBar {
+    public var isVisible: Bool {
+        !isHidden
+    }
+    
+    public func add(to view: UIView) {
+        translatesAutoresizingMaskIntoConstraints = false
+        
+        view.addSubview(self)
+        
+        let bottomInset = settings.flag.isVisibleProgressOnHiddenState ? sliderTopInset : 0
+        bottomConstraint = bottomAnchor.constraint(
+            equalTo: view.bottomAnchor,
+            constant: settings.size.barHeight - bottomInset
+        )
+        
+        NSLayoutConstraint.activate([
+            leftAnchor.constraint(equalTo: view.leftAnchor),
+            rightAnchor.constraint(equalTo: view.rightAnchor),
+            heightAnchor.constraint(equalToConstant: settings.size.barHeight),
+            bottomConstraint,
+        ])
+    }
+    
+    public func setHidden(_ isHidden: Bool) {
+        self.isHidden = isHidden
+    }
     
     public func setTime(_ time: TimeInterval, duration: TimeInterval) {
         didStartPlay = true
         
-        progressSlider.duration = CGFloat(duration)
-        progressSlider.currentTime = CGFloat(time)
-        let progress = CGFloat(time / duration)
-        progressSlider.setProgress(progress)
+        progressSlider.setCurrentTime(CGFloat(time), of: CGFloat(duration))
 
         let timeValue = Int(time)
         let durationValue = Int(duration)
@@ -177,7 +178,7 @@ public class FoxVideoPlayerProgressBarView: UIView {
         progressSlider.didUpdateTime()
     }
     
-    public func updateScreenMode(_ mode: FoxScreenMode) {
+    public func updateScreenMode(_ mode: FVPScreenMode) {
         screenMode = mode
 
         let image = screenMode == .default
@@ -195,41 +196,29 @@ public class FoxVideoPlayerProgressBarView: UIView {
         progressSlider.setPreviewImageSize(size)
     }
     
-    public func add(to view: UIView) {
-        view.addSubview(self)
-        
-        bottomConstraint = bottomAnchor.constraint(
-            equalTo: view.bottomAnchor,
-            constant: height - sliderTopInset
-        )
-        
-        NSLayoutConstraint.activate([
-            leftAnchor.constraint(equalTo: view.leftAnchor),
-            rightAnchor.constraint(equalTo: view.rightAnchor),
-            heightAnchor.constraint(equalToConstant: height),
-            bottomConstraint,
-        ])
-    }
-    
     public func show() {
         bottomConstraint?.constant = 0
-        UIView.animate(withDuration: 0.2) {
+        UIView.animate(withDuration: settings.duration.animate) {
             self.superview?.layoutIfNeeded()
         }
         showAnimation()
     }
     
     public func hide() {
-        let inset = screenMode == .default ? sliderTopInset : 0
+        superview?.clipsToBounds = !settings.flag.isVisibleProgressOnHiddenState
+        
+        let inset = screenMode == .default
+        ? settings.flag.isVisibleProgressOnHiddenState ? sliderTopInset : 0
+        : 0
         bottomConstraint?.constant = frame.height - inset
-        UIView.animate(withDuration: 0.2) {
+        UIView.animate(withDuration: settings.duration.animate) {
             self.superview?.layoutIfNeeded()
         }
         hideAnimation()
     }
     
     public func updateFullScreenButton() {
-        progressSlider.layoutSubviews()
+        progressSlider.updateLayout()
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             self.screenModeButton.isSelected = false
         }
@@ -237,7 +226,7 @@ public class FoxVideoPlayerProgressBarView: UIView {
 }
 
 // MARK: Action
-private extension FoxVideoPlayerProgressBarView {
+private extension FVPProgressBarView {
     @objc func didTapRate() {
         
     }
@@ -252,7 +241,7 @@ private extension FoxVideoPlayerProgressBarView {
 }
 
 // MARK: Private
-private extension FoxVideoPlayerProgressBarView {
+private extension FVPProgressBarView {
     func secondsToHoursMinutesSeconds(seconds: Int) -> (hours: Int, minutes: Int, seconds: Int) {
         return (hours: seconds / 3600, minutes: (seconds % 3600) / 60, seconds: (seconds % 3600) % 60)
     }
@@ -263,17 +252,44 @@ private extension FoxVideoPlayerProgressBarView {
     }
 
     func showElements() {
-        UIView.animate(withDuration: 0.1) {
+        UIView.animate(withDuration: settings.duration.elementAnimate) {
             self.timerLabel.alpha = 1
             self.buttonsStackView.alpha = 1
         }
     }
 
     func hideElements() {
-        UIView.animate(withDuration: 0.1) {
+        UIView.animate(withDuration: settings.duration.elementAnimate) {
             self.timerLabel.alpha = 0
             self.buttonsStackView.alpha = 0
         }
     }
 }
 
+// MARK: FoxVideoPlayerProgressSliderDelegate
+
+extension FVPProgressBarView: FVPProgressSliderDelegate {
+    public func movingOnRaised(_ progressSlider: FVPProgressSlider, isMoving: Bool) {
+        if isMoving {
+            self.hideElements()
+            self.delegate?.didBeginMovingPin(self, state: .visible)
+        } else {
+            self.showElements()
+            self.delegate?.didEndMovingPin(self, state: .visible)
+        }
+    }
+    
+    public func movingOnHidden(_ progressSlider: FVPProgressSlider, isMoving: Bool) {
+        isMoving
+            ? self.delegate?.didBeginMovingPin(self, state: .hidden)
+            : self.delegate?.didEndMovingPin(self, state: .hidden)
+    }
+    
+    public func updateCurrentTime(_ progressSlider: FVPProgressSlider, time: CGFloat) {
+        delegate?.setTime(self, time: TimeInterval(time))
+    }
+    
+    public func makeImage(_ progressSlider: FVPProgressSlider, for time: CGFloat) {
+        delegate?.renderImage(self, time: time)
+    }
+}

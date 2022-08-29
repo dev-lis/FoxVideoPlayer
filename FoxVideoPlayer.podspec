@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'FoxVideoPlayer'
-  s.version          = '0.1.1'
+  s.version          = '1.0.1'
   s.summary          = 'Customizable video player'
   s.description      = 'You can easily and quickly integrate a video player into your project. You can use all player or some of its components. The player summer insists.'
 
@@ -21,5 +21,4 @@ Pod::Spec.new do |s|
   s.swift_versions = '5.0'
 
   s.source_files = 'FoxVideoPlayer/Sources/**/*.{h,m,swift}'
-  
 end
