@@ -31,7 +31,8 @@ final class FVPAssembly: FVPAssembler {
             if let player = dependency.player {
                 return player
             } else {
-                let player = FVPVideoPlayerView()
+                let settings = FVPVideoPlayerSettings()
+                let player = FVPVideoPlayerView(settings: settings)
                 return player
             }
         }

@@ -42,6 +42,7 @@
 		CB41427F4A90E86D28EDADFDE7380F9F /* FVPPlaceholderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDA580A1F90949F08ED5D90C342C2543 /* FVPPlaceholderView.swift */; };
 		D4B6D923691B6F55B8DB2F91446DDD9E /* FVPLoaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1AD69D33F18587760B2769A1EC736B3 /* FVPLoaderView.swift */; };
 		E0A1D194315FDFC36E68C29B74AEE1AA /* FVPController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0F1FAB2D8307EC3CE93A2589ECD05F1 /* FVPController.swift */; };
+		EAE8329D28BD526F00B0B360 /* FVPVideoPlayerSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAE8329C28BD526F00B0B360 /* FVPVideoPlayerSettings.swift */; };
 		F0E13F7795A8837D1C88CBA37A952C70 /* FVPProgressSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6DBEEDBB1397C48CD5ABB9441A14A55 /* FVPProgressSlider.swift */; };
 		F1A59E4D2807CD2B2D9216F5A5046270 /* FVPLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA68561C523AF71D197982B49052FB70 /* FVPLoader.swift */; };
 		F33ACB3BC6DD59FB825CD1DAA8F77268 /* FVPViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AABCB0E7BD8D7DA7C50E17E16544B58 /* FVPViewController.swift */; };
@@ -68,7 +69,7 @@
 		39BEFAC67560D66DE648DDFC0CE18F4E /* FVPLoaderSettings.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = FVPLoaderSettings.swift; sourceTree = "<group>"; };
 		3C1F7F47D43566AF373EF7A7B50B0310 /* FVPScreen.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = FVPScreen.swift; sourceTree = "<group>"; };
 		3CDF7242A79E4CBE15478CECF737907E /* FVPProgressBarLineLayer.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = FVPProgressBarLineLayer.swift; sourceTree = "<group>"; };
-		41D09A54639CFC4720817DC386BBC880 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; path = LICENSE; sourceTree = "<group>"; };
+		41D09A54639CFC4720817DC386BBC880 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		4987E7FBE0141E8ECCF8F5267E3E2030 /* FoxVideoPlayer-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "FoxVideoPlayer-umbrella.h"; sourceTree = "<group>"; };
 		4DFBE767DB0F3043339B2F64CC7EDA41 /* FVPProgressBarSettings.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = FVPProgressBarSettings.swift; sourceTree = "<group>"; };
 		5105287F55B0017A9E630EF13D41BF1D /* FVPProgressPreviewImageView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = FVPProgressPreviewImageView.swift; sourceTree = "<group>"; };
@@ -78,7 +79,7 @@
 		6AC9958BBB59AD943F34F32965A603C5 /* FVPProgressBar.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = FVPProgressBar.swift; sourceTree = "<group>"; };
 		6FB72549749BF6C02ED0D28A12D3EE7A /* FVPStates.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = FVPStates.swift; sourceTree = "<group>"; };
 		73010CC983E3809BECEE5348DA1BB8C6 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS14.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
-		734FF9DEC8565B69B1AB1C86482FEC93 /* FoxVideoPlayer.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; path = FoxVideoPlayer.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		734FF9DEC8565B69B1AB1C86482FEC93 /* FoxVideoPlayer.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; path = FoxVideoPlayer.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		7596D3633E38F4FD47EC53F1DF000D60 /* Pods-FoxVideoPlayer_Example */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = "Pods-FoxVideoPlayer_Example"; path = Pods_FoxVideoPlayer_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7B13957758A2DA32054CC462D7A28E07 /* Pods-FoxVideoPlayer_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-FoxVideoPlayer_Example.release.xcconfig"; sourceTree = "<group>"; };
 		7E616143468C350502D4214E11F7FA32 /* Pods-FoxVideoPlayer_Example.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-FoxVideoPlayer_Example.modulemap"; sourceTree = "<group>"; };
@@ -89,8 +90,8 @@
 		937DA36B22071009BEB98E67493C35F6 /* Pods-FoxVideoPlayer_Example-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-FoxVideoPlayer_Example-Info.plist"; sourceTree = "<group>"; };
 		94AB6FC7E6F6DEBB6F90C632A6F7F63A /* Pods-FoxVideoPlayer_Example-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-FoxVideoPlayer_Example-acknowledgements.plist"; sourceTree = "<group>"; };
 		9762F52A4F6214102FE60FD33BBE02FC /* FoxVideoPlayer-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "FoxVideoPlayer-prefix.pch"; sourceTree = "<group>"; };
-		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
-		A0B461669AA514D21ABAD0CC0AB8C64D /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; path = README.md; sourceTree = "<group>"; };
+		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		A0B461669AA514D21ABAD0CC0AB8C64D /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		A0FDF56EE98DCEEB31503C0BA10E6FB9 /* FVPServiceLocator.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = FVPServiceLocator.swift; sourceTree = "<group>"; };
 		A239D5791F5A90B25317BCD8AFDAB704 /* FVPProgressBarView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = FVPProgressBarView.swift; sourceTree = "<group>"; };
 		A6B406F02B7D138588A88E1A8817D098 /* FoxVideoPlayer-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "FoxVideoPlayer-Info.plist"; sourceTree = "<group>"; };
@@ -111,6 +112,7 @@
 		DA68561C523AF71D197982B49052FB70 /* FVPLoader.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = FVPLoader.swift; sourceTree = "<group>"; };
 		DC52404E8ACFED89BB3D1BE5658C5264 /* FVPDependency.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = FVPDependency.swift; sourceTree = "<group>"; };
 		E5B2A3D20D6029040909B628651C6E11 /* Pods-FoxVideoPlayer_Example-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-FoxVideoPlayer_Example-frameworks.sh"; sourceTree = "<group>"; };
+		EAE8329C28BD526F00B0B360 /* FVPVideoPlayerSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FVPVideoPlayerSettings.swift; sourceTree = "<group>"; };
 		EDA580A1F90949F08ED5D90C342C2543 /* FVPPlaceholderView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = FVPPlaceholderView.swift; sourceTree = "<group>"; };
 		F5AEEAFCC1BF0FC6406CF99B3C4AD0A6 /* FVPControlsView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = FVPControlsView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -271,6 +273,7 @@
 				B346AE5AC42B068FB1B9ECAC04A95677 /* FVPPlaceholderSettings.swift */,
 				4DFBE767DB0F3043339B2F64CC7EDA41 /* FVPProgressBarSettings.swift */,
 				BDEC7DFC983098FD67FB8DA1B015E760 /* FVPProgressBarSliderSettings.swift */,
+				EAE8329C28BD526F00B0B360 /* FVPVideoPlayerSettings.swift */,
 			);
 			name = Settings;
 			path = FoxVideoPlayer/Sources/Settings;
@@ -489,6 +492,7 @@
 			files = (
 				2A5E6AADE7D9CF4010CEAF717AB69521 /* CMTime+Extensions.swift in Sources */,
 				48FE6EC3EBBD610E0F0BB6B2AE0BBC78 /* FoxVideoPlayer-dummy.m in Sources */,
+				EAE8329D28BD526F00B0B360 /* FVPVideoPlayerSettings.swift in Sources */,
 				4003A0EC77D353C5645556B60CB75350 /* FVPAssembly.swift in Sources */,
 				0453FE1DB420849B86D1AB96737C8FDD /* FVPAsset.swift in Sources */,
 				E0A1D194315FDFC36E68C29B74AEE1AA /* FVPController.swift in Sources */,
@@ -723,8 +727,7 @@
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRIP_INSTALLED_PRODUCT = NO;
-				SWIFT_COMPILATION_MODE = wholemodule;
-				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				SWIFT_VERSION = 5.0;
 				SYMROOT = "${SRCROOT}/../build";
 			};

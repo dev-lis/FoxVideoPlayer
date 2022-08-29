@@ -33,9 +33,11 @@ public class FVPVideoPlayerView: UIView {
     public weak var delegate: FVPVideoPlayerDelegate?
 
     private var rate: Float
+    private let settings: FVPVideoPlayerSettings
 
-    public init(rate: Float = 1.0) {
-        self.rate = rate
+    public init(settings: FVPVideoPlayerSettings) {
+        self.settings = settings
+        self.rate = settings.rate
         super.init(frame: .zero)
         backgroundColor = .black
     }
@@ -210,7 +212,7 @@ extension FVPVideoPlayerView: FVPVideoPlayer {
 
     public func setup(with asset: FVPAsset) {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            self.backgroundColor = .black
+            self.backgroundColor = self.settings.color.background
             self.setupPlayerItem(
                 with: AVAsset(url: asset.url),
                 startTime: asset.startTime,
